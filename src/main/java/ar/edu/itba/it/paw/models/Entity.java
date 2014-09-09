@@ -9,5 +9,9 @@ public abstract class Entity {
 	public Entity(){
 		
 	}
+	
+	public long getId(){
+		return this.id;
+	}
 }
 

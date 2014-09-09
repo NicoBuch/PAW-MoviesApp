@@ -4,4 +4,14 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  
+  <servlet>
+  	<servlet-name>HelloWorld</servlet-name>
+  	<servlet-class>ar.edu.itba.it.paw.servlets.HelloWorld</servlet-class>
+  </servlet>
+  
+   <servlet-mapping>
+  	<servlet-name>HelloWorld</servlet-name>
+  	<url-pattern>/helloWorld</url-pattern>
+  </servlet-mapping>
 </web-app>
