@@ -24,7 +24,7 @@ public class PostgresMovieDao implements MovieDao{
 	}
 	
 	public Iterable<Movie> getAll() {
-		Session<Movie> query = new Session<Movie>(Movie.class);
+		Session<Movie> query = new Session<Movie>();
 		ResultSet rs = query.list("movie");
 		List<Movie> movies = new ArrayList<Movie>();
 		
@@ -49,7 +49,7 @@ public class PostgresMovieDao implements MovieDao{
 	}
 
 	public Movie getById(long id) {
-		Session<Movie> query = new Session<Movie>(Movie.class);
+		Session<Movie> query = new Session<Movie>();
 		query.add(Criteria.eq("id", id));
 		ResultSet rs = query.list("movie");
 		Movie movie = null;

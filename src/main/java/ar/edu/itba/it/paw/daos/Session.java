@@ -22,7 +22,7 @@ public class Session<T> {
 	private List<Criteria> criteria = new ArrayList<Criteria>();
 	
 	
-	public Session(Class<T> clazz){
+	public Session(){
 		Properties connectionProps = new Properties();
 	    connectionProps.put("user",userName);
 	    connectionProps.put("password", password);
