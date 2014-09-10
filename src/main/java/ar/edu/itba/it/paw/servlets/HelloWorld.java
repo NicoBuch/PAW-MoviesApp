@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,9 @@ public class HelloWorld extends HttpServlet{
 			out.println(" ");
 			out.println("Description:" + mv.getDescription());
 		}
+		md.update(movie);
+		
+		//md.update(new Movie("bla", new Date(System.currentTimeMillis()), "Director", "Fantasy", 20, "La peor"));
 		out.println(movie.getMovieName());
 		out.println(" ");
 		out.println("</body></html>");

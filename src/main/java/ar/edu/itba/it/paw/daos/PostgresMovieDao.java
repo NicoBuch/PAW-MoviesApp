@@ -18,7 +18,6 @@ public class PostgresMovieDao implements MovieDao{
 	public static MovieDao getInstance(){
 		if(obj == null)
 			obj = new PostgresMovieDao();
-		System.out.println("Llego " + obj.toString());
 		
 		return obj;
 	}
@@ -64,19 +63,31 @@ public class PostgresMovieDao implements MovieDao{
 			long movieid = rs.getLong("id");
 			movie = new Movie(movieid,movieName,releaseDate,directorName,genre,minutes,description);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return movie;
 	}
 
 	public void update(Movie movie) {
-		// TODO Auto-generated method stub
-		
+		Session<Movie> session = new Session<Movie>();
+		if(movie.getId() > 0){
+			Object[] movieName = {"moviename",movie.getMovieName()};
+			Object[] releaseDate = {"releasedate" , movie.getReleaseDate()};
+			Object[] directorName = {"directorname" , movie.getDirectorName()};
+			Object[] genre = {"genre" , movie.getGenre()};
+			Object[] minutes = {"minutes" , movie.getMinutes()};
+			Object[] description = {"description" , movie.getDescription()};
+			session.add(Criteria.eq("id", movie.getId()));
+			session.update("movie", movieName, releaseDate, directorName, genre, minutes, description);
+		}
+		else{
+			session.insert("movie", null, movie.getReleaseDate(), movie.getMovieName(), movie.getDirectorName()
+					, movie.getGenre(),movie.getMinutes(), movie.getDescription() );
+		}
 	}
 
 	public Movie getByGenre(String genre) {
-		
+	
 		return null;
 	}
 

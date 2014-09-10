@@ -52,5 +52,20 @@ public class Movie extends Entity{
 	public String getDescription(){
 		return this.description;
 	}
+	public void setMovieName(String movieName) {
+		this.movieName = movieName;
+	}
+	public void setReleaseDate(Date releaseDate) {
+		this.releaseDate = releaseDate;
+	}
+	public void setDirectorName(String directorName) {
+		this.directorName = directorName;
+	}
+	public void setGenre(Genre genre) {
+		this.genre = genre;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	
 }

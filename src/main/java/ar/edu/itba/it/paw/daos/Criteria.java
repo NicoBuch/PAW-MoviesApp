@@ -1,10 +1,9 @@
 package ar.edu.itba.it.paw.daos;
 
-import org.eclipse.jdt.internal.core.util.ToStringSorter;
-
+import ar.edu.itba.it.paw.daos.Session;
 public class Criteria {
 	
-	private String sqlOperator;
+	protected String sqlOperator;
 	protected String field;
 	protected Object value;
 	
@@ -23,6 +22,6 @@ public class Criteria {
 	}
 	@Override
 	public String toString(){
-		return field +  sqlOperator  + value; 
+		return field +  sqlOperator  + Session.convertToSql(value); 
 	}
 }
