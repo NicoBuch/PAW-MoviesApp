@@ -1,5 +1,7 @@
 package ar.edu.itba.it.paw.daos;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -11,42 +13,51 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
-
 public class Session<T> {
-	
-	String userName = "paw";
-	String password = "paw";
-	String db = "jdbc:postgresql://localhost/paw7";
-	String dbname = "paw7";
+
 	Connection conn;
 
 	private List<Criteria> criteria = new ArrayList<Criteria>();
-	
-	
-	public Session(){
-		Properties connectionProps = new Properties();
-	    connectionProps.put("user",userName);
-	    connectionProps.put("password", password);
+	private Properties connectionProps = new Properties();
+
+	public Session() {
+
 		try {
-			conn = DriverManager.getConnection(db, connectionProps);
-		} catch (SQLException e) {
-			e.printStackTrace(); 
+			InputStream systemResourceAsStream = getClass().getClassLoader()
+					.getResourceAsStream("database.properties");
+			connectionProps.load(systemResourceAsStream);
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		System.out.println("Connected to database");
+		try {
+			try {
+				Class.forName("org.postgresql.Driver");
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			conn = DriverManager.getConnection(
+					connectionProps.getProperty("url"), connectionProps);
+			System.out.println("Connected to database");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
-	
-	public  void add(Criteria criteria){
+
+	public void add(Criteria criteria) {
 		this.criteria.add(criteria);
 	}
-	
-	public ResultSet list(String table){
+
+	public ResultSet list(String table) {
 		String query = "SELECT " + "* " + "FROM " + table.toLowerCase();
-		if(criteria.size() > 0){
+		if (criteria.size() > 0) {
 			query = query + " WHERE ";
 			Iterator<Criteria> critIterator = criteria.iterator();
-			while(critIterator.hasNext()){
+			while (critIterator.hasNext()) {
 				query = query + critIterator.next();
-				if(critIterator.hasNext())
+				if (critIterator.hasNext())
 					query = query + " AND ";
 			}
 		}
@@ -60,19 +71,22 @@ public class Session<T> {
 			return null;
 		}
 	}
-	/*Los parametros se deben ingresar en el mismo orden en el que estan en la tabla*/
-	public void insert(String table, Object... values){
+
+	/*
+	 * Los parametros se deben ingresar en el mismo orden en el que estan en la
+	 * tabla
+	 */
+	public void insert(String table, Object... values) {
 		String query = "INSERT INTO " + table.toLowerCase() + " VALUES ";
 		query += " ( ";
-		for(int i = 0; i<values.length-1 ; i++){
-			if(values[i] == null){
+		for (int i = 0; i < values.length - 1; i++) {
+			if (values[i] == null) {
 				query += "DEFAULT" + ",";
-			}
-			else{
+			} else {
 				query += convertToSql(values[i]) + ",";
 			}
 		}
-		query += convertToSql(values[values.length-1])+ ");";
+		query += convertToSql(values[values.length - 1]) + ");";
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.execute(query);
@@ -83,18 +97,20 @@ public class Session<T> {
 			return;
 		}
 	}
-	public void update(String table, Object[]... values){
+
+	public void update(String table, Object[]... values) {
 		String query = "UPDATE " + table.toLowerCase() + " SET ";
-		for(int i = 0; i< values.length-1; i++){
-			query+= values[i][0] + " = " + convertToSql(values[i][1]) +",";
+		for (int i = 0; i < values.length - 1; i++) {
+			query += values[i][0] + " = " + convertToSql(values[i][1]) + ",";
 		}
-		query+= values[values.length-1][0] + " = " + convertToSql(values[values.length-1][1]);
-		if(criteria.size() > 0){
+		query += values[values.length - 1][0] + " = "
+				+ convertToSql(values[values.length - 1][1]);
+		if (criteria.size() > 0) {
 			query = query + " WHERE ";
 			Iterator<Criteria> critIterator = criteria.iterator();
-			while(critIterator.hasNext()){
+			while (critIterator.hasNext()) {
 				query = query + critIterator.next();
-				if(critIterator.hasNext())
+				if (critIterator.hasNext())
 					query = query + " AND ";
 			}
 		}
@@ -108,16 +124,21 @@ public class Session<T> {
 			return;
 		}
 	}
-	/*Agrega si es necesario los ' '*/
-	 static String convertToSql(Object value){
+
+	/* Agrega si es necesario los ' ' */
+	static String convertToSql(Object value) {
 		String converted;
-		if(value instanceof String || value instanceof Character || value instanceof Date){
-			 converted = "'"+value.toString()+"'";
-		}
-		else{
+		if (value instanceof String || value instanceof Character
+				|| value instanceof Date) {
+			converted = "'" + value.toString() + "'";
+		} else {
 			converted = value.toString();
 		}
 		return converted;
 	}
-	
+
+	public void close() throws SQLException {
+		conn.close();
+	}
+
 }

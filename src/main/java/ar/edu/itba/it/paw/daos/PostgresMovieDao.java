@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.itba.it.paw.models.Movie;
-import ar.edu.itba.it.paw.models.Movie.Genre;
 
 public class PostgresMovieDao implements MovieDao{
 	private static PostgresMovieDao  obj = null;
@@ -29,15 +28,16 @@ public class PostgresMovieDao implements MovieDao{
 		
 		try {
 			while(rs.next()){
-				String movieName = rs.getString("moviename");
-				String directorName = rs.getString("directorname");
+				String movieName = rs.getString("title");
+				String directorName = rs.getString("director");
 				String genre = rs.getString("genre");
 				int minutes = rs.getInt("minutes");
 				String description = rs.getString("description");
-				Date releaseDate = rs.getDate("releasedate");
+				Date releaseDate = rs.getDate("release_date");
 				long id = rs.getLong("id");
 				Movie movie = new Movie(id,movieName,releaseDate,directorName,genre,minutes,description);
 				movies.add(movie);
+				query.close();
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -54,26 +54,27 @@ public class PostgresMovieDao implements MovieDao{
 		Movie movie = null;
 		try {
 			rs.next();
-			String movieName = rs.getString("moviename");
-			String directorName = rs.getString("directorname");
+			String movieName = rs.getString("title");
+			String directorName = rs.getString("director");
 			String genre = rs.getString("genre");
 			int minutes = rs.getInt("minutes");
 			String description = rs.getString("description");
-			Date releaseDate = rs.getDate("releasedate");
+			Date releaseDate = rs.getDate("release_date");
 			long movieid = rs.getLong("id");
 			movie = new Movie(movieid,movieName,releaseDate,directorName,genre,minutes,description);
+			query.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return movie;
 	}
 
-	public void update(Movie movie) {
+	public void save(Movie movie) {
 		Session<Movie> session = new Session<Movie>();
 		if(movie.getId() > 0){
-			Object[] movieName = {"moviename",movie.getMovieName()};
-			Object[] releaseDate = {"releasedate" , movie.getReleaseDate()};
-			Object[] directorName = {"directorname" , movie.getDirectorName()};
+			Object[] movieName = {"title",movie.getTitle()};
+			Object[] releaseDate = {"release_date" , movie.getReleaseDate()};
+			Object[] directorName = {"director" , movie.getDirector()};
 			Object[] genre = {"genre" , movie.getGenre()};
 			Object[] minutes = {"minutes" , movie.getMinutes()};
 			Object[] description = {"description" , movie.getDescription()};
@@ -81,8 +82,14 @@ public class PostgresMovieDao implements MovieDao{
 			session.update("movie", movieName, releaseDate, directorName, genre, minutes, description);
 		}
 		else{
-			session.insert("movie", null, movie.getReleaseDate(), movie.getMovieName(), movie.getDirectorName()
+			session.insert("movie", null, movie.getReleaseDate(), movie.getTitle(), movie.getDirector()
 					, movie.getGenre(),movie.getMinutes(), movie.getDescription() );
+		}
+		try {
+			session.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -101,6 +108,7 @@ public class PostgresMovieDao implements MovieDao{
 				long id = rs.getLong("id");
 				Movie movie = new Movie(id,movieName,releaseDate,directorName,genre,minutes,description);
 				movies.add(movie);
+				session.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
