@@ -4,9 +4,9 @@ import java.sql.Date;
 
 public class Movie extends Entity{
 	
-	String movieName;
+	String title;
 	Date releaseDate;
-	String directorName;
+	String director;
 	Genre genre;
 	int minutes;
 	String description;
@@ -26,8 +26,8 @@ public class Movie extends Entity{
 		setFields(movieName,directorName, minutes, genre, description, releaseDate);
 	}
 	private void setFields(String movieName, String directorName, int minutes, String genre , String description, Date releaseDate){
-		this.movieName = movieName;
-		this.directorName = directorName;
+		this.title = movieName;
+		this.director = directorName;
 		this.minutes = minutes;
 		this.genre = Genre.valueOf(genre.toUpperCase());
 		this.description = description;
@@ -37,11 +37,11 @@ public class Movie extends Entity{
 	public String getGenre(){
 		return this.genre.toString();
 	}
-	public String getMovieName(){
-		return this.movieName;
+	public String getTitle(){
+		return this.title;
 	}
-	public String getDirectorName(){
-		return this.directorName;
+	public String getDirector(){
+		return this.director;
 	}
 	public Date getReleaseDate(){
 		return this.releaseDate;
@@ -52,14 +52,14 @@ public class Movie extends Entity{
 	public String getDescription(){
 		return this.description;
 	}
-	public void setMovieName(String movieName) {
-		this.movieName = movieName;
+	public void setTitle(String movieName) {
+		this.title = movieName;
 	}
 	public void setReleaseDate(Date releaseDate) {
 		this.releaseDate = releaseDate;
 	}
-	public void setDirectorName(String directorName) {
-		this.directorName = directorName;
+	public void setDirector(String directorName) {
+		this.director = directorName;
 	}
 	public void setGenre(Genre genre) {
 		this.genre = genre;

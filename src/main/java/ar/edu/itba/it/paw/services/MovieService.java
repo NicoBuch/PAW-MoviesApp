@@ -1,11 +1,9 @@
 package ar.edu.itba.it.paw.services;
 
 import java.sql.Date;
-import java.util.List;
 
-import extra.Filter;
 import ar.edu.itba.it.paw.models.Movie;
-import ar.edu.itba.it.paw.models.Movie.Genre;
+import extra.Filter;
 
 public class MovieService {
 		private static MovieService obj = null;
