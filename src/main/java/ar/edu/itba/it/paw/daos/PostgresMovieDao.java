@@ -37,6 +37,7 @@ public class PostgresMovieDao implements MovieDao{
 				long id = rs.getLong("id");
 				Movie movie = new Movie(id,movieName,releaseDate,directorName,genre,minutes,description);
 				movies.add(movie);
+				query.close();
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -61,13 +62,14 @@ public class PostgresMovieDao implements MovieDao{
 			Date releaseDate = rs.getDate("release_date");
 			long movieid = rs.getLong("id");
 			movie = new Movie(movieid,movieName,releaseDate,directorName,genre,minutes,description);
+			query.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return movie;
 	}
 
-	public void update(Movie movie) {
+	public void save(Movie movie) {
 		Session<Movie> session = new Session<Movie>();
 		if(movie.getId() > 0){
 			Object[] movieName = {"title",movie.getTitle()};
@@ -82,6 +84,12 @@ public class PostgresMovieDao implements MovieDao{
 		else{
 			session.insert("movie", null, movie.getReleaseDate(), movie.getTitle(), movie.getDirector()
 					, movie.getGenre(),movie.getMinutes(), movie.getDescription() );
+		}
+		try {
+			session.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -100,6 +108,7 @@ public class PostgresMovieDao implements MovieDao{
 				long id = rs.getLong("id");
 				Movie movie = new Movie(id,movieName,releaseDate,directorName,genre,minutes,description);
 				movies.add(movie);
+				session.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

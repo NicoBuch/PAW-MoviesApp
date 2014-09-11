@@ -1,6 +1,6 @@
 package ar.edu.itba.it.paw.exceptions;
 
-public class CantCommentBeforeMoviesReleaseDate extends Exception {
+public class CantCommentBeforeMoviesReleaseDateException extends Exception {
 
 	/**
 	 * 

@@ -67,7 +67,7 @@ public class PostgresCommentDao implements CommentDao {
 		return null;
 	}
 
-	public void update(Comment comment) {
+	public void save(Comment comment) {
 		Session<Comment> session = new Session<Comment>();
 		if(comment.getId() > 0){
 			Object[] body = {"body",comment.getBody()};

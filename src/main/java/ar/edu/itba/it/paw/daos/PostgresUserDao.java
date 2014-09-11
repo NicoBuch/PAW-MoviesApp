@@ -33,6 +33,7 @@ public class PostgresUserDao implements UserDao {
 			while (rs.next()) {
 				User user = createUser(rs);
 				users.add(user);
+				query.close();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -50,6 +51,7 @@ public class PostgresUserDao implements UserDao {
 			if (rs.next()) {
 				user = createUser(rs);
 			}
+			query.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -66,6 +68,7 @@ public class PostgresUserDao implements UserDao {
 			if (rs.next()) {
 				user = createUser(rs);
 			}
+			query.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -73,7 +76,7 @@ public class PostgresUserDao implements UserDao {
 		return user;
 	}
 
-	public void update(User user) {
+	public void save(User user) {
 		Session<User> session = new Session<User>();
 		// In the database: id first_name last_name email password
 		// secret_question secret_answer birth_date
@@ -88,6 +91,12 @@ public class PostgresUserDao implements UserDao {
 		} else {
 			session.insert("user_table", null, user.getFirstName(),
 					user.getLastName(), user.getEmail(), user.getPassword(), null, null, user.getBirthDate());
+		}
+		try {
+			session.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 	}

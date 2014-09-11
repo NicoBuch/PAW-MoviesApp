@@ -9,7 +9,7 @@ public interface CommentDao {
 
 	public abstract Comment getById(long id);
 
-	public abstract void update(Comment comment);
+	public abstract void save(Comment comment);
 
 	public abstract Comment getCommentsByUserAndMovie(User u, Movie m);
 

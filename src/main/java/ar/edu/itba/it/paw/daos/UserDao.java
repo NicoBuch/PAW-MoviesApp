@@ -7,7 +7,7 @@ public interface UserDao {
 	public abstract Iterable<User> getAll();
 	public abstract User getById(long id);
 	public abstract User getByEmail(String email);
-	public abstract void update(User user);
+	public abstract void save(User user);
    
 	
 }
