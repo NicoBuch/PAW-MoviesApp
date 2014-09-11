@@ -86,9 +86,26 @@ public class PostgresMovieDao implements MovieDao{
 		}
 	}
 
-	public Movie getByGenre(String genre) {
-	
-		return null;
+	public Iterable<Movie> getByGenre(String genre) {
+		Session<Movie> session = new Session<Movie>();
+		session.add(Criteria.eq("genre", genre));
+		ResultSet rs = session.list("movie");
+		List<Movie> movies = new ArrayList<Movie>();
+		try {
+			while(rs.next()){
+				String movieName = rs.getString("moviename");
+				String directorName = rs.getString("directorname");
+				int minutes = rs.getInt("minutes");
+				String description = rs.getString("description");
+				Date releaseDate = rs.getDate("releasedate");
+				long id = rs.getLong("id");
+				Movie movie = new Movie(id,movieName,releaseDate,directorName,genre,minutes,description);
+				movies.add(movie);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return movies;
 	}
 
 }

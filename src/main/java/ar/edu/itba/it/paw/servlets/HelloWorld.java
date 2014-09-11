@@ -2,7 +2,6 @@ package ar.edu.itba.it.paw.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -19,7 +18,7 @@ public class HelloWorld extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException{
 		MovieDao md = (PostgresMovieDao) PostgresMovieDao.getInstance();
-		Iterable<Movie> movies = md.getAll();
+		Iterable<Movie> movies = md.getByGenre("Fantasy");
 		Movie movie = md.getById(1);
 		PrintWriter out = resp.getWriter();
 		out.println("<html><body>HelloWorld!");
