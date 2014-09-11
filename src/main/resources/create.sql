@@ -1,14 +1,29 @@
 CREATE TABLE movie
 (
   id serial NOT NULL,
-  releasedate date,
-  moviename character varying(255),
-  directorname character varying(255),
+  releae_date date,
+  title character varying(255),
+  director character varying(255),
   genre character varying(15),
   minutes integer,
   description text(600),
   CONSTRAINT pk_movie PRIMARY KEY (id),
-  CONSTRAINT uq_movie UNIQUE (name)
+  CONSTRAINT uq_movie UNIQUE (title)
+)
+WITH (
+  OIDS=FALSE
+);
+
+CREATE TABLE comment
+(
+  id serial NOT NULL,
+  body text(600),
+  creation_date date,
+  rating integer check(rating > 0 and rating < 6),
+  movie_id integer references movie (id),
+  user_id integer references user (id),
+  CONSTRAINT pk_comment PRIMARY KEY (id),
+  CONSTRAINT uq_comment UNIQUE (movie_id, user_id)
 )
 WITH (
   OIDS=FALSE
