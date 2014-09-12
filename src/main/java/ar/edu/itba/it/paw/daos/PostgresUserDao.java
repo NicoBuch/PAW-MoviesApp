@@ -33,8 +33,8 @@ public class PostgresUserDao implements UserDao {
 			while (rs.next()) {
 				User user = createUser(rs);
 				users.add(user);
-				query.close();
 			}
+			query.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -9,7 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import ar.edu.itba.it.paw.daos.MovieDao;
 import ar.edu.itba.it.paw.daos.PostgresMovieDao;
+import ar.edu.itba.it.paw.exceptions.NoMovieIdException;
 import ar.edu.itba.it.paw.models.Movie;
+import ar.edu.itba.it.paw.services.MovieService;
+import ar.edu.itba.it.paw.services.MovieServiceImpl;
 
 public class HelloWorld extends HttpServlet{
 	/**
@@ -19,11 +22,19 @@ public class HelloWorld extends HttpServlet{
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException{
-		MovieDao md = (PostgresMovieDao) PostgresMovieDao.getInstance();
-		Iterable<Movie> movies = md.getAll();
-		Movie movie = md.getById(1);
+		MovieService ms = MovieServiceImpl.getInstance();
+		Iterable<Movie> movies = ms.getAll();
+		
 		PrintWriter out = resp.getWriter();
 		out.println("<html><body>HelloWorld!");
+		try {
+			Movie movie = ms.getById(5);
+			ms.save(movie);
+			out.println(movie.getTitle());
+		} catch (NoMovieIdException e) {
+			out.println(" ID INVALIDO");
+			e.printStackTrace();
+		}
 		for(Movie mv : movies){
 			out.println(mv.getTitle());
 			out.println(" ");
@@ -37,10 +48,8 @@ public class HelloWorld extends HttpServlet{
 			out.println(" ");
 			out.println("Description:" + mv.getDescription());
 		}
-		md.save(movie);
 		
 		//md.update(new Movie("bla", new Date(System.currentTimeMillis()), "Director", "Fantasy", 20, "La peor"));
-		out.println(movie.getTitle());
 		out.println(" ");
 		out.println("</body></html>");
 		

@@ -40,6 +40,7 @@ public class PostgresCommentDao implements CommentDao {
 						rs.getInt("user_id"));
 				comments.add(new Comment(id, body, creationDate, rating, movie, user));
 			}
+			query.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,15 +53,17 @@ public class PostgresCommentDao implements CommentDao {
 		query.add(Criteria.eq("id", id));
 		ResultSet rs = query.list("comment");
 		try {
-			rs.next();
-			String body = rs.getString("body");
-			int rating = rs.getInt("rating");
-			Date creationDate = rs.getDate("creation_date");
-			Movie movie = PostgresMovieDao.getInstance().getById(
-					rs.getInt("movie_id"));
-			User user = PostgresUserDao.getInstance().getById(
-					rs.getInt("user_id"));
-			return new Comment(id, body, creationDate, rating, movie, user);
+			if(rs.next() == true){
+				String body = rs.getString("body");
+				int rating = rs.getInt("rating");
+				Date creationDate = rs.getDate("creation_date");
+				Movie movie = PostgresMovieDao.getInstance().getById(
+						rs.getInt("movie_id"));
+				User user = PostgresUserDao.getInstance().getById(
+						rs.getInt("user_id"));
+				return new Comment(id, body, creationDate, rating, movie, user);
+			}
+			query.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -82,6 +85,12 @@ public class PostgresCommentDao implements CommentDao {
 			session.insert("comment", null, comment.getBody(), comment.getCreationDate(),comment.getRating()
 					, comment.getMovie().getId(), comment.getUser().getId());
 		}
+		try {
+			session.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -91,12 +100,14 @@ public class PostgresCommentDao implements CommentDao {
 		query.add(Criteria.eq("movie_id", m.getId()));
 		ResultSet rs = query.list("comment");
 		try {
-			rs.next();
-			String body = rs.getString("body");
-			int rating = rs.getInt("rating");
-			Date creationDate = rs.getDate("creation_date");
-			long id = rs.getLong("id");
-			return new Comment(id, body, creationDate, rating, m, u);
+			if(rs.next() == true){
+				String body = rs.getString("body");
+				int rating = rs.getInt("rating");
+				Date creationDate = rs.getDate("creation_date");
+				long id = rs.getLong("id");
+				return new Comment(id, body, creationDate, rating, m, u);
+			}
+			query.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -118,6 +129,7 @@ public class PostgresCommentDao implements CommentDao {
 						rs.getInt("user_id"));
 				comments.add(new Comment(id, body, creationDate, rating, m, user));
 			}
+			query.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -140,6 +152,7 @@ public class PostgresCommentDao implements CommentDao {
 						rs.getInt("movie_id"));
 				comments.add(new Comment(id, body, creationDate, rating, movie, u));
 			}
+			query.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

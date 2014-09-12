@@ -18,6 +18,7 @@ public class Session<T> {
 	Connection conn;
 
 	private List<Criteria> criteria = new ArrayList<Criteria>();
+	private List<Order> order = new ArrayList<Order>();
 	private Properties connectionProps = new Properties();
 
 	public Session() {
@@ -49,6 +50,9 @@ public class Session<T> {
 	public void add(Criteria criteria) {
 		this.criteria.add(criteria);
 	}
+	public void add(Order order){
+		this.order.add(order);
+	}
 
 	public ResultSet list(String table) {
 		String query = "SELECT " + "* " + "FROM " + table.toLowerCase();
@@ -59,6 +63,15 @@ public class Session<T> {
 				query = query + critIterator.next();
 				if (critIterator.hasNext())
 					query = query + " AND ";
+			}
+		}
+		if (order.size() > 0) {
+			query = query + " ORDER BY ";
+			Iterator<Order> orderIterator = order.iterator();
+			while (orderIterator.hasNext()) {
+				query = query + orderIterator.next();
+				if (orderIterator.hasNext())
+					query = query + ", ";
 			}
 		}
 		try {

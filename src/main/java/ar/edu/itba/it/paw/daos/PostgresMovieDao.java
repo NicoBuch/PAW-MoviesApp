@@ -23,22 +23,16 @@ public class PostgresMovieDao implements MovieDao{
 	
 	public Iterable<Movie> getAll() {
 		Session<Movie> query = new Session<Movie>();
+		query.add(new Order("release_date" , false));
 		ResultSet rs = query.list("movie");
 		List<Movie> movies = new ArrayList<Movie>();
 		
 		try {
 			while(rs.next()){
-				String movieName = rs.getString("title");
-				String directorName = rs.getString("director");
-				String genre = rs.getString("genre");
-				int minutes = rs.getInt("minutes");
-				String description = rs.getString("description");
-				Date releaseDate = rs.getDate("release_date");
-				long id = rs.getLong("id");
-				Movie movie = new Movie(id,movieName,releaseDate,directorName,genre,minutes,description);
+				Movie movie = formMovie(rs);
 				movies.add(movie);
-				query.close();
 			}
+			query.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,15 +47,24 @@ public class PostgresMovieDao implements MovieDao{
 		ResultSet rs = query.list("movie");
 		Movie movie = null;
 		try {
-			rs.next();
-			String movieName = rs.getString("title");
-			String directorName = rs.getString("director");
-			String genre = rs.getString("genre");
-			int minutes = rs.getInt("minutes");
-			String description = rs.getString("description");
-			Date releaseDate = rs.getDate("release_date");
-			long movieid = rs.getLong("id");
-			movie = new Movie(movieid,movieName,releaseDate,directorName,genre,minutes,description);
+			if(rs.next() == true){
+				movie = formMovie(rs);
+			}
+			query.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return movie;
+	}
+	public Movie getByTitle(String title){
+		Session<Movie> query = new Session<Movie>();
+		query.add(Criteria.eq("title", title));
+		ResultSet rs = query.list("movie");
+		Movie movie = null;
+		try {
+			if(rs.next() == true){
+				movie = formMovie(rs);
+			}
 			query.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -100,20 +103,26 @@ public class PostgresMovieDao implements MovieDao{
 		List<Movie> movies = new ArrayList<Movie>();
 		try {
 			while(rs.next()){
-				String movieName = rs.getString("moviename");
-				String directorName = rs.getString("directorname");
-				int minutes = rs.getInt("minutes");
-				String description = rs.getString("description");
-				Date releaseDate = rs.getDate("releasedate");
-				long id = rs.getLong("id");
-				Movie movie = new Movie(id,movieName,releaseDate,directorName,genre,minutes,description);
+				Movie movie = formMovie(rs);
 				movies.add(movie);
-				session.close();
 			}
+			session.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return movies;
+	}
+	
+	private Movie formMovie(ResultSet rs) throws SQLException{
+		String movieName = rs.getString("title");
+		String directorName = rs.getString("director");
+		String genre = rs.getString("genre");
+		int minutes = rs.getInt("minutes");
+		String description = rs.getString("description");
+		Date releaseDate = rs.getDate("release_date");
+		long id = rs.getLong("id");
+		Movie movie = new Movie(id,movieName,releaseDate,directorName,genre,minutes,description);
+		return movie;
 	}
 
 }
