@@ -99,6 +99,7 @@ public class PostgresMovieDao implements MovieDao{
 	public Iterable<Movie> getByGenre(String genre) {
 		Session<Movie> session = new Session<Movie>();
 		session.add(Criteria.eq("genre", genre));
+		session.add(new Order("release_date" , false));
 		ResultSet rs = session.list("movie");
 		List<Movie> movies = new ArrayList<Movie>();
 		try {
