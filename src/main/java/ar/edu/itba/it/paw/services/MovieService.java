@@ -1,5 +1,6 @@
 package ar.edu.itba.it.paw.services;
 
+import ar.edu.itba.it.paw.exceptions.NoGenreException;
 import ar.edu.itba.it.paw.exceptions.NoMovieIdException;
 import ar.edu.itba.it.paw.models.Movie;
 
@@ -12,6 +13,6 @@ public interface MovieService {
 
 	public boolean isNew(Movie movie);
 	
-	public Movie getByGenre(String genre);
+	public Iterable<Movie> getByGenre(String genre) throws NoGenreException;
 
 }

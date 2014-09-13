@@ -4,6 +4,7 @@ import java.util.Date;
 
 import ar.edu.itba.it.paw.daos.MovieDao;
 import ar.edu.itba.it.paw.daos.PostgresMovieDao;
+import ar.edu.itba.it.paw.exceptions.NoGenreException;
 import ar.edu.itba.it.paw.exceptions.NoMovieIdException;
 import ar.edu.itba.it.paw.models.Movie;
 
@@ -52,8 +53,15 @@ public class MovieServiceImpl implements MovieService {
 		return false;
 	}
 
-	public Movie getByGenre(String genre) {
-		// TODO Auto-generated method stub
-		return null;
+	public Iterable<Movie> getByGenre(String genre) throws NoGenreException 
+	{
+		try{
+			Movie.Genre.valueOf(genre.toUpperCase());
+			Iterable<Movie> movies = movieDao.getByGenre(genre.toUpperCase());
+			return movies;	
+		}catch (IllegalArgumentException e){
+			throw new NoGenreException();
+		}
 	}
+	
 }
