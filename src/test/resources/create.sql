@@ -1,4 +1,4 @@
-CREATE TABLE movie
+﻿CREATE TABLE movie
 (
   id serial NOT NULL,
   title character varying(255),
