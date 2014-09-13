@@ -4,10 +4,10 @@ import java.sql.Date;
 
 public class User extends Entity{
 	
-	String email;
+	String email = "";
 	String password;
-	String firstName;
-	String lastName;
+	String firstName= "";
+	String lastName = "";
 	Date birthDate;
 	
 	
@@ -20,6 +20,10 @@ public class User extends Entity{
 		setFields(email,password,firstName,lastName,birthDate);
 		
 	}
+	public User() {
+		super();	
+	}
+	
 	private void setFields(String email, String password, String firstName, String lastName, Date birthDate){
 		this.email = email;
 		this.password = password;
