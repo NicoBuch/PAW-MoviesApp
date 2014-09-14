@@ -53,7 +53,19 @@ public class Session<T> {
 	public void add(Order order){
 		this.order.add(order);
 	}
-
+	
+	public ResultSet executeQuery(String query){
+		try {
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			return rs;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public ResultSet list(String table) {
 		String query = "SELECT " + "* " + "FROM " + table.toLowerCase();
 		if (criteria.size() > 0) {

@@ -20,6 +20,13 @@ public class Criteria {
 	public static Criteria all(){
 		return new Criteria("" , "" , null);
 	}
+	public static Criteria biggerOrEq(String field, Object value){
+		return new Criteria(">=", field, value);
+	}
+	public static Criteria lowerOrEq(String field, Object value){
+		return new Criteria("<=", field, value);
+	}
+	
 	@Override
 	public String toString(){
 		return field +  sqlOperator  + Session.convertToSql(value); 

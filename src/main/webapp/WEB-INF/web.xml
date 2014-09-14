@@ -8,17 +8,21 @@
 		<servlet-name>MoviesServlet</servlet-name>
 		<servlet-class>ar.edu.itba.it.paw.servlets.MoviesServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>Index</servlet-name>
+		<servlet-class>ar.edu.itba.it.paw.servlets.Index</servlet-class>
+	</servlet>
 
 	<servlet>
 		<servlet-name>Registration</servlet-name>
 		<servlet-class>ar.edu.itba.it.paw.servlets.Registration</servlet-class>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>LoginServlet</servlet-name>
 		<servlet-class>ar.edu.itba.it.paw.servlets.LoginServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>LogOutServlet</servlet-name>
 		<servlet-class>ar.edu.itba.it.paw.servlets.LogOutServlet</servlet-class>
@@ -39,5 +43,11 @@
 	<servlet-mapping>
 		<servlet-name>Registration</servlet-name>
 		<url-pattern>/sign_up</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Index</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
 
 </web-app>
