@@ -16,5 +16,7 @@ public interface CommentDao {
 	public abstract Iterable<Comment> getCommentsByMovie(Movie m);
 
 	public abstract Iterable<Comment> getCommentsByUser(User u);
+	
+	public abstract int countCommentsByMovie(Movie m);
 
 }

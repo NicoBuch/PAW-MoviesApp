@@ -30,15 +30,12 @@ public class PostgresCommentDao implements CommentDao {
 		List<Comment> comments = new ArrayList<Comment>();
 		try {
 			while (rs.next()) {
-				String body = rs.getString("body");
-				int rating = rs.getInt("rating");
-				long id = rs.getLong("id");
-				Date creationDate = rs.getDate("creation_date");
+				
 				Movie movie = PostgresMovieDao.getInstance().getById(
 						rs.getInt("movie_id"));
 				User user = PostgresUserDao.getInstance().getById(
 						rs.getInt("user_id"));
-				comments.add(new Comment(id, body, creationDate, rating, movie, user));
+				comments.add(buildComment(rs, movie, user));
 			}
 			query.close();
 		} catch (SQLException e) {
@@ -54,14 +51,11 @@ public class PostgresCommentDao implements CommentDao {
 		ResultSet rs = query.list("comment");
 		try {
 			if(rs.next() == true){
-				String body = rs.getString("body");
-				int rating = rs.getInt("rating");
-				Date creationDate = rs.getDate("creation_date");
 				Movie movie = PostgresMovieDao.getInstance().getById(
 						rs.getInt("movie_id"));
 				User user = PostgresUserDao.getInstance().getById(
 						rs.getInt("user_id"));
-				return new Comment(id, body, creationDate, rating, movie, user);
+				return buildComment(rs, movie, user);
 			}
 			query.close();
 		} catch (SQLException e) {
@@ -94,18 +88,14 @@ public class PostgresCommentDao implements CommentDao {
 		
 	}
 
-	public Comment getCommentsByUserAndMovie(User u, Movie m) {
+	public Comment getCommentsByUserAndMovie(User user, Movie movie) {
 		Session<Comment> query = new Session<Comment>();
-		query.add(Criteria.eq("user_id", u.getId()));
-		query.add(Criteria.eq("movie_id", m.getId()));
+		query.add(Criteria.eq("user_id", user.getId()));
+		query.add(Criteria.eq("movie_id", movie.getId()));
 		ResultSet rs = query.list("comment");
 		try {
 			if(rs.next() == true){
-				String body = rs.getString("body");
-				int rating = rs.getInt("rating");
-				Date creationDate = rs.getDate("creation_date");
-				long id = rs.getLong("id");
-				return new Comment(id, body, creationDate, rating, m, u);
+				return buildComment(rs, movie, user);
 			}
 			query.close();
 		} catch (SQLException e) {
@@ -114,20 +104,16 @@ public class PostgresCommentDao implements CommentDao {
 		return null;
 	}
 
-	public Iterable<Comment> getCommentsByMovie(Movie m) {
+	public Iterable<Comment> getCommentsByMovie(Movie movie) {
 		Session<Comment> query = new Session<Comment>();
-		query.add(Criteria.eq("movie_id", m.getId()));
+		query.add(Criteria.eq("movie_id", movie.getId()));
 		ResultSet rs = query.list("comment");
 		List<Comment> comments = new ArrayList<Comment>();
 		try {
 			while (rs.next()) {
-				String body = rs.getString("body");
-				int rating = rs.getInt("rating");
-				long id = rs.getLong("id");
-				Date creationDate = rs.getDate("creation_date");
 				User user = PostgresUserDao.getInstance().getById(
 						rs.getInt("user_id"));
-				comments.add(new Comment(id, body, creationDate, rating, m, user));
+				comments.add(buildComment(rs, movie, user));
 			}
 			query.close();
 		} catch (SQLException e) {
@@ -137,20 +123,16 @@ public class PostgresCommentDao implements CommentDao {
 		return comments;
 	}
 
-	public Iterable<Comment> getCommentsByUser(User u) {
+	public Iterable<Comment> getCommentsByUser(User user) {
 		Session<Comment> query = new Session<Comment>();
-		query.add(Criteria.eq("user_id", u.getId()));
+		query.add(Criteria.eq("user_id", user.getId()));
 		ResultSet rs = query.list("comment");
 		List<Comment> comments = new ArrayList<Comment>();
 		try {
 			while (rs.next()) {
-				String body = rs.getString("body");
-				int rating = rs.getInt("rating");
-				long id = rs.getLong("id");
-				Date creationDate = rs.getDate("creation_date");
 				Movie movie = PostgresMovieDao.getInstance().getById(
 						rs.getInt("movie_id"));
-				comments.add(new Comment(id, body, creationDate, rating, movie, u));
+				comments.add(buildComment(rs, movie, user));
 			}
 			query.close();
 		} catch (SQLException e) {
@@ -158,6 +140,32 @@ public class PostgresCommentDao implements CommentDao {
 			e.printStackTrace();
 		}
 		return comments;
+	}
+
+	public int countCommentsByMovie(Movie m) {
+		Session<Comment> session = new Session<Comment>();
+		String query = "select count(*) from comment where movie_id=" + m.getId();
+		ResultSet rs = session.executeQuery(query);
+		int count = 0;
+		try {
+			if(rs.next() == true){
+				count = rs.getInt("count");
+			}
+			session.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return count;
+		
+	}
+	
+	private Comment buildComment(ResultSet rs, Movie m, User u) throws SQLException{
+		String body = rs.getString("body");
+		int rating = rs.getInt("rating");
+		Date creationDate = rs.getDate("creation_date");
+		long id = rs.getLong("id");
+		return new Comment(id, body, creationDate, rating, m, u);
 	}
 
 }

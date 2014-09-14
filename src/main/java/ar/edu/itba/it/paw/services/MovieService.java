@@ -19,5 +19,8 @@ public interface MovieService {
 	
 	public Iterable<Movie> getByRating(int limit);
 	
+	public Iterable<Movie> getByCreationDate(int limit);
+	
 	public Iterable<Movie> getByReleaseDate(Date from, Date to);
+	
 }

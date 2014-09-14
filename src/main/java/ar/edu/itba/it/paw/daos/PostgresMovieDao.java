@@ -125,21 +125,22 @@ public class PostgresMovieDao implements MovieDao {
 		String description = rs.getString("description");
 		Date releaseDate = rs.getDate("release_date");
 		long id = rs.getLong("id");
+		Date creationDate = rs.getDate("creation_date");
 		Movie movie = new Movie(id, movieName, releaseDate, directorName,
-				genre, minutes, description);
+				genre, minutes, description, creationDate);
 		return movie;
 	}
 
 	public Iterable<Movie> getByRating(int limit) {
 		Session<Movie> session = new Session<Movie>();
-		String query = "select movie.* from movie,comment where comment.movie_id = movie.id order by rating desc limit "
-				+ limit;
+		String query = "select movie_id from movie,comment where movie_id=movie.id"
+				+ " group by movie_id order by avg(rating) desc limit " + limit;
 		ResultSet rs = session.executeQuery(query);
 		List<Movie> movies = new ArrayList<Movie>();
 
 		try {
 			while (rs.next()) {
-				Movie movie = formMovie(rs);
+				Movie movie = getById(rs.getLong("movie_id"));
 				movies.add(movie);
 			}
 			session.close();
@@ -163,6 +164,25 @@ public class PostgresMovieDao implements MovieDao {
 			}
 			query.close();
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return movies;
+	}
+
+	public Iterable<Movie> getByCreationDate(int limit) {
+		Session<Movie> session = new Session<Movie>();
+		String query = "select * from movie order by creation_date desc limit "
+				+ limit;
+		ResultSet rs = session.executeQuery(query);
+		List<Movie> movies = new ArrayList<Movie>();
+		try {
+			while (rs.next()) {
+				Movie movie = formMovie(rs);
+				movies.add(movie);
+			}
+			session.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return movies;

@@ -71,5 +71,9 @@ public class MovieServiceImpl implements MovieService {
 	public Iterable<Movie> getByReleaseDate(Date from, Date to) {
 		return movieDao.getByReleaseDate(from, to);
 	}
+
+	public Iterable<Movie> getByCreationDate(int limit) {
+		return movieDao.getByCreationDate(limit);
+	}
 	
 }

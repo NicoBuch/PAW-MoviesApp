@@ -15,4 +15,6 @@ public interface CommentService {
 	public Iterable<Comment> getCommentsByMovie(Movie m);
 
 	public Iterable<Comment> getCommentsByUser(User u);
+	
+	public int countCommentsByMovie(Movie m);
 }

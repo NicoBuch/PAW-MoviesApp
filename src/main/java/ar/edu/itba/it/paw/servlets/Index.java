@@ -28,6 +28,8 @@ public class Index extends HttpServlet{
 		c.add(Calendar.DATE, -6); 
 		Iterable<Movie> releases = ms.getByReleaseDate(new Date(c.getTimeInMillis()), now);
 		shortDescription(releases);
+		Iterable<Movie> recents = ms.getByCreationDate(5);
+		req.setAttribute("recents", recents);
 		req.setAttribute("user", req.getSession().getAttribute("user"));
 		req.setAttribute("releases", releases);
 		req.setAttribute("ranked", ranked);

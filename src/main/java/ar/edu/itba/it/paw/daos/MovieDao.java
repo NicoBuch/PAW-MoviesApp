@@ -10,5 +10,6 @@ public interface MovieDao {
 	public abstract void save(Movie movie);
 	public abstract Iterable<Movie> getByGenre(String genre);
 	public abstract Iterable<Movie> getByRating(int limit);
+	public abstract Iterable<Movie> getByCreationDate(int limit);
 	public abstract Iterable<Movie> getByReleaseDate(Date from, Date to);
 }

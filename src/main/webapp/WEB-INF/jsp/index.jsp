@@ -32,6 +32,18 @@
    </div>
    
    <div>
+        <h3> Recent Uploaded Movies </h3>
+		<ul>
+		  <c:forEach var="aMovie" items="${recents}">
+	        <li> <a href="movie?id=${aMovie.id}">${aMovie.title}</a></br>
+	        	 Upload Date: ${aMovie.creationDate}</br>
+	        	 Comments: ${aMovie.commentCount}
+	        </li> 	   
+    	  </c:forEach>
+        </ul>
+   </div>   
+   
+   <div>
    		<h3><a href="comments?user_id=${user.id}"> See all my comments</h3>
    </div>
    		
