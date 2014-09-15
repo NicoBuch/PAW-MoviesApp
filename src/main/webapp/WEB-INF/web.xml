@@ -8,6 +8,7 @@
 		<servlet-name>MoviesServlet</servlet-name>
 		<servlet-class>ar.edu.itba.it.paw.servlets.MoviesServlet</servlet-class>
 	</servlet>
+
 	<servlet>
 		<servlet-name>Index</servlet-name>
 		<servlet-class>ar.edu.itba.it.paw.servlets.Index</servlet-class>
@@ -27,27 +28,38 @@
 		<servlet-name>LogOutServlet</servlet-name>
 		<servlet-class>ar.edu.itba.it.paw.servlets.LogOutServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>MovieServlet</servlet-name>
+		<servlet-class>ar.edu.itba.it.paw.servlets.MovieServlet</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>MoviesServlet</servlet-name>
 		<url-pattern>/movies</url-pattern>
 	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>LoginServlet</servlet-name>
 		<url-pattern>/sign_in</url-pattern>
 	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>LogOutServlet</servlet-name>
 		<url-pattern>/sign_out</url-pattern>
 	</servlet-mapping>
+	
 	<servlet-mapping>
 		<servlet-name>Registration</servlet-name>
 		<url-pattern>/sign_up</url-pattern>
 	</servlet-mapping>
+	
 	<servlet-mapping>
 		<servlet-name>Index</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
-
+	<servlet-mapping>
+		<servlet-name>MovieServlet</servlet-name>
+		<url-pattern>/movie</url-pattern>
+	</servlet-mapping>
 </web-app>

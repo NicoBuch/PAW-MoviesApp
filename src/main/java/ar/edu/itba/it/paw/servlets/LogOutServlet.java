@@ -15,7 +15,7 @@ public class LogOutServlet extends HttpServlet{
 		
 		HttpSession session  = req.getSession();
 		session.setAttribute("user", null);
-		resp.sendRedirect("movies"); //CAMBIAR A INDEX
+		resp.sendRedirect(""); //CAMBIAR A INDEX
 	}
 	
 }

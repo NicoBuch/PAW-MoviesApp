@@ -63,6 +63,13 @@ public class MovieServiceImpl implements MovieService {
 			throw new NoGenreException();
 		}
 	}
+	public boolean alreadyRelease(Movie movie){
+		if(movie.getReleaseDate().compareTo(new Date(System.currentTimeMillis())) < 0){
+			return true;
+		}
+		return false;
+		
+	}
 	
 	public Iterable<Movie> getByRating(int limit){
 		return movieDao.getByRating(limit);

@@ -12,7 +12,7 @@
 
 	
 	<c:forEach var="error" items="${errors}">
-		<h6><c:out value="${error.message}" /></h6>
+		<h6>${error.message}</h6>
 	</c:forEach>
 
 	

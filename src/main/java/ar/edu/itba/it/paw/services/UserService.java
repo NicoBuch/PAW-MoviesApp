@@ -13,5 +13,7 @@ public interface UserService {
 	public User getById(int id);
 
 	public void save(User user) throws EmailAlreadyTakenException;
+	
+	public boolean isVip(User user);
 
 }

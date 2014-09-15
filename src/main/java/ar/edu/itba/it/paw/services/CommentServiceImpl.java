@@ -46,8 +46,32 @@ public class CommentServiceImpl implements CommentService{
 		return dao.getCommentsByUser(u);
 	}
 
+
 	public int countCommentsByMovie(Movie m) {
 		return dao.countCommentsByMovie(m);
+	}
+	public boolean alreadyComment(User user, Movie movie) {
+		Comment userComment = dao.getCommentsByUserAndMovie(user,
+				movie);
+		if(userComment!=null){
+			return true;
+		}
+		return false;
+	}
+
+	public boolean canComment(User user, Movie movie) {
+		MovieService movieService = MovieServiceImpl.getInstance();
+		UserService userService = UserServiceImpl.getInstance();
+		if(user==null)
+			return false;
+		if((movieService.alreadyRelease(movie) || userService.isVip(user)) && user!=null 
+				&& !(alreadyComment(user, movie))){
+			return true;
+		}
+		else{
+			return false;
+		}
+
 	}
 
 }

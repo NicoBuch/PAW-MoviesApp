@@ -25,6 +25,7 @@ CREATE TABLE user_table
   secret_question character varying(255),
   secret_answer character varying(255),
   birth_date date NOT NULL,
+  vip boolean DEFAULT FALSE,
   CONSTRAINT pk_user PRIMARY KEY (id),
   CONSTRAINT uq_user UNIQUE (email)
 )
@@ -37,7 +38,7 @@ CREATE TABLE comment
   id serial NOT NULL,
   body text,
   creation_date date,
-  rating integer check(rating > 0 and rating < 6),
+  rating integer check(rating >= 0 and rating < 6),
   movie_id integer references movie (id),
   user_id integer references user_table (id),
   CONSTRAINT pk_comment PRIMARY KEY (id),
