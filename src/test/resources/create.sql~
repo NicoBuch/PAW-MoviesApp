@@ -7,7 +7,7 @@
   genre character varying(15),
   minutes integer,
   description text,
-  creatioin_date date,
+  creation_date date,
   CONSTRAINT pk_movie PRIMARY KEY (id),
   CONSTRAINT uq_movie UNIQUE (title)
 )
@@ -38,7 +38,7 @@ CREATE TABLE comment
   id serial NOT NULL,
   body text,
   creation_date date,
-  rating integer check(rating > 0 and rating < 6),
+  rating integer check(rating >= 0 and rating < 6),
   movie_id integer references movie (id),
   user_id integer references user_table (id),
   CONSTRAINT pk_comment PRIMARY KEY (id),

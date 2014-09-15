@@ -28,9 +28,14 @@ public class MovieServlet extends HttpServlet{
 		HttpSession session = req.getSession();
 		MovieService movieService = MovieServiceImpl.getInstance();
 		CommentService commentService = CommentServiceImpl.getInstance();
-		Long id = Long.parseLong(req.getParameter("id"));
+		Long id;
+		try{
+			 id = Long.parseLong(req.getParameter("id"));
+		}catch (NumberFormatException e) {
+			resp.sendRedirect("movies");
+			return;
+		} 
 		User user = (User) session.getAttribute("user");
-		
 		try {
 			Movie movie  = movieService.getById(id);
 			req.setAttribute("movie", movie);
@@ -48,8 +53,6 @@ public class MovieServlet extends HttpServlet{
 			resp.sendRedirect("movies");
 		}
 			
-			
-		
 	}
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException{

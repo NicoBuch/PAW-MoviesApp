@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
@@ -42,6 +44,7 @@ public class Registration extends HttpServlet{
 		String password = req.getParameter("password");
 		String password_confirmation = req.getParameter("password_confirmation");
 		String birthDate = req.getParameter("birthDate");
+		List<Error> errors = new ArrayList<Error>();
 		if(!firstName.isEmpty()){
 			user.setFirstName(firstName);
 			count++;
@@ -58,32 +61,33 @@ public class Registration extends HttpServlet{
 			count++;
 		}
 		if(password.isEmpty() || count != 4 ){
-			req.setAttribute("user", user);
-			req.setAttribute("error", new Error("You must complete all the fields to sign up"));
-			this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);
+			errors.add(new Error("Password empty"));
 		}
 		if(!password.equals(password_confirmation)){
-			req.setAttribute("user", user);
-			req.setAttribute("error", new Error("Password and Confirmation doesnt match"));
-			this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);
-		}
-		if(!isValidDate(birthDate)){
-			req.setAttribute("user", user);
-			req.setAttribute("error", new Error("Invalid Date"));
-			req.getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);			
-		}
-
-
-		if (!rfc2822.matcher(email).matches()) {
-			req.setAttribute("user", user);
-			req.setAttribute("error", new Error("Invalid Email"));
-			req.getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);  
+			errors.add(new Error("Password and Confirmation doesnt match"));
 		}
 		
-		user.setBirthDate(Date.valueOf(birthDate));
+		if(!isValidDate(birthDate)){
+			errors.add(new Error("Invalid Date"));
+		}
+		else{
+			user.setBirthDate(Date.valueOf(birthDate));
+		}
+		
+		if (!rfc2822.matcher(email).matches()) {
+			errors.add(new Error("Invalid Email"));
+		}
+		if(!errors.isEmpty()){
+			req.setAttribute("user", user);
+			req.setAttribute("errors", errors);
+			req.getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);  
+			return;
+		}
+		
 		user.setPassword(password);
 		try {
 			UserServiceImpl.getInstance().save(user);
+			resp.sendRedirect("sign_in");
 		} catch (EmailAlreadyTakenException e) {
 			user.setEmail("");
 			req.setAttribute("user", user);

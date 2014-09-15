@@ -65,6 +65,7 @@ public class User extends Entity{
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
+
 	public void setVip(boolean vip){
 		this.vip=vip;
 	}
