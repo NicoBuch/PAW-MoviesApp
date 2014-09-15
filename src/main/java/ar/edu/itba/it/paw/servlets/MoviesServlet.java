@@ -23,17 +23,21 @@ public class MoviesServlet extends HttpServlet{
 		
 		resp.setContentType("text/html");
 		String genre = req.getParameter("genre");
+		String director = req.getParameter("director");
 		MovieService movieService = MovieServiceImpl.getInstance();
 		Iterable<Movie> movies = new ArrayList<Movie>(); //Inicializo con una lista vacia, programacion defensiva
-		if(genre == null){
-			movies = movieService.getAll();
-		}
-		else{
+		if(genre != null){
 			try {
 				movies = movieService.getByGenre(genre);
 			} catch (NoGenreException e) {
 				resp.sendRedirect("movies");
 			}
+		}
+		else if(director!=null){
+				movies = movieService.getByDirector(director);	 
+		}
+		else{
+			movies = movieService.getAll();
 		}
 		Object[] genres = Movie.Genre.values();
 		List<Object> genresIterable = new ArrayList<Object>();

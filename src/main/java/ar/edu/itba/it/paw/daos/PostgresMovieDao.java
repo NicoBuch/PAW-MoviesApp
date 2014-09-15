@@ -133,7 +133,7 @@ public class PostgresMovieDao implements MovieDao {
 
 	public Iterable<Movie> getByRating(int limit) {
 		Session<Movie> session = new Session<Movie>();
-		String query = "select movie_id from movie,comment where movie_id=movie.id"
+		String query = "select movie_id from comment "
 				+ " group by movie_id order by avg(rating) desc limit " + limit;
 		ResultSet rs = session.executeQuery(query);
 		List<Movie> movies = new ArrayList<Movie>();
@@ -183,6 +183,24 @@ public class PostgresMovieDao implements MovieDao {
 			session.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return movies;
+	}
+
+	public Iterable<Movie> getByDirector(String director) {
+		Session<Movie> session = new Session<Movie>();
+		session.add(Criteria.stringEq("director", director));
+		session.add(new Order("release_date", false));
+		ResultSet rs = session.list("movie");
+		List<Movie> movies = new ArrayList<Movie>();
+		try {
+			while (rs.next()) {
+				Movie movie = formMovie(rs);
+				movies.add(movie);
+			}
+			session.close();
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return movies;

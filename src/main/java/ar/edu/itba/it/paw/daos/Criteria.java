@@ -26,9 +26,12 @@ public class Criteria {
 	public static Criteria lowerOrEq(String field, Object value){
 		return new Criteria("<=", field, value);
 	}
+	public static Criteria stringEq(String field, Object value){
+		return new Criteria("~*" , field, value);
+	}
 	
 	@Override
 	public String toString(){
-		return field +  sqlOperator  + Session.convertToSql(value); 
+		return field + " " + sqlOperator + " " + Session.convertToSql(value); 
 	}
 }
