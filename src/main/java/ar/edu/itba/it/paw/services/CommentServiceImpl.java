@@ -46,4 +46,8 @@ public class CommentServiceImpl implements CommentService{
 		return dao.getCommentsByUser(u);
 	}
 
+	public int countCommentsByMovie(Movie m) {
+		return dao.countCommentsByMovie(m);
+	}
+
 }

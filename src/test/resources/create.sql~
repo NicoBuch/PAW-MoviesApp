@@ -7,6 +7,7 @@
   genre character varying(15),
   minutes integer,
   description text,
+  creatioin_date date,
   CONSTRAINT pk_movie PRIMARY KEY (id),
   CONSTRAINT uq_movie UNIQUE (title)
 )
@@ -14,7 +15,7 @@ WITH (
   OIDS=FALSE
 );
 
-CREATE TABLE user
+CREATE TABLE user_table
 (
   id serial NOT NULL ,
   first_name character varying(255) NOT NULL,

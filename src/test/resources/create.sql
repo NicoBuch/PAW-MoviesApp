@@ -7,6 +7,7 @@
   genre character varying(15),
   minutes integer,
   description text,
+  creation_date date,
   CONSTRAINT pk_movie PRIMARY KEY (id),
   CONSTRAINT uq_movie UNIQUE (title)
 )

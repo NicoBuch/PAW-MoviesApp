@@ -1,6 +1,6 @@
 package ar.edu.itba.it.paw.services;
 
-import java.util.Date;
+import java.sql.Date;
 
 import ar.edu.itba.it.paw.daos.MovieDao;
 import ar.edu.itba.it.paw.daos.PostgresMovieDao;
@@ -62,6 +62,18 @@ public class MovieServiceImpl implements MovieService {
 		}catch (IllegalArgumentException e){
 			throw new NoGenreException();
 		}
+	}
+	
+	public Iterable<Movie> getByRating(int limit){
+		return movieDao.getByRating(limit);
+	}
+
+	public Iterable<Movie> getByReleaseDate(Date from, Date to) {
+		return movieDao.getByReleaseDate(from, to);
+	}
+
+	public Iterable<Movie> getByCreationDate(int limit) {
+		return movieDao.getByCreationDate(limit);
 	}
 	
 }

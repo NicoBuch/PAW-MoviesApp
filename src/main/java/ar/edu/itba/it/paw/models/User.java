@@ -62,7 +62,7 @@ public class User extends Entity{
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
-	
+
 	@Override
     public boolean equals(Object obj) {
     	if (this == obj)

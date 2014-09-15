@@ -8,27 +8,28 @@ import java.util.List;
 
 import ar.edu.itba.it.paw.models.Movie;
 
-public class PostgresMovieDao implements MovieDao{
-	private static PostgresMovieDao  obj = null;
-	
-	private PostgresMovieDao(){	
-		
+public class PostgresMovieDao implements MovieDao {
+	private static PostgresMovieDao obj = null;
+
+	private PostgresMovieDao() {
+
 	}
-	public static MovieDao getInstance(){
-		if(obj == null)
+
+	public static MovieDao getInstance() {
+		if (obj == null)
 			obj = new PostgresMovieDao();
-		
+
 		return obj;
 	}
-	
+
 	public Iterable<Movie> getAll() {
 		Session<Movie> query = new Session<Movie>();
-		query.add(new Order("release_date" , false));
+		query.add(new Order("release_date", false));
 		ResultSet rs = query.list("movie");
 		List<Movie> movies = new ArrayList<Movie>();
-		
+
 		try {
-			while(rs.next()){
+			while (rs.next()) {
 				Movie movie = formMovie(rs);
 				movies.add(movie);
 			}
@@ -47,7 +48,7 @@ public class PostgresMovieDao implements MovieDao{
 		ResultSet rs = query.list("movie");
 		Movie movie = null;
 		try {
-			if(rs.next() == true){
+			if (rs.next() == true) {
 				movie = formMovie(rs);
 			}
 			query.close();
@@ -56,13 +57,14 @@ public class PostgresMovieDao implements MovieDao{
 		}
 		return movie;
 	}
-	public Movie getByTitle(String title){
+
+	public Movie getByTitle(String title) {
 		Session<Movie> query = new Session<Movie>();
 		query.add(Criteria.eq("title", title));
 		ResultSet rs = query.list("movie");
 		Movie movie = null;
 		try {
-			if(rs.next() == true){
+			if (rs.next() == true) {
 				movie = formMovie(rs);
 			}
 			query.close();
@@ -74,19 +76,20 @@ public class PostgresMovieDao implements MovieDao{
 
 	public void save(Movie movie) {
 		Session<Movie> session = new Session<Movie>();
-		if(movie.getId() > 0){
-			Object[] movieName = {"title",movie.getTitle()};
-			Object[] releaseDate = {"release_date" , movie.getReleaseDate()};
-			Object[] directorName = {"director" , movie.getDirector()};
-			Object[] genre = {"genre" , movie.getGenre()};
-			Object[] minutes = {"minutes" , movie.getMinutes()};
-			Object[] description = {"description" , movie.getDescription()};
+		if (movie.getId() > 0) {
+			Object[] movieName = { "title", movie.getTitle() };
+			Object[] releaseDate = { "release_date", movie.getReleaseDate() };
+			Object[] directorName = { "director", movie.getDirector() };
+			Object[] genre = { "genre", movie.getGenre() };
+			Object[] minutes = { "minutes", movie.getMinutes() };
+			Object[] description = { "description", movie.getDescription() };
 			session.add(Criteria.eq("id", movie.getId()));
-			session.update("movie", movieName, releaseDate, directorName, genre, minutes, description);
-		}
-		else{
-			session.insert("movie", null, movie.getReleaseDate(), movie.getTitle(), movie.getDirector()
-					, movie.getGenre(),movie.getMinutes(), movie.getDescription() );
+			session.update("movie", movieName, releaseDate, directorName,
+					genre, minutes, description);
+		} else {
+			session.insert("movie", null, movie.getReleaseDate(),
+					movie.getTitle(), movie.getDirector(), movie.getGenre(),
+					movie.getMinutes(), movie.getDescription());
 		}
 		try {
 			session.close();
@@ -99,11 +102,11 @@ public class PostgresMovieDao implements MovieDao{
 	public Iterable<Movie> getByGenre(String genre) {
 		Session<Movie> session = new Session<Movie>();
 		session.add(Criteria.eq("genre", genre));
-		session.add(new Order("release_date" , false));
+		session.add(new Order("release_date", false));
 		ResultSet rs = session.list("movie");
 		List<Movie> movies = new ArrayList<Movie>();
 		try {
-			while(rs.next()){
+			while (rs.next()) {
 				Movie movie = formMovie(rs);
 				movies.add(movie);
 			}
@@ -113,8 +116,8 @@ public class PostgresMovieDao implements MovieDao{
 		}
 		return movies;
 	}
-	
-	private Movie formMovie(ResultSet rs) throws SQLException{
+
+	private Movie formMovie(ResultSet rs) throws SQLException {
 		String movieName = rs.getString("title");
 		String directorName = rs.getString("director");
 		String genre = rs.getString("genre");
@@ -122,8 +125,67 @@ public class PostgresMovieDao implements MovieDao{
 		String description = rs.getString("description");
 		Date releaseDate = rs.getDate("release_date");
 		long id = rs.getLong("id");
-		Movie movie = new Movie(id,movieName,releaseDate,directorName,genre,minutes,description);
+		Date creationDate = rs.getDate("creation_date");
+		Movie movie = new Movie(id, movieName, releaseDate, directorName,
+				genre, minutes, description, creationDate);
 		return movie;
+	}
+
+	public Iterable<Movie> getByRating(int limit) {
+		Session<Movie> session = new Session<Movie>();
+		String query = "select movie_id from movie,comment where movie_id=movie.id"
+				+ " group by movie_id order by avg(rating) desc limit " + limit;
+		ResultSet rs = session.executeQuery(query);
+		List<Movie> movies = new ArrayList<Movie>();
+
+		try {
+			while (rs.next()) {
+				Movie movie = getById(rs.getLong("movie_id"));
+				movies.add(movie);
+			}
+			session.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return movies;
+	}
+
+	public Iterable<Movie> getByReleaseDate(Date from, Date to) {
+		Session<Movie> query = new Session<Movie>();
+		query.add(Criteria.biggerOrEq("release_date", from));
+		query.add(Criteria.lowerOrEq("release_date", to));
+		ResultSet rs = query.list("movie");
+		List<Movie> movies = new ArrayList<Movie>();
+		try {
+			while (rs.next()) {
+				Movie movie = formMovie(rs);
+				movies.add(movie);
+			}
+			query.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return movies;
+	}
+
+	public Iterable<Movie> getByCreationDate(int limit) {
+		Session<Movie> session = new Session<Movie>();
+		String query = "select * from movie order by creation_date desc limit "
+				+ limit;
+		ResultSet rs = session.executeQuery(query);
+		List<Movie> movies = new ArrayList<Movie>();
+		try {
+			while (rs.next()) {
+				Movie movie = formMovie(rs);
+				movies.add(movie);
+			}
+			session.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return movies;
 	}
 
 }
