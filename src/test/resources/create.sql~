@@ -25,6 +25,7 @@ CREATE TABLE user_table
   secret_question character varying(255),
   secret_answer character varying(255),
   birth_date date NOT NULL,
+  vip boolean DEFAULT FALSE,
   CONSTRAINT pk_user PRIMARY KEY (id),
   CONSTRAINT uq_user UNIQUE (email)
 )

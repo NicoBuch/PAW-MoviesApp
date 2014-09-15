@@ -61,5 +61,9 @@ public class UserServiceImpl implements UserService {
 	private boolean passwordMatch(String password1, String password2) {
 		return password1.equals(password2);
 	}
+	
+	public boolean isVip(User user){
+		return userDao.isVip(user);
+	}
 
 }

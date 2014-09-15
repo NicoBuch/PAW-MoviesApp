@@ -8,6 +8,7 @@ public interface UserDao {
 	public abstract User getById(long id);
 	public abstract User getByEmail(String email);
 	public abstract void save(User user);
+	public abstract boolean isVip(User user);
    
 	
 }

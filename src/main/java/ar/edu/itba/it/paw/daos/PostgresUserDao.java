@@ -108,7 +108,12 @@ public class PostgresUserDao implements UserDao {
 		String lastName = rs.getString("last_name");
 		Date birthDate = rs.getDate("birth_date");
 		long id = rs.getLong("id");
-		return new User(id, email, password, firstName, lastName, birthDate);
+		boolean vip = rs.getBoolean("vip");
+		return new User(id, email, password, firstName, lastName, birthDate,vip);
+	}
+
+	public boolean isVip(User user) {
+		return user.getVip();
 	}
 
 }

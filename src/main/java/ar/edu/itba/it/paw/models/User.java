@@ -9,27 +9,30 @@ public class User extends Entity{
 	String firstName= "";
 	String lastName = "";
 	Date birthDate;
+	boolean vip;
 	
 	
-	public User(long id, String email, String password, String firstName, String lastName, Date birthDate) {
+	public User(long id, String email, String password, String firstName, String lastName, Date birthDate, boolean vip) {
 		super(id);
-		setFields(email,password,firstName,lastName,birthDate);
+		setFields(email,password,firstName,lastName,birthDate, vip);
 	}
-	public User(String email, String password, String firstName, String lastName, Date birthDate) {
+	public User(String email, String password, String firstName, String lastName, Date birthDate, boolean vip) {
 		super();
-		setFields(email,password,firstName,lastName,birthDate);
+		setFields(email,password,firstName,lastName,birthDate, vip);
 		
 	}
 	public User() {
 		super();	
 	}
 	
-	private void setFields(String email, String password, String firstName, String lastName, Date birthDate){
+	private void setFields(String email, String password, String firstName, String lastName, Date birthDate, boolean vip){
+
 		this.email = email;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
+		this.vip = vip;
 	}
 	
 	public String getEmail() {
@@ -62,7 +65,12 @@ public class User extends Entity{
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
-
+	public void setVip(boolean vip){
+		this.vip=vip;
+	}
+	public boolean getVip(){
+		return vip;
+	}
 	@Override
     public boolean equals(Object obj) {
     	if (this == obj)

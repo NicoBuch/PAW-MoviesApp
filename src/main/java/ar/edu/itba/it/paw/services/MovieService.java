@@ -23,5 +23,7 @@ public interface MovieService {
 	
 	public Iterable<Movie> getByReleaseDate(Date from, Date to);
 	
+	public boolean alreadyRelease(Movie movie);
+
 
 }

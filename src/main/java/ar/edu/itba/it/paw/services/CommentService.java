@@ -16,5 +16,11 @@ public interface CommentService {
 
 	public Iterable<Comment> getCommentsByUser(User u);
 	
+
 	public int countCommentsByMovie(Movie m);
+
+	public boolean alreadyComment(User u, Movie movie);
+	
+	public boolean canComment(User u, Movie movie);
+
 }
