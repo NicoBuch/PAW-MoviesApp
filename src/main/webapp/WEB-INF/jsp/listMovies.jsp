@@ -22,6 +22,11 @@
 	</select>
 	<button type="submit">Filtrar</button>
 </form>
+<form name="filterByDirectorForm" method='get'>
+	Director:
+	<input  type="text" name="director"> <button type="submit">Filtrar</button> <br/> 
+	
+</form>
 
 
 <!-- Movies Table -->
