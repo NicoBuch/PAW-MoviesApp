@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet{
 		try {
 			User us = userService.login(email, password);
 			session.setAttribute("user", us );
-			resp.sendRedirect("movies"); //CAMBIAR A INDEX
+			resp.sendRedirect("");
 		} catch (LoginFailedException e) {
 			// TODO Auto-generated catch block
 				req.setAttribute("errorMessage", "Invalid user or password");

@@ -8,6 +8,11 @@
 		<servlet-name>MoviesServlet</servlet-name>
 		<servlet-class>ar.edu.itba.it.paw.servlets.MoviesServlet</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>CommentsServlet</servlet-name>
+		<servlet-class>ar.edu.itba.it.paw.servlets.CommentsServlet</servlet-class>
+	</servlet>
 
 	<servlet>
 		<servlet-name>Index</servlet-name>
@@ -61,5 +66,10 @@
 	<servlet-mapping>
 		<servlet-name>MovieServlet</servlet-name>
 		<url-pattern>/movie</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>CommentsServlet</servlet-name>
+		<url-pattern>/comments</url-pattern>
 	</servlet-mapping>
 </web-app>
