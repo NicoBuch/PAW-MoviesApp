@@ -33,9 +33,15 @@
 		<servlet-name>LogOutServlet</servlet-name>
 		<servlet-class>ar.edu.itba.it.paw.servlets.LogOutServlet</servlet-class>
 	</servlet>
+	
 	<servlet>
 		<servlet-name>MovieServlet</servlet-name>
 		<servlet-class>ar.edu.itba.it.paw.servlets.MovieServlet</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>RecoveryServlet</servlet-name>
+		<servlet-class>ar.edu.itba.it.paw.servlets.RecoveryServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
@@ -71,5 +77,10 @@
 	<servlet-mapping>
 		<servlet-name>CommentsServlet</servlet-name>
 		<url-pattern>/comments</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>RecoveryServlet</servlet-name>
+		<url-pattern>/recovery</url-pattern>
 	</servlet-mapping>
 </web-app>

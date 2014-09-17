@@ -9,23 +9,28 @@ public class User extends Entity{
 	String firstName= "";
 	String lastName = "";
 	Date birthDate;
+	String secretQuestion;
+	String secretAnswer;
 	boolean vip;
 	
 	
-	public User(long id, String email, String password, String firstName, String lastName, Date birthDate, boolean vip) {
+	public User(long id, String email, String password, String firstName, String lastName, Date birthDate,
+			String secretQuestion, String secretAnswer, boolean vip) {
 		super(id);
-		setFields(email,password,firstName,lastName,birthDate, vip);
+		setFields(email,password,firstName,lastName,birthDate,secretQuestion,secretAnswer, vip);
 	}
-	public User(String email, String password, String firstName, String lastName, Date birthDate, boolean vip) {
+	public User(String email, String password, String firstName, String lastName, Date birthDate,
+			String secretQuestion, String secretAnswer,boolean vip) {
 		super();
-		setFields(email,password,firstName,lastName,birthDate, vip);
+		setFields(email,password,firstName,lastName,birthDate,secretQuestion,secretAnswer, vip);
 		
 	}
 	public User() {
 		super();	
 	}
 	
-	private void setFields(String email, String password, String firstName, String lastName, Date birthDate, boolean vip){
+	private void setFields(String email, String password, String firstName, String lastName,
+			Date birthDate,String secretQuestion, String secretAnswer, boolean vip){
 
 		this.email = email;
 		this.password = password;
@@ -33,6 +38,8 @@ public class User extends Entity{
 		this.lastName = lastName;
 		this.birthDate = birthDate;
 		this.vip = vip;
+		this.secretQuestion = secretQuestion;
+		this.secretAnswer = secretAnswer;
 	}
 	
 	public String getEmail() {
@@ -71,6 +78,18 @@ public class User extends Entity{
 	}
 	public boolean getVip(){
 		return vip;
+	}
+	public String getSecretQuestion(){
+		return secretQuestion;
+	}
+	public void setSecretQuestion(String secretQuestion){
+		this.secretQuestion = secretQuestion;
+	}
+	public String getSecretAnswer(){
+		return secretAnswer;
+	}
+	public void setSecretAnswer(String secretAnswer){
+		this.secretAnswer = secretAnswer;
 	}
 	@Override
     public boolean equals(Object obj) {
