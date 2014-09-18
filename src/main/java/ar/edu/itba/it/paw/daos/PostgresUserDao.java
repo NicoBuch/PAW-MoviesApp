@@ -92,7 +92,7 @@ public class PostgresUserDao implements UserDao {
 			session.update("user_table", firstName, lastName, email, password, birthDate,secretQuestion,secretAnswer);
 		} else {
 			session.insert("user_table", null, user.getFirstName(),
-					user.getLastName(), user.getEmail(), user.getPassword(), null, null, user.getBirthDate());
+					user.getLastName(), user.getEmail(), user.getPassword(), user.getSecretQuestion(), user.getSecretAnswer(), user.getBirthDate());
 		}
 		try {
 			session.close();
