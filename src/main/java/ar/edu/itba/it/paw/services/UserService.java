@@ -15,5 +15,9 @@ public interface UserService {
 	public void save(User user) throws EmailAlreadyTakenException;
 	
 	public boolean isVip(User user);
+	
+	public boolean compareAnswer(User user,String answer);
+	
+	public void establishNewPassword(User user,String newPassword);
 
 }

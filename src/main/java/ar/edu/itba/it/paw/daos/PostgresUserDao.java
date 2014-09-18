@@ -86,11 +86,13 @@ public class PostgresUserDao implements UserDao {
 			Object[] email = { "email", user.getEmail() };
 			Object[] password = { "password", user.getPassword() };
 			Object[] birthDate = { "birth_date", user.getBirthDate() };
+			Object[] secretQuestion = { "secret_question", user.getSecretQuestion() };
+			Object[] secretAnswer = { "secret_Answer", user.getSecretAnswer() };
 			session.add(Criteria.eq("id", user.getId()));
-			session.update("user_table", firstName, lastName, email, password, birthDate);
+			session.update("user_table", firstName, lastName, email, password, birthDate,secretQuestion,secretAnswer);
 		} else {
 			session.insert("user_table", null, user.getFirstName(),
-					user.getLastName(), user.getEmail(), user.getPassword(), null, null, user.getBirthDate());
+					user.getLastName(), user.getEmail(), user.getPassword(), user.getSecretQuestion(), user.getSecretAnswer(), user.getBirthDate());
 		}
 		try {
 			session.close();
@@ -108,12 +110,14 @@ public class PostgresUserDao implements UserDao {
 		String lastName = rs.getString("last_name");
 		Date birthDate = rs.getDate("birth_date");
 		long id = rs.getLong("id");
+		String secretQuestion = rs.getString("secret_question");
+		String secretAnswer = rs.getString("secret_answer");
 		boolean vip = rs.getBoolean("vip");
-		return new User(id, email, password, firstName, lastName, birthDate,vip);
+		return new User(id, email, password, firstName, lastName, birthDate,secretQuestion,secretAnswer,vip);
 	}
 
 	public boolean isVip(User user) {
-		return user.getVip();
+		return user.isVip();
 	}
 
 }
