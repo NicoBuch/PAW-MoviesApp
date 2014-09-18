@@ -1,38 +1,70 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page contentType="text/html" %>
-<%@ page pageEncoding="UTF-8" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<html>
-	<head><title>MoviesApp</title></head>
-	<body>
+<%@ include file="header.jsp" %>
 
 
-	<h1>Please complete these fields to sign up</h1>
+	<legend><h2>Register</h2></legend>
+	<h3>Please complete these fields to sign up</h3>
 
-	
-	<c:forEach var="error" items="${errors}">
-		<h6><c:out value="${error.message}" /></h6>
-	</c:forEach>
-
+	<c:if test='${!empty errors}'>
+		<c:forEach var="error" items="${errors}">
+			<div class="alert alert-warning alert-dismissible" role="alert">
+	  			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	  			<strong>Login Error!</strong> ${error.message}
+			</div>
+		</c:forEach>
+	</c:if>
 	
 
-	<form action="sign_up" method=POST>  
-		First Name
-		<input required=true type="text" name="firstName" value = <c:out value="${user.firstName}" /> ><br/> 
-		Last Name
-		<input required=true type="text" name="lastName" value = <c:out value="${user.lastName}" /> ><br/>  
-		Email
-		<input required=true type="email" name="email" value = <c:out value="${user.email}" /> ><br/>  
-		Password
-		<input type="password" name="password"/><br/>
-		Confirm your Password
-		<input type="password" name="password_confirmation"/><br/>   
-		Birth Date
-		<input required=true type="date" name="birthDate" value = <c:out value="${user.birthDate}" /> > <br/> 
-		<br/>
-		<input type="submit" value="Sign Up!"/>  
+	<form action="sign_up" method=POST novalidate>
+		<div class="col-md-8 col-md-offset-2" id="feedbackPanel" />
+			<fieldset>
+				
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label class="control-label">First Name</label>
+						<input class="form-control" required type="text" name="firstName" value = <c:out value="${user.firstName}" /> >
+					</div>
+				</div>
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label class="control-label">Last Name</label>
+						<input class="form-control" required type="text" name="lastName" value = <c:out value="${user.lastName}" /> >
+					</div>
+				</div>
+
+				<div class="col-xs-7">
+					<div class="form-group">
+						<label class="control-label">Email</label>
+						<input class="form-control" required type="email" name="email" value = <c:out value="${user.email}" /> >
+					</div>
+				</div>
+				<div class="col-xs-5">
+					<div class="form-group">
+						<label class="control-label">Birth Date</label>
+						<input class="form-control" required type="date" name="birthDate" value = <c:out value="${user.birthDate}" /> > <br/> 
+					</div>
+				</div>
+
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label class="control-label">Password</label>
+						<input class="form-control" required type="password" name="password"/>
+					</div>
+				</div>
+
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label class="control-label">Confirm your Password</label>
+						<input class="form-control" required type="password" name="password_confirmation"/>
+					</div>
+				</div>	
+				
+				
+				<div class="col-md-8 col-md-offset-2">
+					<button class="btn btn-primary btn-block" type="submit">Sign Up!</button>
+					<a class="btn btn-default btn-block" href="/MoviesApp">Cancel</a>
+				</div>
+			</fieldset>
+		</div>
 	</form>  
 	
-</body>	
-</html>
+<%@ include file="footer.jsp" %>
