@@ -117,7 +117,7 @@ public class PostgresUserDao implements UserDao {
 	}
 
 	public boolean isVip(User user) {
-		return user.getVip();
+		return user.isVip();
 	}
 
 }

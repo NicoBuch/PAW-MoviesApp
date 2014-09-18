@@ -23,21 +23,27 @@ public class RecoveryServlet extends HttpServlet{
 	}
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException{
-		String email = (String)req.getAttribute("email");
+		String email = (String)req.getParameter("email");
 		UserService userService = UserServiceImpl.getInstance();
-		String newPassword = (String) req.getAttribute("newPassword");
-		String newPasswordConfirmation = (String) req.getAttribute("newPasswordConfirmation");
+		String newPassword = (String) req.getParameter("newPassword");
+		String newPasswordConfirmation = (String) req.getParameter("newPasswordConfirmation");
 		
 		if(email == null){
 			doGet(req, resp);
 			return;
 		}
-		String answer = (String)req.getAttribute("answer");
+		else{
+			req.setAttribute("email", email);
+		}
+		String answer = (String)req.getParameter("answer");
 		User user = userService.getByEmail(email);
 		if(user == null){
 			req.setAttribute("errorMessage", "Invalid Email");
 			doGet(req,resp);
 			return;
+		}
+		else{
+			req.setAttribute("question", user.getSecretQuestion());
 		}
 		//Checkear si son correctos
 		if(answer != null){
@@ -63,6 +69,7 @@ public class RecoveryServlet extends HttpServlet{
 			doGet(req,resp);
 			return;
 		}
+		resp.sendRedirect("");
 		
 	}
 }

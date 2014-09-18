@@ -76,7 +76,7 @@ public class User extends Entity{
 	public void setVip(boolean vip){
 		this.vip=vip;
 	}
-	public boolean getVip(){
+	public boolean isVip(){
 		return vip;
 	}
 	public String getSecretQuestion(){
