@@ -27,9 +27,7 @@ public class Registration extends HttpServlet{
 	);
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException{
-		User user = new User();
 		
-		req.setAttribute("user", user);
 		req.setAttribute("error", new Error());
 		this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);
 	}
@@ -78,7 +76,7 @@ public class Registration extends HttpServlet{
 			errors.add(new Error("Invalid Email"));
 		}
 		if(!errors.isEmpty()){
-			req.setAttribute("user", user);
+			//req.setAttribute("user", user);
 			req.setAttribute("errors", errors);
 			req.getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);  
 			return;

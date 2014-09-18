@@ -1,26 +1,43 @@
-<%@ page contentType="text/html" %>
-<%@ page pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-
-<html>
-
-	<h1>Movies App</h1>
-	<h2>Login</h2>
+<%@ include file="header.jsp" %>
+	
+	<legend><h2>Login</h2></legend>
 
 	<!-- Filter by genre Form -->
+	<c:if test="${!empty errorMessage}">
+		<div class="alert alert-warning alert-dismissible" role="alert">
+  			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  			<strong>Login Error!</strong> ${errorMessage}
+		</div>
+	</c:if>
+	
+	
 	<form name="loginForm" method='post'>
-		<label for='email'>Username</label>
-		<input name='email' type='email'placeholder='user@example.com'/><br>
-		<label for='password'>Password</label>
-		<input name='password' type='password' placeholder='Insert password'><br>
-		<button type="submit">Log in</button>${errorMessage}
+		<div class="col-md-8 col-md-offset-2" id="feedbackPanel" />
+			<div class="col-xs-12">
+				<div class="form-group">
+					<label class="control-label">Username</label>
+					<input class="form-control" name='email' type='email' placeholder='user@example.com' required/>
+				</div>
+			</div>
+
+			<div class="col-xs-12">
+				<div class="form-group">
+					<label class="control-label">Password</label>
+					<input class="form-control" name='password' type='password' placeholder='Insert password' required>
+				</div>
+			</div>
+			
+			<div class="col-md-6 col-md-offset-6 ">
+						<button class="btn btn-primary btn-block" type="submit">Log in</button>
+						Forgot your password? <a href="recovery" class="float-right"><strong>Recover it!</strong></a>
+
+			</div>			
+			
+		</div>
+		
 	</form>
 
+<%@ include file="footer.jsp" %>
 
-</html>
+
+

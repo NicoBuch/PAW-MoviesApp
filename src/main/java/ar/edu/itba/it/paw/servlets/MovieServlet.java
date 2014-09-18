@@ -25,6 +25,7 @@ public class MovieServlet extends HttpServlet{
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException{
+		
 		HttpSession session = req.getSession();
 		MovieService movieService = MovieServiceImpl.getInstance();
 		CommentService commentService = CommentServiceImpl.getInstance();
