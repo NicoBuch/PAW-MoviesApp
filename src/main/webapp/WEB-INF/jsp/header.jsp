@@ -45,13 +45,13 @@
 					</ul>
 				    <ul class="nav navbar-nav navbar-right">
 				    	<c:choose>							
-							<c:when test='${empty user}'>
+							<c:when test='${empty user || user.email==""}'>
 								<!-- User is not logged in -->
 								<li><a href="/MoviesApp/sign_in">Login</a></li>
 						    	<li><a href="/MoviesApp/sign_up">Register</a></li>
 						    </c:when>						    
 					    	<c:otherwise>
-					    		<!-- Usr is logged in -->
+					    		<!-- User is logged in -->
 							    <li class="dropdown">
 								    <a href="#" class="dropdown-toggle" data-toggle="dropdown">${user.email}<span class="caret"></span></a>
 								    <ul class="dropdown-menu" role="menu">

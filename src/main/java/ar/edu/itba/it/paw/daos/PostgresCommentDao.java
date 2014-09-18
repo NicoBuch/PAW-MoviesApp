@@ -126,6 +126,7 @@ public class PostgresCommentDao implements CommentDao {
 	public Iterable<Comment> getCommentsByUser(User user) {
 		Session<Comment> query = new Session<Comment>();
 		query.add(Criteria.eq("user_id", user.getId()));
+		query.add(new Order("creation_date", false));
 		ResultSet rs = query.list("comment");
 		List<Comment> comments = new ArrayList<Comment>();
 		try {

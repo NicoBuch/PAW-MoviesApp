@@ -22,6 +22,11 @@
 	</select>
 	<button type="submit">Filtrar</button>
 </form>
+<form name="filterByDirectorForm" method='get'>
+	Director:
+	<input  type="text" name="director"><br/> 
+	<button type="submit">Filtrar</button>
+</form>
 
 
 <!-- Movies Table -->
@@ -37,7 +42,7 @@
 	    <tr>
 	    	<td><a href="movie?id=${aMovie.id}">${aMovie.title}</a></td>
 	    	<td>${aMovie.director}</td>
-	    	<td>${aMovie.releasedate}</td>	    	
+	    	<td>${aMovie.releaseDate}</td>	    	
 	    </tr>        	   
      </c:forEach>
 </table>

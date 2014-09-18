@@ -1,3 +1,4 @@
+
 <%@ include file="header.jsp" %>
 
 	<legend><h2>List Movies</h2></legend>
@@ -5,6 +6,8 @@
 	<!-- Filter by genre Form -->
 	<div class="pull-right">
 		<form class="form-inline" name="filterByGenreForm" method='get'>
+			<label class="label-control">Director:</label>
+			<input  type="text" name="director" class="form-control input-sm"> 
 			<label class="label-control">Genre: </label>
 			<select class="form-control input-sm" name='genre'>
 				<c:forEach var="aGenre" items="${genres}">
@@ -37,3 +40,4 @@
 
 
 <%@ include file="footer.jsp" %>
+
