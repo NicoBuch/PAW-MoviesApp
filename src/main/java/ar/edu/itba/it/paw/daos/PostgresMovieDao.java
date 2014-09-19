@@ -126,8 +126,9 @@ public class PostgresMovieDao implements MovieDao {
 		Date releaseDate = rs.getDate("release_date");
 		long id = rs.getLong("id");
 		Date creationDate = rs.getDate("creation_date");
-		Movie movie = new Movie(id, movieName, releaseDate, directorName,
+		Movie movie = new Movie(movieName, releaseDate, directorName,
 				genre, minutes, description, creationDate);
+		movie.setId(id);
 		return movie;
 	}
 

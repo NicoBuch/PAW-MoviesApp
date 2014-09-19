@@ -19,10 +19,9 @@ public class Movie extends Entity {
 		ACTION, TERROR, THRILLER, DRAMA, PORN, COMEDY, ANIMATION, FANTASY, SCIFI
 	}
 
-	public Movie(long id, String movieName, Date releaseDate,
+	public Movie(String movieName, Date releaseDate,
 			String directorName, String genre, int minutes, String description,
 			Date creationDate) {
-		super(id);
 		setFields(movieName, directorName, minutes, genre, description,
 				releaseDate, creationDate);
 	}
@@ -75,28 +74,13 @@ public class Movie extends Entity {
 		return cs.countCommentsByMovie(this);
 	}
 
-	public void setTitle(String movieName) {
-		this.title = movieName;
-	}
-
-	public void setReleaseDate(Date releaseDate) {
-		this.releaseDate = releaseDate;
-	}
-
-	public void setDirector(String directorName) {
-		this.director = directorName;
-	}
-
-	public void setGenre(Genre genre) {
-		this.genre = genre;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 	public Date getCreationDate() {
 		return creationDate;
+	}
+
+	public void setDescription(String string) {
+		this.description = string;		
 	}
 
 }

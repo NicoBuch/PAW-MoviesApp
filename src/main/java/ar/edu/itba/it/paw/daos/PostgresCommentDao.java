@@ -166,7 +166,9 @@ public class PostgresCommentDao implements CommentDao {
 		int rating = rs.getInt("rating");
 		Date creationDate = rs.getDate("creation_date");
 		long id = rs.getLong("id");
-		return new Comment(id, body, creationDate, rating, m, u);
+		Comment comment = new Comment(body, creationDate, rating, m, u);
+		comment.setId(id);
+		return comment;
 	}
 
 }
