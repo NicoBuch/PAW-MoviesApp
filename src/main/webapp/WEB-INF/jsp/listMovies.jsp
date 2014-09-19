@@ -10,8 +10,8 @@
 			<select class="form-control input-sm" name='genre'>
 				<option value='empty'>Select genre...</option>
 				<c:forEach var="aGenre" items="${genres}">
-				   <option value='${aGenre}'>${aGenre}</option>     	   
-			     </c:forEach>	  
+				   <option value='${aGenre}'>${aGenre}</option>
+			     </c:forEach>
 			</select>
 			<button class="btn btn-primary btn-sm" type="submit">Filter</button>
 		</form>
@@ -39,8 +39,8 @@
 		    <tr>
 		    	<td><a href="movie?id=${aMovie.id}">${aMovie.title}</a></td>
 		    	<td>${aMovie.director}</td>
-		    	<td>${aMovie.releaseDate}</td>	    	
-		    </tr>        	   
+		    	<td>${aMovie.releaseDate}</td>
+		    </tr>
 	     </c:forEach>
 	</table>
 
