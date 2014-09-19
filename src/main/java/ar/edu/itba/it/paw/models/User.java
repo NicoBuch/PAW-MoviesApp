@@ -14,11 +14,7 @@ public class User extends Entity{
 	boolean vip;
 	
 	
-	public User(long id, String email, String password, String firstName, String lastName, Date birthDate,
-			String secretQuestion, String secretAnswer, boolean vip) {
-		super(id);
-		setFields(email,password,firstName,lastName,birthDate,secretQuestion,secretAnswer, vip);
-	}
+
 	public User(String email, String password, String firstName, String lastName, Date birthDate,
 			String secretQuestion, String secretAnswer,boolean vip) {
 		super();

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.itba.it.paw.exceptions.FatalErrorException;
 import ar.edu.itba.it.paw.models.Movie;
 
 public class PostgresMovieDao implements MovieDao {
@@ -36,7 +37,7 @@ public class PostgresMovieDao implements MovieDao {
 			query.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		// TODO Auto-generated method stub
 		return movies;
@@ -53,7 +54,7 @@ public class PostgresMovieDao implements MovieDao {
 			}
 			query.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return movie;
 	}
@@ -69,7 +70,7 @@ public class PostgresMovieDao implements MovieDao {
 			}
 			query.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return movie;
 	}
@@ -95,7 +96,7 @@ public class PostgresMovieDao implements MovieDao {
 			session.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 	}
 
@@ -112,7 +113,7 @@ public class PostgresMovieDao implements MovieDao {
 			}
 			session.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return movies;
 	}
@@ -147,7 +148,7 @@ public class PostgresMovieDao implements MovieDao {
 			session.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return movies;
 	}
@@ -165,7 +166,7 @@ public class PostgresMovieDao implements MovieDao {
 			}
 			query.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return movies;
 	}
@@ -184,7 +185,7 @@ public class PostgresMovieDao implements MovieDao {
 			session.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return movies;
 	}
@@ -202,7 +203,7 @@ public class PostgresMovieDao implements MovieDao {
 			}
 			session.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return movies;
 	}

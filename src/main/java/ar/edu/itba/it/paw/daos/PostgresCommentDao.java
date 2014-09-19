@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.itba.it.paw.exceptions.FatalErrorException;
 import ar.edu.itba.it.paw.models.Comment;
 import ar.edu.itba.it.paw.models.Movie;
 import ar.edu.itba.it.paw.models.User;
@@ -39,8 +40,7 @@ public class PostgresCommentDao implements CommentDao {
 			}
 			query.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return comments;
 	}
@@ -59,7 +59,7 @@ public class PostgresCommentDao implements CommentDao {
 			}
 			query.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return null;
 	}
@@ -82,8 +82,7 @@ public class PostgresCommentDao implements CommentDao {
 		try {
 			session.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		
 	}
@@ -99,7 +98,7 @@ public class PostgresCommentDao implements CommentDao {
 			}
 			query.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return null;
 	}
@@ -117,8 +116,7 @@ public class PostgresCommentDao implements CommentDao {
 			}
 			query.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return comments;
 	}
@@ -137,8 +135,7 @@ public class PostgresCommentDao implements CommentDao {
 			}
 			query.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return comments;
 	}
@@ -154,8 +151,7 @@ public class PostgresCommentDao implements CommentDao {
 			}
 			session.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return count;
 		
