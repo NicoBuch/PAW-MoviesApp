@@ -3,6 +3,16 @@
 	version="2.4">
 
 	<display-name>Archetype Created Web Application</display-name>
+	
+	<filter>
+	    <filter-name>exceptionFilter</filter-name>
+	    <filter-class>ar.edu.itba.it.paw.filters.ExceptionFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+	    <filter-name>exceptionFilter</filter-name>
+	    <url-pattern>*</url-pattern> <!-- we will process every request -->
+	</filter-mapping>
 
 	<servlet>
 		<servlet-name>MoviesServlet</servlet-name>

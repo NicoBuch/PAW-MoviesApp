@@ -27,7 +27,7 @@ public class Registration extends HttpServlet{
 	);
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException{
-		
+	
 		req.setAttribute("error", new Error());
 		this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);
 	}

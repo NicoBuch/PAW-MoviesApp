@@ -67,7 +67,7 @@
 		  </div><!-- /.container-fluid -->
 		</nav>
 
-		<div class="container jumbotron col-md-6 col-md-offset-3">
+		<div class="container col-md-6 col-md-offset-3">
 		
 		
 		
