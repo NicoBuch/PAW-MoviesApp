@@ -15,7 +15,6 @@ public class User extends Entity {
 	
 	public User(String email, String password, String firstName, String lastName, Date birthDate,
 			String secretQuestion, String secretAnswer,boolean vip) {
-
 		super();
 		setFields(email, password, firstName, lastName, birthDate,
 				secretQuestion, secretAnswer, vip);
