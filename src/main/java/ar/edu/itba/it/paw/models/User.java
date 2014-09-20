@@ -19,7 +19,6 @@ public class User extends Entity {
 		setFields(email, password, firstName, lastName, birthDate,
 				secretQuestion, secretAnswer, vip);
 	}
-
 	public User() {
 		super();
 	}
