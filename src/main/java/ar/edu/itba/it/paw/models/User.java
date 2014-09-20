@@ -12,7 +12,7 @@ public class User extends Entity {
 	String secretQuestion;
 	String secretAnswer;
 	boolean vip;
-	
+
 	public User(String email, String password, String firstName, String lastName, Date birthDate,
 			String secretQuestion, String secretAnswer,boolean vip) {
 		super();
