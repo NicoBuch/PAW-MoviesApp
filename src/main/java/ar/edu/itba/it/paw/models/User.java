@@ -19,10 +19,6 @@ public class User extends Entity {
 		setFields(email, password, firstName, lastName, birthDate,
 				secretQuestion, secretAnswer, vip);
 	}
-	public User() {
-		super();
-	}
-
 	private void setFields(String email, String password, String firstName,
 			String lastName, Date birthDate, String secretQuestion,
 			String secretAnswer, boolean vip) {
@@ -46,15 +42,10 @@ public class User extends Entity {
 		return email;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	public String getPassword() {
 		return password;
 	}
-
-	public void setPassword(String password) {
+	public void setPassword(String password){
 		this.password = password;
 	}
 
@@ -78,13 +69,6 @@ public class User extends Entity {
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
-	}
-
-	public void setVip(boolean vip) {
-		this.vip = vip;
-	}
 	public boolean isVip(){
 		return vip;
 	}
@@ -93,16 +77,8 @@ public class User extends Entity {
 		return secretQuestion;
 	}
 
-	public void setSecretQuestion(String secretQuestion) {
-		this.secretQuestion = secretQuestion;
-	}
-
 	public String getSecretAnswer() {
 		return secretAnswer;
-	}
-
-	public void setSecretAnswer(String secretAnswer) {
-		this.secretAnswer = secretAnswer;
 	}
 
 	@Override

@@ -38,7 +38,7 @@ CREATE TABLE comment
   id serial NOT NULL,
   body text,
   creation_date date,
-  rating integer check(rating >= 0 and rating < 6),
+  rating integer,
   movie_id integer references movie (id),
   user_id integer references user_table (id),
   CONSTRAINT pk_comment PRIMARY KEY (id),
