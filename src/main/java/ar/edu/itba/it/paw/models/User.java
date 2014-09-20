@@ -4,14 +4,14 @@ import java.sql.Date;
 
 public class User extends Entity {
 
-	String email;
-	String password;
-	String firstName;
-	String lastName;
-	Date birthDate;
-	String secretQuestion;
-	String secretAnswer;
-	boolean vip;
+	private String email;
+	private String password;
+	private String firstName;
+	private String lastName;
+	private Date birthDate;
+	private String secretQuestion;
+	private String secretAnswer;
+	private boolean vip;
 
 	public User(String email, String password, String firstName, String lastName, Date birthDate,
 			String secretQuestion, String secretAnswer,boolean vip) {

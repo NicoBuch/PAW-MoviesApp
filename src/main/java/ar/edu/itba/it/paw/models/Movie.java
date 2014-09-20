@@ -7,13 +7,13 @@ import ar.edu.itba.it.paw.services.CommentServiceImpl;
 
 public class Movie extends Entity {
 
-	String title;
-	Date releaseDate;
-	String director;
-	Genre genre;
-	int minutes;
-	String description;
-	Date creationDate;
+	private String title;
+	private Date releaseDate;
+	private String director;
+	private Genre genre;
+	private int minutes;
+	private String description;
+	private Date creationDate;
 
 	public enum Genre {
 		ACTION, TERROR, THRILLER, DRAMA, PORN, COMEDY, ANIMATION, FANTASY, SCIFI
@@ -36,6 +36,10 @@ public class Movie extends Entity {
 	private void setFields(String movieName, String directorName, int minutes,
 			String genre, String description, Date releaseDate,
 			Date creationDate) {
+		if (movieName.length() > 255 || directorName.length() > 255
+				|| releaseDate == null || genre == null || description == null) {
+			throw new IllegalArgumentException();
+		}
 		this.title = movieName;
 		this.director = directorName;
 		this.minutes = minutes;

@@ -4,11 +4,11 @@ import java.sql.Date;
 
 public class Comment extends Entity{
 	
-	String body;
-	Date creationDate;
-	int rating; 
-	Movie movie;
-	User user;
+	private String body;
+	private Date creationDate;
+	private int rating; 
+	private Movie movie;
+	private User user;
 	
 
 	public Comment( String body, Date creationDate, int rating, Movie movie, User user) {
