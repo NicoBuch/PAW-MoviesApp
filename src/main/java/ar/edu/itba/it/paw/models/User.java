@@ -20,7 +20,6 @@ public class User extends Entity {
 				secretQuestion, secretAnswer, vip);
 	}
 
-
 	public User() {
 		super();
 	}
