@@ -30,7 +30,6 @@ public class Index extends HttpServlet{
 		shortDescription(releases);
 		Iterable<Movie> recents = ms.getByCreationDate(5);
 		req.setAttribute("recents", recents);
-		req.setAttribute("user", req.getSession().getAttribute("user"));
 		req.setAttribute("releases", releases);
 		req.setAttribute("ranked", ranked);
 		req.getRequestDispatcher("/WEB-INF/jsp/index.jsp").forward(req, resp);
