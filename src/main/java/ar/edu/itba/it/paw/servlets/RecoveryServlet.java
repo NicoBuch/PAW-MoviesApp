@@ -39,6 +39,7 @@ public class RecoveryServlet extends HttpServlet{
 		User user = userService.getByEmail(email);
 		if(user == null){
 			req.setAttribute("errorMessage", "Invalid Email");
+			req.removeAttribute("email");
 			doGet(req,resp);
 			return;
 		}
