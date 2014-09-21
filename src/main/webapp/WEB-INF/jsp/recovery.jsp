@@ -1,42 +1,94 @@
-<%@ page contentType="text/html" %>
-<%@ page pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ include file="header.jsp" %>
 
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
+<div class="page-header">
+	<h2>Recovery
+	<br>
+	<small>Follow the steps to reset your password</small>
+	</h2>	
+</div>
 
-<html>
+<div class="col-md-10 col-md-offset-1">
+
+	<c:if test="${!empty errorMessage}">
+		<div class="alert alert-warning alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<strong>Login Error!</strong> ${errorMessage}
+		</div>
+	</c:if>
+
+	<c:if test="${empty email}">
+		
+		<form name="recoveryForm" method='post'>
+			<div class="col-md-8 col-md-offset-2" id="feedbackPanel" />
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label class="control-label">Email</label>
+						<input class="form-control" name='email' type='email' placeholder='user@example.com'/>
+					</div>
+				</div>
+			
+				<div class="col-md-6 col-md-offset-6 ">
+					<button class="btn btn-primary btn-block" type="submit">Next Step<span class="pull-right glyphicon glyphicon-chevron-right"></span></button>
+				</div>
+			</div>
+		</form>
+
+	</c:if>
+
+	<c:if test="${!empty email}">
+
+		<div>
+				<h4>Reseting password for: <span class="label label-primary">${email}</span></h4>
+				<br><br>
+		</div>
+	</c:if>
+
+	<c:if test="${!empty question}">
+		
+		<form name="answerForm" method='post'>
+			
+			<div class="col-md-8 col-md-offset-2" id="feedbackPanel" />
+
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label class="control-label">Question</label>
+						<h4><span class="label label-info">${question}</label></span></h4>
+					</div>
+				</div>
+
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label class="control-label">Answer</label>
+						<input class="form-control" name='answer' type='answer'/>
+					</div>
+				</div>
+					
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label class="control-label">New Password</label>
+						<input class="form-control" name='newPassword' type='password'/>
+					</div>
+				</div>
+					
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label class="control-label">Confirm Password</label>
+						<input class="form-control" name='newPasswordConfirmation' type='password'/>
+					</div>
+				</div>
+			
+
+				<input name='email' type="hidden" value="${email}"/>
+				
+				<div class="col-md-6 col-md-offset-6 ">
+					<button class="btn btn-success btn-block" type="submit">Reset Password<span class="pull-right glyphicon glyphicon-ok"></span></button>
+				</div>
+			</div>
+		</form>
+
+	</c:if>
+</div>
 
 
-<h1>Movies App</h1>
-<h2>Recovery</h2>
-<c:if test="${empty email}">
-	<form name="recoveryForm" method='post'>
-		<label for='email'>Email</label>
-		<input name='email' type='email'placeholder='user@example.com'/><br>
-		<button type="submit">Submit</button>${errorMessage}
-	</form>
-</c:if>
-<br/>
-<c:if test="${!empty email}">
-	<div>${email}</div>
-</c:if>
-<c:if test="${!empty question}">
-	<form name="answerForm" method='post'>
-		<div>${question}</div>
-		<label for='answer'>Answer</label>
-		<input name='answer' type='answer'/><br>
-		<label for='newPassword'>New Password</label>
-		<input name='newPassword' type='password'/><br>
-		<label for='newPasswordConfirmation'>Confirm Password</label>
-		<input name='newPasswordConfirmation' type='password'/><br>
-		<input name='email' type="hidden" value="${email}"/>
-		<button type="submit">Submit</button>${errorMessage}
-	</form>
-</c:if>
-
-
-</html>
+<%@ include file="footer.jsp" %>

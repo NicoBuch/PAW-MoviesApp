@@ -1,7 +1,12 @@
 
 <%@ include file="header.jsp" %>
 
-	<legend><h2>List Movies</h2></legend>
+	<div class="page-header">
+		<h2>Movie List
+			<br>
+			<small>A complete list of all movies</small>
+		</h2>	
+	</div>
 
 	<!-- Filter by genre Form -->
 	<div class="pull-right">
