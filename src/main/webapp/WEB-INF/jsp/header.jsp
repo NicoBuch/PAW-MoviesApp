@@ -58,7 +58,7 @@
 									    <li><a href="comments?user_id=${user.id}">My comments</a></li>
 									    <li><a href="recovery">Reset password</a></li>
 									    <li class="divider"></li>
-									    <li><a href="#">Logout</a></li>
+									    <li><a href="sign_out">Logout</a></li>
 								    </ul>
 							    </li>
 							</c:otherwise>

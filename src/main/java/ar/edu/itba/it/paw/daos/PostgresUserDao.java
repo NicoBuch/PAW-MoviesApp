@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.itba.it.paw.exceptions.FatalErrorException;
 import ar.edu.itba.it.paw.models.User;
 
 public class PostgresUserDao implements UserDao {
@@ -36,7 +37,7 @@ public class PostgresUserDao implements UserDao {
 			}
 			query.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 
 		return users;
@@ -54,7 +55,7 @@ public class PostgresUserDao implements UserDao {
 			query.close();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return user;
 	}
@@ -71,7 +72,7 @@ public class PostgresUserDao implements UserDao {
 			query.close();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 		return user;
 	}
@@ -98,7 +99,7 @@ public class PostgresUserDao implements UserDao {
 			session.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new FatalErrorException();
 		}
 
 	}
@@ -113,7 +114,9 @@ public class PostgresUserDao implements UserDao {
 		String secretQuestion = rs.getString("secret_question");
 		String secretAnswer = rs.getString("secret_answer");
 		boolean vip = rs.getBoolean("vip");
-		return new User(id, email, password, firstName, lastName, birthDate,secretQuestion,secretAnswer,vip);
+		User user = new User( email, password, firstName, lastName, birthDate,secretQuestion,secretAnswer,vip);
+		user.setId(id);
+		return user;
 	}
 
 	public boolean isVip(User user) {

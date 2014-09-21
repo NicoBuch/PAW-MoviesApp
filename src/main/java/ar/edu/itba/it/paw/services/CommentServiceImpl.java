@@ -26,7 +26,7 @@ public class CommentServiceImpl implements CommentService{
 	public void save(Comment c)
 			throws NoMoreThanOneCommentPerUserPerMovieException,
 			CantCommentBeforeMoviesReleaseDateException {
-		if (c.getMovie().getReleaseDate().after(c.getCreationDate())) {
+		if (c.getMovie().getReleaseDate().after(c.getCreationDate()) && !c.getUser().isVip()) {
 			throw new CantCommentBeforeMoviesReleaseDateException();
 		}
 		Comment usersComment = dao.getCommentsByUserAndMovie(c.getUser(),

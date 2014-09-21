@@ -24,7 +24,7 @@
 				<div class="col-xs-12">
 					<div class="form-group">
 						<label class="control-label">Email</label>
-						<input class="form-control" name='email' type='email' placeholder='user@example.com'/>
+						<input class="form-control" autofocus name='email' type='email' placeholder='user@example.com'/>
 					</div>
 				</div>
 			
@@ -60,7 +60,7 @@
 				<div class="col-xs-12">
 					<div class="form-group">
 						<label class="control-label">Answer</label>
-						<input class="form-control" name='answer' type='answer'/>
+						<input class="form-control" autofocus name='answer' type='answer'/>
 					</div>
 				</div>
 					

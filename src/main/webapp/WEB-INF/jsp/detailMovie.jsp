@@ -30,7 +30,7 @@
 		<div class="well">
 			<p class="text-center">	
 				<label><b>Description</b></label><br> 
-				<i>"${movie.description}"</i>
+				<i>${movie.description}</i>
 			</p>
 		</div>
 	</div>
@@ -70,7 +70,7 @@
 							</div>
 						</div>
 								
-						<div class="col-md-8 col-md-offset-2">						
+						<div class="col-md-3 col-md-offset-2 pull-right">						
 							<button class="btn btn-primary btn-block" type='submit'>Comment</button>
 						</div>
 

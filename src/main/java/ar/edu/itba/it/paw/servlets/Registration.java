@@ -19,7 +19,7 @@ import ar.edu.itba.it.paw.services.UserServiceImpl;
 public class Registration extends HttpServlet{
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final Pattern rfc2822 = Pattern.compile(
@@ -27,74 +27,88 @@ public class Registration extends HttpServlet{
 	);
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException{
-	
+		
 		req.setAttribute("error", new Error());
 		this.getServletContext().getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);
 	}
-	
+
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException{
-		User user = new User();
 		int count = 0;
 		String firstName = req.getParameter("firstName");
 		String lastName = req.getParameter("lastName");
 		String email = req.getParameter("email");
 		String password = req.getParameter("password");
-		String password_confirmation = req.getParameter("password_confirmation");
+		String password_confirmation = req.getParameter("passwordConfirmation");
 		String birthDate = req.getParameter("birthDate");
+		String secretQuestion = req.getParameter("secretQuestion");
+		String secretAnswer = req.getParameter("secretAnswer");
 		List<Error> errors = new ArrayList<Error>();
 		if(!firstName.isEmpty()){
-			user.setFirstName(firstName);
+			req.setAttribute("firstName",firstName);
 			count++;
 		}
 		if(!lastName.isEmpty()){
-			user.setLastName(lastName);
+			req.setAttribute("lastName",lastName);
 			count++;
 		}
 		if(!email.isEmpty()){
-			user.setEmail(email);
+			req.setAttribute("email",email);
 			count++;
 		}
 		if(!birthDate.isEmpty()){
+			req.setAttribute("birthDate", birthDate);
 			count++;
 		}
-		if(password.isEmpty() || count != 4 ){
-			errors.add(new Error("Password empty"));
+		if(!secretQuestion.isEmpty()){
+			req.setAttribute("secretQuestion",secretQuestion);
+		}
+		if(count != 4){
+			errors.add(new Error("You must fill all the fields except the question ones"));
 		}
 		if(!password.equals(password_confirmation)){
 			errors.add(new Error("Password and Confirmation doesnt match"));
 		}
-		
+
 		if(!isValidDate(birthDate)){
 			errors.add(new Error("Invalid Date"));
 		}
-		else{
-			user.setBirthDate(Date.valueOf(birthDate));
+		else if(Date.valueOf(birthDate).after(new Date(System.currentTimeMillis()))){
+			errors.add(new Error("Invalid Date"));
 		}
-		
 		if (!rfc2822.matcher(email).matches()) {
 			errors.add(new Error("Invalid Email"));
 		}
+		if(!secretQuestion.endsWith("?")){
+		errors.add(new Error("Question must end with \"?\" "));
+		}
+		if(!secretQuestion.isEmpty() && secretAnswer.isEmpty()){
+			errors.add(new Error("The answer to your question cant be empty"));
+		}
+		if (firstName.length() > 255 || lastName.length() > 255
+				|| email.length() > 255 || password.length() > 255
+				|| (secretQuestion != null && secretQuestion.length() > 255)
+				|| (secretAnswer != null && secretAnswer.length() > 255)) {
+			errors.add(new Error("Fields must have less than 256 characters"));
+		}
 		if(!errors.isEmpty()){
-			//req.setAttribute("user", user);
 			req.setAttribute("errors", errors);
-			req.getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);  
+			req.getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);
 			return;
 		}
-		
-		user.setPassword(password);
 		try {
+			User user = new User(email, password, firstName, lastName, Date.valueOf(birthDate), secretQuestion, secretAnswer, false);
 			UserServiceImpl.getInstance().save(user);
+			
 			resp.sendRedirect("sign_in");
 		} catch (EmailAlreadyTakenException e) {
-			user.setEmail("");
-			req.setAttribute("user", user);
-			req.setAttribute("error", new Error("Email already in use"));
+			errors.add(new Error("Email already in use"));
+			req.setAttribute("errors", errors);
 			req.getRequestDispatcher("/WEB-INF/jsp/sign_up.jsp").forward(req, resp);
 		}
 	}
-	
-	
+
+
 	  public static boolean isValidDate(String inDate) {
 		    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		    dateFormat.setLenient(false);

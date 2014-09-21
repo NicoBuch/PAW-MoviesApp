@@ -2,10 +2,24 @@
 
 
   <div class="jumbotron">
-      <div class="col-md-offset-2"> 
-        <h1>Welcome to our site.<br><small>A place for movie fans.</small></h1>
+      <div class="col-md-offset-0"> 
+        <h1 class="text-center">Welcome to our site.<br><small>A place for movie fans.</small></h1>
       </div>
   
+  </div>
+  
+  
+  <div class="col-md-10 col-md-offset-1">
+     <h2 class="col-md-offset-0 text-center">Weekly Releases</h2>
+     <div class="list-group">
+      <c:forEach var="aMovie" items="${releases}">
+       <a href="movie?id=${aMovie.id}" class="list-group-item ">
+          <h4 class="text-center list-group-item-heading"><b><u>${aMovie.title}</u></b></h4>
+          <p class="text-center list-group-item-text"><i>"${aMovie.description}"</i></p>
+       </a>
+                     
+      </c:forEach>
+    </div>
   </div>
 
 
@@ -30,19 +44,6 @@
     </div>
   </div> 
     
-  <div class="col-md-10 col-md-offset-1">
-   	<h2 class="col-md-offset-4">Weekly Releases</h2>
-
-		<div class="list-group">
-		  <c:forEach var="aMovie" items="${releases}">
-	     <a href="movie?id=${aMovie.id}" class="list-group-item ">
-          <h4 class="text-center list-group-item-heading"><b><u>${aMovie.title}</u></b></h4>
-          <p class="text-center list-group-item-text"><i>"${aMovie.description}"</i></p>
-       </a>
-                	   
-    	</c:forEach>
-    </div>
-  </div>
 
 
  

@@ -24,9 +24,9 @@ public class UserFilter implements Filter{
 		HttpServletRequest req = ( HttpServletRequest) request;
 		HttpSession session = req.getSession();
 		User user = (User) session.getAttribute("user");
+		request.setAttribute("user", user);
+		chain.doFilter(request, response);
 		
-		
-	
 	}
 	public void init(FilterConfig arg0) throws ServletException {
 		// TODO Auto-generated method stub

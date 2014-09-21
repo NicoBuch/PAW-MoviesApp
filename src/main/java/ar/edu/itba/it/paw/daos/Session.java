@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+import ar.edu.itba.it.paw.exceptions.FatalErrorException;
+
 public class Session<T> {
 
 	Connection conn;
@@ -29,15 +31,13 @@ public class Session<T> {
 			connectionProps.load(systemResourceAsStream);
 
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			throw new FatalErrorException();
 		}
 		try {
 			try {
 				Class.forName("org.postgresql.Driver");
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new FatalErrorException();
 			}
 			conn = DriverManager.getConnection(
 					connectionProps.getProperty("url"), connectionProps);
@@ -60,9 +60,7 @@ public class Session<T> {
 			ResultSet rs = stmt.executeQuery(query);
 			return rs;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+			throw new FatalErrorException();
 		}
 	}
 	
@@ -91,9 +89,7 @@ public class Session<T> {
 			ResultSet rs = stmt.executeQuery(query);
 			return rs;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+			throw new FatalErrorException();
 		}
 	}
 
@@ -117,9 +113,7 @@ public class Session<T> {
 			stmt.execute(query);
 			return;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
+			throw new FatalErrorException();
 		}
 	}
 
@@ -144,9 +138,7 @@ public class Session<T> {
 			stmt.execute(query);
 			return;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
+			throw new FatalErrorException();
 		}
 	}
 

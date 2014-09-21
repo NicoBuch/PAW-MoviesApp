@@ -7,6 +7,7 @@
 			<small>Please complete these fields to sign in</small>
 		</h2>	
 	</div>
+	
 
 	<div class="col-md-10 col-md-offset-1">
 
@@ -16,6 +17,13 @@
 	  			<strong>Login Error!</strong> ${errorMessage}
 			</div>
 		</c:if>
+
+		<c:if test="${!empty prevSuccess}">
+			<div class="alert alert-success alert-dismissible" role="alert">
+	  			<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	  			<strong>Success!</strong> ${prevSuccess}
+			</div>
+		</c:if>
 		
 		
 		<form name="loginForm" method='post'>
@@ -23,7 +31,7 @@
 				<div class="col-xs-12">
 					<div class="form-group">
 						<label class="control-label">Username</label>
-						<input class="form-control" name='email' type='email' placeholder='user@example.com' required/>
+						<input class="form-control" name='email' autofocus type='email' placeholder='user@example.com' required/>
 					</div>
 				</div>
 

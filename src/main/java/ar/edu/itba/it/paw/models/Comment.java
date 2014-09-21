@@ -4,19 +4,14 @@ import java.sql.Date;
 
 public class Comment extends Entity{
 	
-	String body;
-	Date creationDate;
-	int rating; 
-	Movie movie;
-	User user;
+	private String body;
+	private Date creationDate;
+	private int rating; 
+	private Movie movie;
+	private User user;
 	
-	public Comment(long id, String body, int rating, Movie movie, User user) {
-		super(id);
-		creationDate = new Date(System.currentTimeMillis());
-		setFields(body,rating,movie,user);
-	}
-	public Comment(long id, String body, Date creationDate, int rating, Movie movie, User user) {
-		super(id);
+
+	public Comment( String body, Date creationDate, int rating, Movie movie, User user) {
 		setFields(body, creationDate, rating,movie,user);
 	}
 	public Comment(String body, int rating, Movie movie, User user) {

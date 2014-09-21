@@ -8,8 +8,8 @@
 		</h2>	
 	</div>
 
-	<div class="col-md-6 col-md-offset-3">
-	
+	<div class="col-md-10 col-md-offset-1">
+
 		<c:if test='${!empty errors}'>
 			<c:forEach var="error" items="${errors}">
 				<div class="alert alert-warning alert-dismissible" role="alert">
@@ -18,35 +18,38 @@
 				</div>
 			</c:forEach>
 		</c:if>
-		
+
 
 		<form action="sign_up" method=POST novalidate>
-			<div class="col-md-10 col-md-offset-1" id="feedbackPanel" />
+			<div class="col-md-8 col-md-offset-2" id="feedbackPanel" />
+				
 				<fieldset>
-					
+
 					<div class="col-xs-12">
 						<div class="form-group">
 							<label class="control-label">First Name</label>
-							<input class="form-control" required type="text" name="firstName" value = <c:out value="${user.firstName}" /> >
-						</div>
-					</div>
-					<div class="col-xs-12">
-						<div class="form-group">
-							<label class="control-label">Last Name</label>
-							<input class="form-control" required type="text" name="lastName" value = <c:out value="${user.lastName}" /> >
+							<input class="form-control" required type="text" autofocus name="firstName" value = <c:out value="${firstName}" /> >
 						</div>
 					</div>
 
-					<div class="col-xs-7">
+					<div class="col-xs-12">
 						<div class="form-group">
-							<label class="control-label">Email</label>
-							<input class="form-control" placeholder="user@example.com" required type="email" name="email" value = <c:out value="${user.email}" /> >
+							<label class="control-label">Last Name</label>
+							<input class="form-control" required type="text" name="lastName" value = <c:out value="${lastName}" /> >
 						</div>
 					</div>
-					<div class="col-xs-5">
+
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label">Email</label>
+							<input class="form-control" required type="email" name="email" value = <c:out value="${email}" /> >
+						</div>
+					</div>
+
+					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label">Birth Date</label>
-							<input class="form-control" required type="date" name="birthDate" value = <c:out value="${user.birthDate}" /> > <br/> 
+							<input class="form-control" required type="date" name="birthDate" value = <c:out value="${birthDate}" /> > <br/>
 						</div>
 					</div>
 
@@ -60,17 +63,37 @@
 					<div class="col-xs-12">
 						<div class="form-group">
 							<label class="control-label">Confirm your Password</label>
-							<input class="form-control" required type="password" name="password_confirmation"/>
+							<input class="form-control" required type="password" name="passwordConfirmation"/>
 						</div>
-					</div>	
-					
-					
+					</div>
+
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label">Secret Question</label>
+							<input class="form-control" required type="text" name="secretQuestion" value = <c:out value="${secretQuestion}" /> >
+						</div>
+					</div>
+
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label">Secret Answer</label>
+							<input class="form-control" required type="text" name="secretAnswer" />
+						</div>
+					</div>
+
+
 					<div class="col-md-8 col-md-offset-2">
 						<button class="btn btn-primary btn-block" type="submit">Sign Up!</button>
 						<a class="btn btn-default btn-block" href="/MoviesApp">Cancel</a>
 					</div>
+
 				</fieldset>
 			</div>
-		</form>  
+		</form>
+	
 	</div>
+	
+
+
+
 <%@ include file="footer.jsp" %>

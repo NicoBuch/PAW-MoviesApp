@@ -18,8 +18,7 @@ public class LoginServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException{
 		resp.setContentType("text/html");
-		HttpSession session = req.getSession();
-		User user = (User) session.getAttribute("user");
+		User user = (User) req.getAttribute("user");
 		if(user != null){
 			resp.sendRedirect("");
 		}

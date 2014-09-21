@@ -11,17 +11,24 @@
 	<!-- Filter by genre Form -->
 	<div class="pull-right">
 		<form class="form-inline" name="filterByGenreForm" method='get'>
-			<label class="label-control">Director:</label>
-			<input  type="text" name="director" class="form-control input-sm"> 
 			<label class="label-control">Genre: </label>
 			<select class="form-control input-sm" name='genre'>
+				<option value='empty'>Select genre...</option>
 				<c:forEach var="aGenre" items="${genres}">
-				   <option value='${aGenre}'>${aGenre}</option>     	   
-			     </c:forEach>	  
+				   <option value='${aGenre}'>${aGenre}</option>
+			     </c:forEach>
 			</select>
 			<button class="btn btn-primary btn-sm" type="submit">Filter</button>
 		</form>
 	</div>
+	<div class="pull-left">
+		<form class="form-inline" name="filterByDirectorForm" method='get'>
+			<label class="label-control">Director:</label>
+			<input  type="text" name="director" class="form-control input-sm"> 
+			<button class="btn btn-primary btn-sm" type="submit">Filter</button>
+		</form>
+	</div>
+	
 
 
 	<!-- Movies Table -->
@@ -37,8 +44,8 @@
 		    <tr>
 		    	<td><a href="movie?id=${aMovie.id}">${aMovie.title}</a></td>
 		    	<td>${aMovie.director}</td>
-		    	<td>${aMovie.releaseDate}</td>	    	
-		    </tr>        	   
+		    	<td>${aMovie.releaseDate}</td>
+		    </tr>
 	     </c:forEach>
 	</table>
 

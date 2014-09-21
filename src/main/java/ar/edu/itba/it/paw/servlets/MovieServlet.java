@@ -6,7 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import ar.edu.itba.it.paw.exceptions.CantCommentBeforeMoviesReleaseDateException;
 import ar.edu.itba.it.paw.exceptions.NoMoreThanOneCommentPerUserPerMovieException;
@@ -26,7 +25,6 @@ public class MovieServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException{
 		
-		HttpSession session = req.getSession();
 		MovieService movieService = MovieServiceImpl.getInstance();
 		CommentService commentService = CommentServiceImpl.getInstance();
 		Long id;
@@ -36,7 +34,7 @@ public class MovieServlet extends HttpServlet{
 			resp.sendRedirect("movies");
 			return;
 		} 
-		User user = (User) session.getAttribute("user");
+		User user = (User) req.getAttribute("user");
 		try {
 			Movie movie  = movieService.getById(id);
 			req.setAttribute("movie", movie);
@@ -57,9 +55,8 @@ public class MovieServlet extends HttpServlet{
 	}
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException{
-		HttpSession session = req.getSession();
 		CommentService commentService = CommentServiceImpl.getInstance();
-		User user = (User) session.getAttribute("user");
+		User user = (User) req.getAttribute("user");
 		MovieService movieService = MovieServiceImpl.getInstance();
 		String id = (String) req.getParameter("movieId");
 		Movie movie;
