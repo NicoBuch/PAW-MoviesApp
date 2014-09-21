@@ -31,7 +31,7 @@
 				<div class="col-xs-12">
 					<div class="form-group">
 						<label class="control-label">Username</label>
-						<input class="form-control" name='email' autofocus type='email' placeholder='user@example.com' required/>
+						<input class="form-control" required=true name='email' autofocus type='email' placeholder='user@example.com' value = <c:out value="${email}" /> >
 					</div>
 				</div>
 

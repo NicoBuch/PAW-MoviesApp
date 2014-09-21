@@ -35,14 +35,17 @@ public class Registration extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 	throws ServletException, IOException{
 		int count = 0;
+		String bDay = req.getParameter("bDay");
+		String bMonth = req.getParameter("bMonth");
+		String bYear = req.getParameter("bYear");
 		String firstName = req.getParameter("firstName");
 		String lastName = req.getParameter("lastName");
 		String email = req.getParameter("email");
 		String password = req.getParameter("password");
 		String password_confirmation = req.getParameter("passwordConfirmation");
-		String birthDate = req.getParameter("birthDate");
 		String secretQuestion = req.getParameter("secretQuestion");
 		String secretAnswer = req.getParameter("secretAnswer");
+		String birthDate = "";
 		List<Error> errors = new ArrayList<Error>();
 		if(!firstName.isEmpty()){
 			req.setAttribute("firstName",firstName);
@@ -56,30 +59,46 @@ public class Registration extends HttpServlet{
 			req.setAttribute("email",email);
 			count++;
 		}
-		if(!birthDate.isEmpty()){
-			req.setAttribute("birthDate", birthDate);
+		if(bDay!=null && !bDay.isEmpty()){
+			req.setAttribute("bDay",bDay);
+			count++;
+		}
+		if(bYear!=null  && !bYear.isEmpty()){
+			req.setAttribute("bYear",bYear);
+			count++;
+		}
+		if(bMonth!=null && !bMonth.isEmpty()){
+			req.setAttribute("bMonth",bMonth);
 			count++;
 		}
 		if(!secretQuestion.isEmpty()){
 			req.setAttribute("secretQuestion",secretQuestion);
 		}
-		if(count != 4){
+		if(count != 6){
 			errors.add(new Error("You must fill all the fields except the question ones"));
+		}
+		else{
+			birthDate = bYear + "-" + bMonth + "-" + bDay;
 		}
 		if(!password.equals(password_confirmation)){
 			errors.add(new Error("Password and Confirmation doesnt match"));
 		}
+		if(password.isEmpty()){
+			errors.add(new Error("Password cant be empty"));
+		}
+		if(!birthDate.isEmpty()){
+			if(! isValidDate(birthDate)){
+				errors.add(new Error("Invalid Date"));
+			}
+			else if(Date.valueOf(birthDate).after(new Date(System.currentTimeMillis()))){
+				errors.add(new Error("Invalid Date"));
+			}
+		}
 
-		if(!isValidDate(birthDate)){
-			errors.add(new Error("Invalid Date"));
-		}
-		else if(Date.valueOf(birthDate).after(new Date(System.currentTimeMillis()))){
-			errors.add(new Error("Invalid Date"));
-		}
 		if (!rfc2822.matcher(email).matches()) {
 			errors.add(new Error("Invalid Email"));
 		}
-		if(!secretQuestion.endsWith("?")){
+		if(! (secretQuestion.isEmpty() || secretQuestion.endsWith("?"))){
 		errors.add(new Error("Question must end with \"?\" "));
 		}
 		if(!secretQuestion.isEmpty() && secretAnswer.isEmpty()){

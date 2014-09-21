@@ -40,6 +40,7 @@ public class LoginServlet extends HttpServlet{
 			resp.sendRedirect("");
 		} catch (LoginFailedException e) {
 			// TODO Auto-generated catch block
+				req.setAttribute("email", email);
 				req.setAttribute("errorMessage", "Invalid user or password");
 				req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
 				e.printStackTrace();
