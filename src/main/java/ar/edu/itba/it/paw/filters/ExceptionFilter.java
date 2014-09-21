@@ -11,13 +11,11 @@ import javax.servlet.ServletResponse;
 
 public class ExceptionFilter implements Filter {
 
-	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain filterChain) throws IOException, ServletException {
 		try {
@@ -31,7 +29,6 @@ public class ExceptionFilter implements Filter {
 		
 	}
 
-	@Override
 	public void init(FilterConfig arg0) throws ServletException {
 		// TODO Auto-generated method stub
 		
