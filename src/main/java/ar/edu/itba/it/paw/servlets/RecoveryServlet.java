@@ -69,7 +69,7 @@ public class RecoveryServlet extends HttpServlet{
 			doGet(req,resp);
 			return;
 		}
-		resp.sendRedirect("");
+		resp.sendRedirect("sign_in");
 		
 	}
 }

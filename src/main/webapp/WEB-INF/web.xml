@@ -5,10 +5,20 @@
 	<display-name>Archetype Created Web Application</display-name>
 	
 	<filter>
+	    <filter-name>exceptionFilter</filter-name>
+	    <filter-class>ar.edu.itba.it.paw.filters.ExceptionFilter</filter-class>
+	</filter>
+	
+	<filter>
 		<filter-name>UserFilter</filter-name>
 		<filter-class>ar.edu.itba.it.paw.filters.UserFilter</filter-class>
 	</filter>
-	
+
+	<filter-mapping>
+	    <filter-name>exceptionFilter</filter-name>
+	    <url-pattern>*</url-pattern> <!-- we will process every request -->
+	</filter-mapping>
+		
 	<filter-mapping>
 		<filter-name>UserFilter</filter-name>
 		<url-pattern>/*</url-pattern>

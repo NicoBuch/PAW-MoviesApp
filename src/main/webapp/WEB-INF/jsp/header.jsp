@@ -56,6 +56,7 @@
 								    <a href="#" class="dropdown-toggle" data-toggle="dropdown">${user.email}<span class="caret"></span></a>
 								    <ul class="dropdown-menu" role="menu">
 									    <li><a href="comments?user_id=${user.id}">My comments</a></li>
+									    <li><a href="recovery">Reset password</a></li>
 									    <li class="divider"></li>
 									    <li><a href="sign_out">Logout</a></li>
 								    </ul>
@@ -67,7 +68,7 @@
 		  </div><!-- /.container-fluid -->
 		</nav>
 
-		<div class="container jumbotron col-md-6 col-md-offset-3">
+		<div class="container col-md-8 col-md-offset-2">
 		
 		
 		
