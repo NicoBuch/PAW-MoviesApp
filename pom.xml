@@ -43,6 +43,12 @@
 		<artifactId>postgresql</artifactId>
 		<version>8.4-701.jdbc3</version>
 	</dependency>
+	<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>3.0.7.RELEASE</version>
+			<scope>compile</scope>
+		</dependency>
   </dependencies>
   <build>
     <finalName>MoviesApp</finalName>

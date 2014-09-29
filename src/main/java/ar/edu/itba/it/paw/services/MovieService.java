@@ -27,5 +27,4 @@ public interface MovieService {
 	
 	public Iterable<Movie> getByDirector(String director);
 
-
 }

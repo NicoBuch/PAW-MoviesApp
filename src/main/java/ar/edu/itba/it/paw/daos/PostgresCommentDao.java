@@ -6,24 +6,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import ar.edu.itba.it.paw.exceptions.FatalErrorException;
 import ar.edu.itba.it.paw.models.Comment;
 import ar.edu.itba.it.paw.models.Movie;
 import ar.edu.itba.it.paw.models.User;
-
+@Repository
 public class PostgresCommentDao implements CommentDao {
-	private static PostgresCommentDao dao;
-
-	private PostgresCommentDao() {
-
+	private MovieDao movieDao;
+	private UserDao userDao;
+	@Autowired
+	public PostgresCommentDao(MovieDao movieDao,UserDao userDao) {
+		this.movieDao = movieDao;
+		this.userDao = userDao;
 	}
 
-	public static PostgresCommentDao getInstance() {
-		if (dao == null) {
-			dao = new PostgresCommentDao();
-		}
-		return dao;
-	}
 
 	public Iterable<Comment> getAll() {
 		Session<Comment> query = new Session<Comment>();
@@ -32,9 +31,9 @@ public class PostgresCommentDao implements CommentDao {
 		try {
 			while (rs.next()) {
 				
-				Movie movie = PostgresMovieDao.getInstance().getById(
+				Movie movie = movieDao.getById(
 						rs.getInt("movie_id"));
-				User user = PostgresUserDao.getInstance().getById(
+				User user = userDao.getById(
 						rs.getInt("user_id"));
 				comments.add(buildComment(rs, movie, user));
 			}
@@ -51,9 +50,9 @@ public class PostgresCommentDao implements CommentDao {
 		ResultSet rs = query.list("comment");
 		try {
 			if(rs.next() == true){
-				Movie movie = PostgresMovieDao.getInstance().getById(
+				Movie movie = movieDao.getById(
 						rs.getInt("movie_id"));
-				User user = PostgresUserDao.getInstance().getById(
+				User user = userDao.getById(
 						rs.getInt("user_id"));
 				return buildComment(rs, movie, user);
 			}
@@ -110,7 +109,7 @@ public class PostgresCommentDao implements CommentDao {
 		List<Comment> comments = new ArrayList<Comment>();
 		try {
 			while (rs.next()) {
-				User user = PostgresUserDao.getInstance().getById(
+				User user = userDao.getById(
 						rs.getInt("user_id"));
 				comments.add(buildComment(rs, movie, user));
 			}
@@ -129,7 +128,7 @@ public class PostgresCommentDao implements CommentDao {
 		List<Comment> comments = new ArrayList<Comment>();
 		try {
 			while (rs.next()) {
-				Movie movie = PostgresMovieDao.getInstance().getById(
+				Movie movie = movieDao.getById(
 						rs.getInt("movie_id"));
 				comments.add(buildComment(rs, movie, user));
 			}

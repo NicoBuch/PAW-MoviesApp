@@ -3,104 +3,15 @@
 	version="2.4">
 
 	<display-name>Archetype Created Web Application</display-name>
-	
-	<filter>
-	    <filter-name>exceptionFilter</filter-name>
-	    <filter-class>ar.edu.itba.it.paw.filters.ExceptionFilter</filter-class>
-	</filter>
-	
-	<filter>
-		<filter-name>UserFilter</filter-name>
-		<filter-class>ar.edu.itba.it.paw.filters.UserFilter</filter-class>
-	</filter>
-
-	<filter-mapping>
-	    <filter-name>exceptionFilter</filter-name>
-	    <url-pattern>*</url-pattern> <!-- we will process every request -->
-	</filter-mapping>
-		
-	<filter-mapping>
-		<filter-name>UserFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
 
 	<servlet>
-		<servlet-name>MoviesServlet</servlet-name>
-		<servlet-class>ar.edu.itba.it.paw.servlets.MoviesServlet</servlet-class>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>CommentsServlet</servlet-name>
-		<servlet-class>ar.edu.itba.it.paw.servlets.CommentsServlet</servlet-class>
-	</servlet>
-
-	<servlet>
-		<servlet-name>Index</servlet-name>
-		<servlet-class>ar.edu.itba.it.paw.servlets.Index</servlet-class>
-	</servlet>
-
-	<servlet>
-		<servlet-name>Registration</servlet-name>
-		<servlet-class>ar.edu.itba.it.paw.servlets.Registration</servlet-class>
-	</servlet>
-
-	<servlet>
-		<servlet-name>LoginServlet</servlet-name>
-		<servlet-class>ar.edu.itba.it.paw.servlets.LoginServlet</servlet-class>
-	</servlet>
-
-	<servlet>
-		<servlet-name>LogOutServlet</servlet-name>
-		<servlet-class>ar.edu.itba.it.paw.servlets.LogOutServlet</servlet-class>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>MovieServlet</servlet-name>
-		<servlet-class>ar.edu.itba.it.paw.servlets.MovieServlet</servlet-class>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>RecoveryServlet</servlet-name>
-		<servlet-class>ar.edu.itba.it.paw.servlets.RecoveryServlet</servlet-class>
+		<servlet-name>spring</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>MoviesServlet</servlet-name>
-		<url-pattern>/movies</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>LoginServlet</servlet-name>
-		<url-pattern>/sign_in</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>LogOutServlet</servlet-name>
-		<url-pattern>/sign_out</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>Registration</servlet-name>
-		<url-pattern>/sign_up</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>Index</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>MovieServlet</servlet-name>
-		<url-pattern>/movie</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>CommentsServlet</servlet-name>
-		<url-pattern>/comments</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>RecoveryServlet</servlet-name>
-		<url-pattern>/recovery</url-pattern>
+		<servlet-name>spring</servlet-name>
+		<url-pattern>/bin/*</url-pattern>
 	</servlet-mapping>
 </web-app>

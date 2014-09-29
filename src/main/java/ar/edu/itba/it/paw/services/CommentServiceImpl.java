@@ -1,26 +1,25 @@
 package ar.edu.itba.it.paw.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import ar.edu.itba.it.paw.daos.CommentDao;
-import ar.edu.itba.it.paw.daos.PostgresCommentDao;
 import ar.edu.itba.it.paw.exceptions.CantCommentBeforeMoviesReleaseDateException;
 import ar.edu.itba.it.paw.exceptions.NoMoreThanOneCommentPerUserPerMovieException;
 import ar.edu.itba.it.paw.models.Comment;
 import ar.edu.itba.it.paw.models.Movie;
+import ar.edu.itba.it.paw.models.MovieWithComments;
 import ar.edu.itba.it.paw.models.User;
-
+@Service
 public class CommentServiceImpl implements CommentService{
-	private static CommentServiceImpl service;
 	private CommentDao dao;
-
-	private CommentServiceImpl() {
-		dao = PostgresCommentDao.getInstance();
-	}
-
-	public static CommentServiceImpl getInstance() {
-		if (service == null) {
-			service = new CommentServiceImpl();
-		}
-		return service;
+	private MovieService movieService;
+	private UserService userService;
+	@Autowired
+	public CommentServiceImpl(CommentDao dao, MovieService movieService, UserService userService) {
+		this.dao = dao;
+		this.movieService = movieService;
+		this.userService = userService;
 	}
 
 	public void save(Comment c)
@@ -60,8 +59,6 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	public boolean canComment(User user, Movie movie) {
-		MovieService movieService = MovieServiceImpl.getInstance();
-		UserService userService = UserServiceImpl.getInstance();
 		if(user==null)
 			return false;
 		if((movieService.alreadyRelease(movie) || userService.isVip(user)) && user!=null 
@@ -72,6 +69,11 @@ public class CommentServiceImpl implements CommentService{
 			return false;
 		}
 
+	}
+	
+	public MovieWithComments getMovieWithComments(Movie movie){
+		MovieWithComments movieComment = new MovieWithComments(movie, countCommentsByMovie(movie));
+		return movieComment;
 	}
 
 }

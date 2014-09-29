@@ -6,21 +6,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import ar.edu.itba.it.paw.exceptions.FatalErrorException;
 import ar.edu.itba.it.paw.models.Movie;
-
+@Repository
 public class PostgresMovieDao implements MovieDao {
-	private static PostgresMovieDao obj = null;
 
 	private PostgresMovieDao() {
 
-	}
-
-	public static MovieDao getInstance() {
-		if (obj == null)
-			obj = new PostgresMovieDao();
-
-		return obj;
 	}
 
 	public Iterable<Movie> getAll() {

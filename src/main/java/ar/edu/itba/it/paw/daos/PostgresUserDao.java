@@ -6,24 +6,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import ar.edu.itba.it.paw.exceptions.FatalErrorException;
 import ar.edu.itba.it.paw.models.User;
-
+@Repository
 public class PostgresUserDao implements UserDao {
 
-	private static PostgresUserDao obj = null;
 
-	// Singleton
 	private PostgresUserDao() {
 
 	}
 
-	public static UserDao getInstance() {
-		if (obj == null)
-			obj = new PostgresUserDao();
-
-		return obj;
-	}
 
 	public Iterable<User> getAll() {
 		Session<User> query = new Session<User>();

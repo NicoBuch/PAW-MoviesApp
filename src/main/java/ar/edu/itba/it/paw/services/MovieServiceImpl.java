@@ -2,24 +2,19 @@ package ar.edu.itba.it.paw.services;
 
 import java.sql.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import ar.edu.itba.it.paw.daos.MovieDao;
-import ar.edu.itba.it.paw.daos.PostgresMovieDao;
 import ar.edu.itba.it.paw.exceptions.NoGenreException;
 import ar.edu.itba.it.paw.exceptions.NoMovieIdException;
 import ar.edu.itba.it.paw.models.Movie;
-
+@Service
 public class MovieServiceImpl implements MovieService {
 	MovieDao movieDao;
-	private static MovieServiceImpl obj = null;
-
-	private MovieServiceImpl() {
-		movieDao = PostgresMovieDao.getInstance();
-	}
-
-	public static MovieServiceImpl getInstance() {
-		if (obj == null)
-			obj = new MovieServiceImpl();
-		return obj;
+	@Autowired
+	public MovieServiceImpl(MovieDao movieDao) {
+		this.movieDao = movieDao;
 	}
 
 	/* Devuelve listado de peliculas */
@@ -71,6 +66,7 @@ public class MovieServiceImpl implements MovieService {
 		
 	}
 	
+	
 	public Iterable<Movie> getByRating(int limit){
 		return movieDao.getByRating(limit);
 	}
@@ -86,5 +82,7 @@ public class MovieServiceImpl implements MovieService {
 	public Iterable<Movie> getByDirector(String director) {
 		return movieDao.getByDirector(director);
 	}
+	
+	
 	
 }

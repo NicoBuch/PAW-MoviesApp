@@ -2,9 +2,6 @@ package ar.edu.itba.it.paw.models;
 
 import java.sql.Date;
 
-import ar.edu.itba.it.paw.services.CommentService;
-import ar.edu.itba.it.paw.services.CommentServiceImpl;
-
 public class Movie extends Entity {
 
 	private String title;
@@ -73,10 +70,6 @@ public class Movie extends Entity {
 		return this.description;
 	}
 
-	public int getCommentCount() {
-		CommentService cs = CommentServiceImpl.getInstance();
-		return cs.countCommentsByMovie(this);
-	}
 
 
 	public Date getCreationDate() {

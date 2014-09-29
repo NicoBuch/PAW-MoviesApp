@@ -1,25 +1,20 @@
 package ar.edu.itba.it.paw.services;
 
-import ar.edu.itba.it.paw.daos.PostgresUserDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import ar.edu.itba.it.paw.daos.UserDao;
 import ar.edu.itba.it.paw.exceptions.EmailAlreadyTakenException;
 import ar.edu.itba.it.paw.exceptions.LoginFailedException;
 import ar.edu.itba.it.paw.models.User;
-
+@Service
 public class UserServiceImpl implements UserService {
 
-	private static UserServiceImpl obj = null;
-	private static UserDao userDao = PostgresUserDao.getInstance();
+	private UserDao userDao;
 
-	// Singleton
-	private UserServiceImpl() {
-
-	}
-
-	public static UserServiceImpl getInstance() {
-		if (obj == null)
-			obj = new UserServiceImpl();
-		return obj;
+	@Autowired
+	public UserServiceImpl(UserDao userDao) {
+		this.userDao = userDao;
 	}
 
 	public User getByEmail(String email) {

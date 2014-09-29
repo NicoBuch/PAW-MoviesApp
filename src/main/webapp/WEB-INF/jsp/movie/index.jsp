@@ -35,10 +35,10 @@
   <div class="col-md-5 col-md-offset-2">
     <legend><h3>Recent Uploaded Movies</h3></legend>
     <div class="list-group">
-      <c:forEach var="aMovie" items="${recents}">
-        <a class="list-group-item" href="movie?id=${aMovie.id}"><u><b>${aMovie.title}</b></u></br>
-          <b>Upload Date:</b> ${aMovie.creationDate}</br>
-          <b>Comments:</b> ${aMovie.commentCount}
+      <c:forEach var="aMovieWithComment" items="${recents}">
+        <a class="list-group-item" href="movie?id=${aMovieWithComment.movie.id}"><u><b>${aMovieWithComment.movie.title}</b></u></br>
+          <b>Upload Date:</b> ${aMovieWithComment.movie.creationDate}</br>
+          <b>Comments:</b> ${aMovieWithComment.commentCount}
         </a>      
       </c:forEach>
     </div>
