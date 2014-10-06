@@ -42,14 +42,14 @@
 			    <!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				    <ul class="nav navbar-nav">
-					    <li><a href="/MoviesApp/movies">List Movies</a></li>
+					    <li><a href="/MoviesApp/bin/movie/list">List Movies</a></li>
 					</ul>
 				    <ul class="nav navbar-nav navbar-right">
 				    	<c:choose>							
 							<c:when test='${empty user || user.email==""}'>
 								<!-- User is not logged in -->
-								<li><a href="/MoviesApp/sign_in">Login</a></li>
-						    	<li><a href="/MoviesApp/sign_up">Register</a></li>
+								<li><a href="/MoviesApp/bin/user/sign_in">Login</a></li>
+						    	<li><a href="/MoviesApp/bin/user/sign_up">Register</a></li>
 						    </c:when>						    
 					    	<c:otherwise>
 					    		<!-- User is logged in -->
@@ -57,9 +57,9 @@
 								    <a href="#" class="dropdown-toggle" data-toggle="dropdown">${user.email}<span class="caret"></span></a>
 								    <ul class="dropdown-menu" role="menu">
 									    <li><a href="comments?user_id=${user.id}">My comments</a></li>
-									    <li><a href="recovery">Reset password</a></li>
+									    <li><a href="/MoviesApp/bin/user/recovery">Reset password</a></li>
 									    <li class="divider"></li>
-									    <li><a href="sign_out">Logout</a></li>
+									    <li><a href="/MoviesApp/bin/user/sign_out">Logout</a></li>
 								    </ul>
 							    </li>
 							</c:otherwise>

@@ -30,7 +30,7 @@
 		<div class="well">
 			<p class="text-center">	
 				<label><b>Description</b></label><br> 
-				<i>${movieFo.description}</i>
+				<i>${movie.description}</i>
 			</p>
 		</div>
 	</div>
@@ -107,4 +107,4 @@
 		</c:if>
 	</div>
 	
-<%@ include file="../footer.jsp" %>
+<%@ include file="footer.jsp" %>

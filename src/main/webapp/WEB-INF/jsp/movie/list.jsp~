@@ -1,5 +1,5 @@
 
-<%@ include file="header.jsp" %>
+<%@ include file="../header.jsp" %>
 
 	<div class="page-header">
 		<h2>Movie List
@@ -42,7 +42,7 @@
 		 </thead>
 		<c:forEach var="aMovie" items="${movies}">
 		    <tr>
-		    	<td><a href="movie?id=${aMovie.id}">${aMovie.title}</a></td>
+		    	<td><a href="detail?id=${aMovie.id}">${aMovie.title}</a></td>
 		    	<td>${aMovie.director}</td>
 		    	<td>${aMovie.releaseDate}</td>
 		    </tr>
