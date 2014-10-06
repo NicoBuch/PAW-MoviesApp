@@ -17,12 +17,10 @@ public class MovieConverter implements Converter<String,Movie>{
 	@Override
 	public Movie convert(String source) {
 		try {
-			return(movieService.getById(Integer.valueOf(source)));
+			return (movieService.getById(Integer.valueOf(source)));
 		} catch (NoMovieIdException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException();
 		}
-	return null;
 	}
 
 }

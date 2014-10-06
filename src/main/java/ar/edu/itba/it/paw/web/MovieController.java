@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +19,7 @@ import ar.edu.itba.it.paw.exceptions.NoGenreException;
 import ar.edu.itba.it.paw.models.Comment;
 import ar.edu.itba.it.paw.models.Movie;
 import ar.edu.itba.it.paw.models.MovieWithComments;
+import ar.edu.itba.it.paw.models.User;
 import ar.edu.itba.it.paw.services.CommentService;
 import ar.edu.itba.it.paw.services.MovieService;
 
@@ -56,31 +60,35 @@ public class MovieController {
 		return mav;
 	}
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView detail(@RequestParam(value="id",required=true)Movie movie){
+	public ModelAndView detail(@RequestParam(value="id",required=true)Movie movie,
+								HttpServletRequest req){
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("movie", movie);
 		Iterable<Comment> comments = commentService.getCommentsByMovie(movie);
 		mav.addObject("comments", comments);
-		/*VER ESTO CUANDO DECIDAMOS COMO SE MANEJAN LAS SESIONES
+		HttpSession session = req.getSession();
+		User user = (User) session.getAttribute("user");
 		if(commentService.canComment(user, movie)){
-			req.setAttribute("canComment", true);
+			mav.addObject("canComment", true);
 		}
 		else{
-			req.setAttribute("canComment", false);
-		}*/
+			mav.addObject("canComment", false);
+		}
 		mav.addObject("canComment",false);
 		return mav;
 	}
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView detail(@RequestParam(value="id",required=true)Movie movie,
 			@RequestParam(value="rating",required=true)Integer rating,
-			@RequestParam(value="body",required=true)String body){
+			@RequestParam(value="body",required=true)String body,
+			HttpServletRequest req){
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("movie", movie);
-		
-		//Si puedo comentar
-		//Comment comment = new Comment(body, rating, movie, user);
-		
+		HttpSession session = req.getSession();
+		User user =(User) session.getAttribute("user");
+		if(commentService.canComment(user, movie)){
+			Comment comment = new Comment(body, rating, movie, user);
+		}
 		Iterable<Comment> comments = commentService.getCommentsByMovie(movie);
 		mav.addObject("comments", comments);
 		mav.addObject("canComment",false);
@@ -97,7 +105,6 @@ public class MovieController {
 		Iterable<Movie> releases = movieService.getByReleaseDate(new Date(c.getTimeInMillis()), now);
 		shortDescription(releases);
 		Iterable<Movie> recents = movieService.getByCreationDate(5);
-		Iterable<Comment> comments = new ArrayList<Comment>();
 		List<MovieWithComments> moviesWithComments = new ArrayList<MovieWithComments>();
 		for(Movie movie : recents){
 			moviesWithComments.add(commentService.getMovieWithComments(movie));
