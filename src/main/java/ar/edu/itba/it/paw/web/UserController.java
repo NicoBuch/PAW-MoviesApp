@@ -39,7 +39,7 @@ public class UserController {
 				User us = userService.login(email, password);
 				session.setAttribute("user", us);
 				resp.sendRedirect("../movie/index");
-				
+
 			} catch (LoginFailedException e) {
 				mav.addObject("errorMessage", "Invalid user or password");
 			}
@@ -53,7 +53,9 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView sign_out(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		HttpSession session = req.getSession();
-		session.invalidate();
+		if(session!=null){
+			session.invalidate();
+		}
 		ModelAndView mav = new ModelAndView();
 		resp.sendRedirect("../movie/index");
 		return mav;
@@ -64,7 +66,7 @@ public class UserController {
 							@RequestParam(value = "newPasswordConfirmation", required = false)String newPasswordConfirmation,
 							@RequestParam(value = "answer", required = false)String answer,
 							HttpServletResponse resp) throws IOException{
-		
+
 		ModelAndView mav = new ModelAndView();
 		User user = userService.getByEmail(email);
 		if(user == null){
@@ -86,7 +88,7 @@ public class UserController {
 					mav.addObject("errorMessage", "Passwords dont match");
 					return mav;
 				}
-				
+
 			}
 			else{
 				mav.addObject("errorMessage", "Invalid Answer");
@@ -94,7 +96,7 @@ public class UserController {
 			}
 		}
 		return mav;
-		
+
 	}
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView recovery(){
@@ -113,4 +115,19 @@ public class UserController {
 		mav.addObject("comments", comments);
 		return mav;
 	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView comments(HttpServletRequest req){
+		HttpSession session = req.getSession();
+		User user = (User) session.getAttribute("user");
+		if(user == null){
+			//Como se manejan los errores?
+			return null;
+		}
+		Iterable<Comment> comments = commentService.getCommentsByUser(user);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("comments", comments);
+		return mav;
+	}
+
 }

@@ -40,14 +40,6 @@ public class MovieServiceImpl implements MovieService {
 		movieDao.save(movie);
 	}
 
-	/* Se fija si es estreno la pelicula */
-	public boolean isNew(Movie movie) {
-		if( movie.getReleaseDate().after(new Date(System.currentTimeMillis() - 604800000))){
-			return true;
-		}
-		return false;
-	}
-
 	public Iterable<Movie> getByGenre(String genre) throws NoGenreException 
 	{
 		try{

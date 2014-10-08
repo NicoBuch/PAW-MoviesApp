@@ -92,4 +92,8 @@ public class User extends Entity {
 		User other = (User) obj;
 		return this.email.equals(other.email);
 	}
+	
+	public boolean compareAnswer(String answer) {
+		return secretAnswer.equals(answer);
+	}
 }

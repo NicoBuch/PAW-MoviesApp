@@ -80,4 +80,9 @@ public class Movie extends Entity {
 		this.description = string;		
 	}
 
+	/* Se fija si es estreno la pelicula */
+	public boolean isNew() {
+		return releaseDate.after(new Date(System.currentTimeMillis() - 604800000));
+	}
+
 }

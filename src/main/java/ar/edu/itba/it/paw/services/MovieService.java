@@ -13,8 +13,6 @@ public interface MovieService {
 
 	public void save(Movie movie);
 
-	public boolean isNew(Movie movie);
-	
 	public Iterable<Movie> getByGenre(String genre) throws NoGenreException;
 	
 	public Iterable<Movie> getByRating(int limit);

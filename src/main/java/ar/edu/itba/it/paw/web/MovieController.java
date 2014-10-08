@@ -29,6 +29,9 @@ import ar.edu.itba.it.paw.services.MovieService;
 public class MovieController {
 	private MovieService movieService;
 	private CommentService commentService;
+	private final int DESCRIPTION_LENGTH = 300;
+	private final int TOP_RANKED_CANT = 5;
+	private final int MOST_RECENT_CANT = 5;
 	@Autowired
 	public MovieController(MovieService movieService,CommentService commentService){
 		this.movieService = movieService;
@@ -99,14 +102,14 @@ public class MovieController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView index(){
-		Iterable<Movie> ranked = movieService.getByRating(5);
+		Iterable<Movie> ranked = movieService.getByRating(TOP_RANKED_CANT);
 		Date now = new Date(System.currentTimeMillis());
 		Calendar c = Calendar.getInstance();
 		c.setTime(now);
 		c.add(Calendar.DATE, -6); 
 		Iterable<Movie> releases = movieService.getByReleaseDate(new Date(c.getTimeInMillis()), now);
 		shortDescription(releases);
-		Iterable<Movie> recents = movieService.getByCreationDate(5);
+		Iterable<Movie> recents = movieService.getByCreationDate(MOST_RECENT_CANT);
 		List<MovieWithComments> moviesWithComments = new ArrayList<MovieWithComments>();
 		for(Movie movie : recents){
 			moviesWithComments.add(commentService.getMovieWithComments(movie));
@@ -120,7 +123,7 @@ public class MovieController {
 	private void shortDescription(Iterable<Movie> movies){
 		for(Movie m : movies){
 			if(m.getDescription().length()>300){
-				m.setDescription(m.getDescription().substring(0, 300) + "...");
+				m.setDescription(m.getDescription().substring(0, DESCRIPTION_LENGTH) + "...");
 			}
 		}
 	}

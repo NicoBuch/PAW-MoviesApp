@@ -20,13 +20,13 @@ public class Comment extends Entity{
 		setFields(body,rating,movie,user);
 		
 	}
-	public void setFields(String body, Date creationDate, int rating, Movie movie, User user){
+	private void setFields(String body, Date creationDate, int rating, Movie movie, User user){
 		this.creationDate = creationDate;
 		setFields(body, rating, movie, user);
 	}
 	
 	private void setFields(String body, int rating, Movie movie, User user){
-		if((rating > 5 || rating < 0) || movie == null || user == null){
+		if((rating > 5 || rating < 0) || movie == null || user == null || body.isEmpty()){
 			throw new IllegalArgumentException();
 		}
 		this.body = body;

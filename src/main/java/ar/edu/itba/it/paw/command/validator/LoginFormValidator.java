@@ -9,12 +9,10 @@ import ar.edu.itba.it.paw.command.LoginForm;
 @Component
 public class LoginFormValidator implements Validator{
 
-	@Override
 	public boolean supports(Class<?> clazz) {
 		return LoginForm.class.equals(clazz);
 	}
 
-	@Override
 	public void validate(Object target, Errors errors) {
 		LoginForm form =(LoginForm) target;
 		
