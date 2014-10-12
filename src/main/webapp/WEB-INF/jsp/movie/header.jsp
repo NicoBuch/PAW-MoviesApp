@@ -25,10 +25,10 @@
 			
 	<!-- CONTENT BEGINS -->
 	<body class="col-md-12">
-		<!-- NAVIGATION BAR -->
+		<!-- NAVIGATION BAR -->fo
 		<nav class="navbar navbar-inverse" role="navigation">
 		  	<div class="container-fluid">
-			    <!-- Brand and toggle get grouped for better mobile display -->
+			    <!-- Brand and toggle get grouped or better mobile display -->
 			    <div class="navbar-header">
 				    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
 				    <span class="sr-only">Toggle navigation</span>
@@ -36,20 +36,20 @@
 				    <span class="icon-bar"></span>
 				    <span class="icon-bar"></span>
 				    </button>
-				    <a class="navbar-brand" href="../movie/index">Movies App</a>
+				    <a class="navbar-brand" href="/MoviesApp">Movies App</a>
 				</div>
 
 			    <!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				    <ul class="nav navbar-nav">
-					    <li><a href="../movie/list">List Movies</a></li>
+					    <li><a href="/MoviesApp/bin/movie/list">List Movies</a></li>
 					</ul>
 				    <ul class="nav navbar-nav navbar-right">
 				    	<c:choose>							
 							<c:when test='${empty user || user.email==""}'>
 								<!-- User is not logged in -->
-								<li><a href="../user/sign_in">Login</a></li>
-						    	<li><a href="../user/sign_up">Register</a></li>
+								<li><a href="/MoviesApp/bin/user/sign_in">Login</a></li>
+						    	<li><a href="/MoviesApp/bin/user/sign_up">Register</a></li>
 						    </c:when>						    
 					    	<c:otherwise>
 					    		<!-- User is logged in -->
@@ -57,9 +57,9 @@
 								    <a href="#" class="dropdown-toggle" data-toggle="dropdown">${user.email}<span class="caret"></span></a>
 								    <ul class="dropdown-menu" role="menu">
 									    <li><a href="comments?user_id=${user.id}">My comments</a></li>
-									    <li><a href="../user/recovery">Reset password</a></li>
+									    <li><a href="/MoviesApp/bin/user/recovery">Reset password</a></li>
 									    <li class="divider"></li>
-									    <li><a href="../user/sign_out">Logout</a></li>
+									    <li><a href="/MoviesApp/bin/user/sign_out">Logout</a></li>
 								    </ul>
 							    </li>
 							</c:otherwise>

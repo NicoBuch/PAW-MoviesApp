@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.it.paw.exceptions.CantCommentBeforeMoviesReleaseDateException;
 import ar.edu.itba.it.paw.exceptions.NoGenreException;
+import ar.edu.itba.it.paw.exceptions.NoMoreThanOneCommentPerUserPerMovieException;
 import ar.edu.itba.it.paw.models.Comment;
 import ar.edu.itba.it.paw.models.Movie;
 import ar.edu.itba.it.paw.models.MovieWithComments;
@@ -74,20 +76,20 @@ public class MovieController {
 		else{
 			mav.addObject("canComment", false);
 		}
-		mav.addObject("canComment",false);
 		return mav;
 	}
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView detail(@RequestParam(value="id",required=true)Movie movie,
 			@RequestParam(value="rating",required=true)Integer rating,
 			@RequestParam(value="body",required=true)String body,
-			HttpServletRequest req){
+			HttpServletRequest req) throws NoMoreThanOneCommentPerUserPerMovieException, CantCommentBeforeMoviesReleaseDateException{
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("movie", movie);
 		HttpSession session = req.getSession();
 		User user =(User) session.getAttribute("user");
 		if(commentService.canComment(user, movie)){
 			Comment comment = new Comment(body, rating, movie, user);
+			commentService.save(comment);
 		}
 		Iterable<Comment> comments = commentService.getCommentsByMovie(movie);
 		mav.addObject("comments", comments);
