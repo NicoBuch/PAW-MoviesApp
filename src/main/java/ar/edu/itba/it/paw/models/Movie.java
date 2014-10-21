@@ -1,21 +1,37 @@
 package ar.edu.itba.it.paw.models;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Movie extends Entity {
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
 
-	private String title;
-	private Date releaseDate;
-	private String director;
-	private Genre genre;
-	private int minutes;
-	private String description;
-	private Date creationDate;
-
+@Entity
+public class Movie extends PersistentEntity {
+	
 	public enum Genre {
 		ACTION, TERROR, THRILLER, DRAMA, PORN, COMEDY, ANIMATION, FANTASY, SCIFI
 	}
 
+	private String title;
+	private Date releaseDate;
+	private String director;
+	
+	@Enumerated(EnumType.STRING)
+	private Genre genre;
+	private int minutes;
+	private String description;
+	private Date creationDate;
+	
+	@OneToMany(mappedBy="movie")
+	private List<Comment> comments;
+	
+	public Movie(){
+	}
+	
 	public Movie(String movieName, Date releaseDate,
 			String directorName, String genre, int minutes, String description,
 			Date creationDate) {
@@ -84,5 +100,41 @@ public class Movie extends Entity {
 	public boolean isNew() {
 		return releaseDate.after(new Date(System.currentTimeMillis() - 604800000));
 	}
-
+	
+	public List<Comment> getComments(){
+		return comments;
+	}
+	
+	public int getCommentCount(){
+		return comments.size();
+	}
+	
+	public boolean alreadyReleased(){
+		return releaseDate.before(new Date(System.currentTimeMillis()));
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Movie other = (Movie) obj;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		return true;
+	}
+	
+	
 }

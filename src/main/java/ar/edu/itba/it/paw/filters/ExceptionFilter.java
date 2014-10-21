@@ -21,9 +21,10 @@ public class ExceptionFilter implements Filter {
 		try {
             filterChain.doFilter(request, response);
         } catch ( Throwable ex ) {
-            //Forward to...
-        	request.setAttribute("exceptionMsg", ex.getMessage());
-        	request.getRequestDispatcher("/WEB-INF/jsp/exceptionPage.jsp").forward(request, response);
+//            //Forward to...
+//        	request.setAttribute("exceptionMsg", ex.getMessage());
+//        	request.getRequestDispatcher("/WEB-INF/jsp/exceptionPage.jsp").forward(request, response);
+        	ex.printStackTrace();
         	
         }
 		

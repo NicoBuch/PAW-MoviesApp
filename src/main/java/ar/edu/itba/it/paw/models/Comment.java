@@ -2,14 +2,24 @@ package ar.edu.itba.it.paw.models;
 
 import java.sql.Date;
 
-public class Comment extends Entity{
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+
+@Entity
+public class Comment extends PersistentEntity{
 	
 	private String body;
 	private Date creationDate;
 	private int rating; 
+	
+	@ManyToOne
 	private Movie movie;
+	
+	@ManyToOne
 	private User user;
 	
+	public Comment(){
+	}
 
 	public Comment( String body, Date creationDate, int rating, Movie movie, User user) {
 		setFields(body, creationDate, rating,movie,user);

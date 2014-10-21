@@ -21,8 +21,8 @@
 
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-		
-			
+
+
 	<!-- CONTENT BEGINS -->
 	<body class="col-md-12">
 		<!-- NAVIGATION BAR -->
@@ -45,12 +45,12 @@
 					    <li><a href="../movie/list">List Movies</a></li>
 					</ul>
 				    <ul class="nav navbar-nav navbar-right">
-				    	<c:choose>							
+				    	<c:choose>
 							<c:when test='${empty user || user.email==""}'>
 								<!-- User is not logged in -->
 								<li><a href="../user/sign_in">Login</a></li>
 						    	<li><a href="../user/sign_up">Register</a></li>
-						    </c:when>						    
+						    </c:when>
 					    	<c:otherwise>
 					    		<!-- User is logged in -->
 							    <li class="dropdown">
@@ -70,6 +70,4 @@
 		</nav>
 
 		<div class="container col-md-8 col-md-offset-2">
-		
-		
-		
+

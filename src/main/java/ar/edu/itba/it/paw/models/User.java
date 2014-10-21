@@ -1,8 +1,16 @@
 package ar.edu.itba.it.paw.models;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-public class User extends Entity {
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "Users")
+public class User extends PersistentEntity {
 
 	private String email;
 	private String password;
@@ -12,7 +20,13 @@ public class User extends Entity {
 	private String secretQuestion;
 	private String secretAnswer;
 	private boolean vip;
-
+	
+	@OneToMany(mappedBy="user")
+	private List<Comment> comments;
+	
+	public User(){		
+	}
+	
 	public User(String email, String password, String firstName, String lastName, Date birthDate,
 			String secretQuestion, String secretAnswer,boolean vip) {
 		super();
@@ -95,5 +109,28 @@ public class User extends Entity {
 	
 	public boolean compareAnswer(String answer) {
 		return secretAnswer.equals(answer);
+	}
+	
+	public List<Comment> getComments(){
+		return comments;
+	}
+	
+	public boolean canComment(Movie movie) {
+		if((movie.alreadyReleased() || isVip()) && !(alreadyCommented(movie))){
+			return true;
+		}
+		else{
+			return false;
+		}
+
+	}
+	
+	public boolean alreadyCommented(Movie movie){
+		for(Comment comment : comments){
+			if(comment.getMovie().equals(movie)){
+				return true;
+			}
+		}
+		return false;
 	}
 }

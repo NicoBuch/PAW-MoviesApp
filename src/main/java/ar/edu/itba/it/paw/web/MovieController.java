@@ -16,46 +16,43 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.it.paw.exceptions.CantCommentBeforeMoviesReleaseDateException;
+import ar.edu.itba.it.paw.domain.MovieRepo;
 import ar.edu.itba.it.paw.exceptions.NoGenreException;
 import ar.edu.itba.it.paw.exceptions.NoMoreThanOneCommentPerUserPerMovieException;
 import ar.edu.itba.it.paw.models.Comment;
 import ar.edu.itba.it.paw.models.Movie;
 import ar.edu.itba.it.paw.models.MovieWithComments;
 import ar.edu.itba.it.paw.models.User;
-import ar.edu.itba.it.paw.services.CommentService;
-import ar.edu.itba.it.paw.services.MovieService;
 
 @Controller
 public class MovieController {
-	private MovieService movieService;
-	private CommentService commentService;
+	private MovieRepo movies;
 	private final int DESCRIPTION_LENGTH = 300;
 	private final int TOP_RANKED_CANT = 5;
 	private final int MOST_RECENT_CANT = 5;
 	@Autowired
-	public MovieController(MovieService movieService,CommentService commentService){
-		this.movieService = movieService;
-		this.commentService = commentService;
+	public MovieController(MovieRepo movies){
+		this.movies = movies;
 	}
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView list(@RequestParam(value = "genre", required=false) String genre,
 							@RequestParam(value="director",required=false) String director){
 		ModelAndView mav = new ModelAndView();
-		Iterable<Movie> movies;
+		List<Movie> filteredMovies;
 		if(genre!=null){
 			try {
-				movies = movieService.getByGenre(genre);
+				filteredMovies = movies.getByGenre(genre);
 			} catch (NoGenreException e) {
 				return mav;
 			}
 		}
 		else if (director!=null){
-			movies = movieService.getByDirector(director);
+			filteredMovies = movies.getByDirector(director);
 		}
 		else{
-			movies = movieService.getAll();
+			filteredMovies = movies.getAll();
 		}
-		mav.addObject("movies", movies);
+		mav.addObject("movies", filteredMovies);
 		Object[] genres = Movie.Genre.values();
 		List<Object> genresIterable = new ArrayList<Object>();
 		for(int i = 0; i< genres.length; i++){
@@ -69,11 +66,11 @@ public class MovieController {
 								HttpServletRequest req){
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("movie", movie);
-		Iterable<Comment> comments = commentService.getCommentsByMovie(movie);
+		Iterable<Comment> comments = movie.getComments();
 		mav.addObject("comments", comments);
 		HttpSession session = req.getSession();
 		User user = (User) session.getAttribute("user");
-		if(commentService.canComment(user, movie)){
+		if(user.canComment(movie)){
 			mav.addObject("canComment", true);
 		}
 		else{
@@ -90,32 +87,28 @@ public class MovieController {
 		mav.addObject("movie", movie);
 		HttpSession session = req.getSession();
 		User user =(User) session.getAttribute("user");
-		if(commentService.canComment(user, movie)){
+		if(user.canComment(movie)){
 			Comment comment = new Comment(body, rating, movie, user);
 			commentService.save(comment);
 		}
-		Iterable<Comment> comments = commentService.getCommentsByMovie(movie);
+		Iterable<Comment> comments = movie.getComments();
 		mav.addObject("comments", comments);
 		mav.addObject("canComment",false);
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView index(){
-		Iterable<Movie> ranked = movieService.getByRating(TOP_RANKED_CANT);
+		Iterable<Movie> ranked = movies.getByRating(TOP_RANKED_CANT);
 		Date now = new Date(System.currentTimeMillis());
 		Calendar c = Calendar.getInstance();
 		c.setTime(now);
-		c.add(Calendar.DATE, -6); 
-		Iterable<Movie> releases = movieService.getByReleaseDate(new Date(c.getTimeInMillis()), now);
+		c.add(Calendar.DATE, -6);
+		Iterable<Movie> releases = movies.getByReleaseDate(new Date(c.getTimeInMillis()), now);
 		shortDescription(releases);
-		Iterable<Movie> recents = movieService.getByCreationDate(MOST_RECENT_CANT);
-		List<MovieWithComments> moviesWithComments = new ArrayList<MovieWithComments>();
-		for(Movie movie : recents){
-			moviesWithComments.add(commentService.getMovieWithComments(movie));
-		}
+		Iterable<Movie> recents = movies.getByCreationDate(MOST_RECENT_CANT);
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("recents", moviesWithComments);
+		mav.addObject("recents", recents);
 		mav.addObject("releases", releases);
 		mav.addObject("ranked", ranked);
 		return mav;

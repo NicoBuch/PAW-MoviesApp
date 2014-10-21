@@ -13,20 +13,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.exceptions.LoginFailedException;
 import ar.edu.itba.it.paw.models.Comment;
 import ar.edu.itba.it.paw.models.User;
-import ar.edu.itba.it.paw.services.CommentService;
-import ar.edu.itba.it.paw.services.UserService;
 
 @Controller
 public class UserController {
-	UserService userService;
-	CommentService commentService;
+	UserRepo users;
 	@Autowired
-	public UserController(UserService userService, CommentService commentService){
-		this.userService = userService;
-		this.commentService = commentService;
+	public UserController(UserRepo users){
+		this.users = users;
 	}
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView sign_in(@RequestParam(value = "email", required = true)String email,
@@ -36,7 +33,7 @@ public class UserController {
 			HttpSession session = req.getSession();
 			ModelAndView mav = new ModelAndView();
 			try {
-				User us = userService.login(email, password);
+				User us = users.login(email, password);
 				session.setAttribute("user", us);
 				resp.sendRedirect("../movie/index");
 
@@ -124,7 +121,7 @@ public class UserController {
 			//Como se manejan los errores?
 			return null;
 		}
-		Iterable<Comment> comments = commentService.getCommentsByUser(user);
+		Iterable<Comment> comments = user.getComments();
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("comments", comments);
 		return mav;
