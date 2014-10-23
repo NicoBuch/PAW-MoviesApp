@@ -13,7 +13,7 @@
      <h2 class="col-md-offset-0 text-center">Weekly Releases</h2>
      <div class="list-group">
       <c:forEach var="aMovie" items="${releases}">
-       <a href="movie?id=${aMovie.id}" class="list-group-item ">
+       <a href="detail?id=${aMovie.id}" class="list-group-item ">
           <h4 class="text-center list-group-item-heading"><b><u>${aMovie.title}</u></b></h4>
           <p class="text-center list-group-item-text"><i>"${aMovie.description}"</i></p>
        </a>
@@ -27,7 +27,7 @@
 		<legend><h3>Most Ranked Movies</h3></legend>
 		<div class="list-group">
 		  <c:forEach var="aMovie" items="${ranked}">
-	        <a class="list-group-item" href="movie?id=${aMovie.id}"><b>${aMovie.title}</b></a></li>
+	        <a class="list-group-item" href="detail?id=${aMovie.id}"><b>${aMovie.title}</b></a></li>
     	  </c:forEach>
     </div>
   </div>
@@ -36,7 +36,7 @@
     <legend><h3>Recent Uploaded Movies</h3></legend>
     <div class="list-group">
       <c:forEach var="aMovie" items="${recents}">
-        <a class="list-group-item" href="movie?id=${aMovie.id}"><u><b>${aMovie.title}</b></u></br>
+        <a class="list-group-item" href="detail?id=${aMovie.id}"><u><b>${aMovie.title}</b></u></br>
           <b>Upload Date:</b> ${aMovie.creationDate}</br>
           <b>Comments:</b> ${aMovie.commentCount}
         </a>

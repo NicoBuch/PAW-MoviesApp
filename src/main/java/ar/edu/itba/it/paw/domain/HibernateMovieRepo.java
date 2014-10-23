@@ -37,10 +37,11 @@ public class HibernateMovieRepo extends AbstractHibernateRepo implements
 	public List<Movie> getByGenre(String genre) throws NoGenreException {
 		if (Movie.Genre.valueOf(genre) == null)
 			throw new NoGenreException();
-		return find("from Movie where genre = ?", genre);
+		return find("from Movie where genre = ?", Movie.Genre.valueOf(genre));
 	}
 
 	public List<Movie> getByDirector(String director) {
+		// Queda ver como hacer que no sea exacto (como implementar ilike )
 		return find("from Movie where director = ?", director);
 	}
 

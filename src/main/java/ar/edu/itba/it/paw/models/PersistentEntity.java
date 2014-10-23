@@ -7,21 +7,18 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public class PersistentEntity {
-	
+
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long id;
-	
-	public long getId() {
+	private int id;
+
+	public int getId() {
 		return id;
 	}
-	public void setId(long id){
-		this.id = id;
-	}
-	
+
 	public boolean isNew() {
 		return id == 0;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

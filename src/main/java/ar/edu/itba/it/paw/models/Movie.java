@@ -1,7 +1,6 @@
 package ar.edu.itba.it.paw.models;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -11,7 +10,7 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class Movie extends PersistentEntity {
-	
+
 	public enum Genre {
 		ACTION, TERROR, THRILLER, DRAMA, PORN, COMEDY, ANIMATION, FANTASY, SCIFI
 	}
@@ -19,19 +18,19 @@ public class Movie extends PersistentEntity {
 	private String title;
 	private Date releaseDate;
 	private String director;
-	
+
 	@Enumerated(EnumType.STRING)
 	private Genre genre;
 	private int minutes;
 	private String description;
 	private Date creationDate;
-	
+
 	@OneToMany(mappedBy="movie")
 	private List<Comment> comments;
-	
+
 	public Movie(){
 	}
-	
+
 	public Movie(String movieName, Date releaseDate,
 			String directorName, String genre, int minutes, String description,
 			Date creationDate) {
@@ -62,6 +61,13 @@ public class Movie extends PersistentEntity {
 		this.creationDate = creationDate;
 	}
 
+	public void comment(String body, int rating, User user){
+		if(user.canComment(this)){
+			Comment comment = new Comment(body, rating, this, user);
+			comments.add(comment);
+			user.getComments().add(comment);
+		}
+	}
 	public String getGenre() {
 		return this.genre.toString();
 	}
@@ -93,22 +99,22 @@ public class Movie extends PersistentEntity {
 	}
 
 	public void setDescription(String string) {
-		this.description = string;		
+		this.description = string;
 	}
 
 	/* Se fija si es estreno la pelicula */
 	public boolean isNew() {
 		return releaseDate.after(new Date(System.currentTimeMillis() - 604800000));
 	}
-	
+
 	public List<Comment> getComments(){
 		return comments;
 	}
-	
+
 	public int getCommentCount(){
 		return comments.size();
 	}
-	
+
 	public boolean alreadyReleased(){
 		return releaseDate.before(new Date(System.currentTimeMillis()));
 	}
@@ -135,6 +141,6 @@ public class Movie extends PersistentEntity {
 			return false;
 		return true;
 	}
-	
-	
+
+
 }

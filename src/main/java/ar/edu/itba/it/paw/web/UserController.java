@@ -34,7 +34,7 @@ public class UserController {
 			ModelAndView mav = new ModelAndView();
 			try {
 				User us = users.login(email, password);
-				session.setAttribute("user", us);
+				session.setAttribute("user_id", us.getId());
 				resp.sendRedirect("../movie/index");
 
 			} catch (LoginFailedException e) {
@@ -65,7 +65,7 @@ public class UserController {
 							HttpServletResponse resp) throws IOException{
 
 		ModelAndView mav = new ModelAndView();
-		User user = userService.getByEmail(email);
+		User user = users.getByEmail(email);
 		if(user == null){
 			mav.addObject("errorMessage", "Invalid Email");
 			return mav;
@@ -76,9 +76,9 @@ public class UserController {
 		}
 		//Checkear si son correctos
 		if(answer != null){
-			if(userService.compareAnswer(user, answer)){
+			if(user.compareAnswer(answer)){
 				if(newPassword.equals(newPasswordConfirmation)){
-					userService.establishNewPassword(user, newPassword);
+					user.setPassword(newPassword);
 					resp.sendRedirect("sign_in");
 				}
 				else{
@@ -100,24 +100,11 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 		return mav;
 	}
-	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView comments(HttpServletRequest req) throws Exception{
-		User user = (User) req.getSession().getAttribute("user");
-		if(user == null){
-			throw new Exception();
-		}
-		ModelAndView mav = new ModelAndView();
-		Iterable<Comment> comments = commentService.getCommentsByUser(user);
-		req.setAttribute("comments", comments);
-		mav.addObject("comments", comments);
-		return mav;
-	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView comments(HttpServletRequest req){
-		HttpSession session = req.getSession();
-		User user = (User) session.getAttribute("user");
-		if(user == null){
+		User user = (User) req.getAttribute("user");
+		if( user == null){
 			//Como se manejan los errores?
 			return null;
 		}

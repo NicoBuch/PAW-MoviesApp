@@ -4,9 +4,9 @@
 		<h2>My Comments
 			<br>
 			<small> These are the movies you have commented </small>
-		</h2>	
+		</h2>
 	</div>
-	
+
 
 
 	<table class="table table-striped">
@@ -19,10 +19,10 @@
 		<c:forEach var="aComment" items="${comments}">
 		    <tr>
 		    	<td><a href="movie?id=${aComment.movie.id}">${aComment.movie.title}</a></td>
-		    	<td>${aComment.creationDate}</td>	    	
-		    </tr>        	   
+		    	<td>${aComment.creationDate}</td>
+		    </tr>
 	     </c:forEach>
 	</table>
 
-	    
-<%@ include file="footer.jsp" %>
+
+<%@ include file="../footer.jsp" %>
