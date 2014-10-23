@@ -16,8 +16,6 @@ public interface UserService {
 	
 	public boolean isVip(User user);
 	
-	public boolean compareAnswer(User user,String answer);
-	
 	public void establishNewPassword(User user,String newPassword);
 
 }

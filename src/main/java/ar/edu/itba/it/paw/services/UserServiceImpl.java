@@ -61,14 +61,6 @@ public class UserServiceImpl implements UserService {
 		return userDao.isVip(user);
 	}
 
-	public boolean compareAnswer(User user, String answer) {
-		String SecretAnswer = user.getSecretAnswer();
-		if(SecretAnswer.equals(answer)){
-			return true;
-		}
-		return false;
-	}
-	
 	public void establishNewPassword(User user,String newPassword){
 		user.setPassword(newPassword);
 		userDao.save(user);

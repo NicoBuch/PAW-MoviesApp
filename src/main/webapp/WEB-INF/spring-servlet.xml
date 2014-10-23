@@ -13,10 +13,13 @@
 	<!-- Beans relacionados con Spring MVC -->
 	<import resource="classpath:mvc.xml" />
 
+	<!-- Beans relacionados con Spring-Hibernate -->
+	<import resource="classpath:data.xml" />
+
 	<!-- Servicios - ya no hace falta declararlos - Spring scanea @Service en Clases -->
-	<!--<import resource="classpath:service.xml" />-->
-	
+	<!--<import resource="classpath:service.xml" /> -->
+
 	<!-- DAOs - Ya no hace falta declararlo - Spring scanea @Repository en clases -->
-	<!--<import resource="classpath:dao.xml" />-->
-	
+	<!--<import resource="classpath:dao.xml" /> -->
+
 </beans>

@@ -5,11 +5,11 @@ import ar.edu.itba.it.paw.models.Movie;
 import ar.edu.itba.it.paw.models.User;
 
 public interface CommentDao {
-	public abstract Iterable<Comment> getAll();
+	public abstract Iterable<Comment> findAll();
 
-	public abstract Comment getById(long id);
+	public abstract Comment find(long id);
 
-	public abstract void save(Comment comment);
+	public abstract Comment store(Comment comment);
 
 	public abstract Comment getCommentsByUserAndMovie(User u, Movie m);
 

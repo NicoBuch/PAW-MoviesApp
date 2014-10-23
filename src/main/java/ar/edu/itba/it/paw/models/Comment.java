@@ -2,14 +2,24 @@ package ar.edu.itba.it.paw.models;
 
 import java.sql.Date;
 
-public class Comment extends Entity{
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+
+@Entity
+public class Comment extends PersistentEntity{
 	
 	private String body;
 	private Date creationDate;
 	private int rating; 
+	
+	@ManyToOne
 	private Movie movie;
+	
+	@ManyToOne
 	private User user;
 	
+	public Comment(){
+	}
 
 	public Comment( String body, Date creationDate, int rating, Movie movie, User user) {
 		setFields(body, creationDate, rating,movie,user);
@@ -20,13 +30,13 @@ public class Comment extends Entity{
 		setFields(body,rating,movie,user);
 		
 	}
-	public void setFields(String body, Date creationDate, int rating, Movie movie, User user){
+	private void setFields(String body, Date creationDate, int rating, Movie movie, User user){
 		this.creationDate = creationDate;
 		setFields(body, rating, movie, user);
 	}
 	
 	private void setFields(String body, int rating, Movie movie, User user){
-		if((rating > 5 || rating < 0) || movie == null || user == null){
+		if((rating > 5 || rating < 0) || movie == null || user == null || body.isEmpty()){
 			throw new IllegalArgumentException();
 		}
 		this.body = body;

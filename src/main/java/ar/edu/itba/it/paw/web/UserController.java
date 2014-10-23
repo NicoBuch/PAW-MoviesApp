@@ -13,20 +13,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.exceptions.LoginFailedException;
 import ar.edu.itba.it.paw.models.Comment;
 import ar.edu.itba.it.paw.models.User;
-import ar.edu.itba.it.paw.services.CommentService;
-import ar.edu.itba.it.paw.services.UserService;
 
 @Controller
 public class UserController {
-	UserService userService;
-	CommentService commentService;
+	UserRepo users;
 	@Autowired
-	public UserController(UserService userService, CommentService commentService){
-		this.userService = userService;
-		this.commentService = commentService;
+	public UserController(UserRepo users){
+		this.users = users;
 	}
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView sign_in(@RequestParam(value = "email", required = true)String email,
@@ -36,10 +33,10 @@ public class UserController {
 			HttpSession session = req.getSession();
 			ModelAndView mav = new ModelAndView();
 			try {
-				User us = userService.login(email, password);
-				session.setAttribute("user", us);
+				User us = users.login(email, password);
+				session.setAttribute("user_id", us.getId());
 				resp.sendRedirect("../movie/index");
-				
+
 			} catch (LoginFailedException e) {
 				mav.addObject("errorMessage", "Invalid user or password");
 			}
@@ -53,7 +50,9 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView sign_out(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		HttpSession session = req.getSession();
-		session.invalidate();
+		if(session!=null){
+			session.invalidate();
+		}
 		ModelAndView mav = new ModelAndView();
 		resp.sendRedirect("../movie/index");
 		return mav;
@@ -64,9 +63,9 @@ public class UserController {
 							@RequestParam(value = "newPasswordConfirmation", required = false)String newPasswordConfirmation,
 							@RequestParam(value = "answer", required = false)String answer,
 							HttpServletResponse resp) throws IOException{
-		
+
 		ModelAndView mav = new ModelAndView();
-		User user = userService.getByEmail(email);
+		User user = users.getByEmail(email);
 		if(user == null){
 			mav.addObject("errorMessage", "Invalid Email");
 			return mav;
@@ -77,16 +76,16 @@ public class UserController {
 		}
 		//Checkear si son correctos
 		if(answer != null){
-			if(userService.compareAnswer(user, answer)){
+			if(user.compareAnswer(answer)){
 				if(newPassword.equals(newPasswordConfirmation)){
-					userService.establishNewPassword(user, newPassword);
+					user.setPassword(newPassword);
 					resp.sendRedirect("sign_in");
 				}
 				else{
 					mav.addObject("errorMessage", "Passwords dont match");
 					return mav;
 				}
-				
+
 			}
 			else{
 				mav.addObject("errorMessage", "Invalid Answer");
@@ -94,23 +93,25 @@ public class UserController {
 			}
 		}
 		return mav;
-		
+
 	}
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView recovery(){
 		ModelAndView mav = new ModelAndView();
 		return mav;
 	}
+
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView comments(HttpServletRequest req) throws Exception{
-		User user = (User) req.getSession().getAttribute("user");
-		if(user == null){
-			throw new Exception();
+	public ModelAndView comments(HttpServletRequest req){
+		User user = (User) req.getAttribute("user");
+		if( user == null){
+			//Como se manejan los errores?
+			return null;
 		}
+		Iterable<Comment> comments = user.getComments();
 		ModelAndView mav = new ModelAndView();
-		Iterable<Comment> comments = commentService.getCommentsByUser(user);
-		req.setAttribute("comments", comments);
 		mav.addObject("comments", comments);
 		return mav;
 	}
+
 }
