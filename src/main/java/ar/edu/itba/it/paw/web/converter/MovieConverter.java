@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import ar.edu.itba.it.paw.domain.MovieRepo;
-import ar.edu.itba.it.paw.exceptions.NoMovieIdException;
-import ar.edu.itba.it.paw.models.Movie;
+import ar.edu.itba.it.paw.domain.movie.Movie;
+import ar.edu.itba.it.paw.domain.movie.MovieRepo;
+import ar.edu.itba.it.paw.domain.movie.NoMovieIdException;
 @Component
 public class MovieConverter implements Converter<String,Movie>{
 	private MovieRepo  movies;

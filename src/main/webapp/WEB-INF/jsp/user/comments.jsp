@@ -18,7 +18,7 @@
 		 </thead>
 		<c:forEach var="aComment" items="${comments}">
 		    <tr>
-		    	<td><a href="movie?id=${aComment.movie.id}">${aComment.movie.title}</a></td>
+		    	<td><a href="../movie/detail?id=${aComment.movie.id}">${aComment.movie.title}</a></td>
 		    	<td>${aComment.creationDate}</td>
 		    </tr>
 	     </c:forEach>

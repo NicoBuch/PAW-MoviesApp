@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.itba.it.paw.domain.UserRepo;
-import ar.edu.itba.it.paw.exceptions.LoginFailedException;
-import ar.edu.itba.it.paw.models.Comment;
-import ar.edu.itba.it.paw.models.User;
+import ar.edu.itba.it.paw.domain.comment.Comment;
+import ar.edu.itba.it.paw.domain.user.LoginFailedException;
+import ar.edu.itba.it.paw.domain.user.User;
+import ar.edu.itba.it.paw.domain.user.UserRepo;
 
 @Controller
 public class UserController {
