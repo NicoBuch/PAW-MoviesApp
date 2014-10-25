@@ -20,6 +20,8 @@ public interface MovieRepo {
 	
 	public List<Movie> getByCreationDate(int limit);
 	
+	public void save(Movie movie);
 	
+	public void delete(Movie movie);
 	
 }

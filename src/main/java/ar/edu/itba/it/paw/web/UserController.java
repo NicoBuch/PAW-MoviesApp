@@ -102,16 +102,14 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView comments(HttpServletRequest req){
+	public ModelAndView comments(HttpServletRequest req) throws Exception{
 		User user = (User) req.getAttribute("user");
 		if( user == null){
-			//Como se manejan los errores?
-			return null;
+			throw new Exception();
 		}
 		Iterable<Comment> comments = user.getComments();
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("comments", comments);
 		return mav;
 	}
-
 }

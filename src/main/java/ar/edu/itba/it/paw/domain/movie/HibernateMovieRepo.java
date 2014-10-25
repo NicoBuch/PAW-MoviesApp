@@ -57,4 +57,14 @@ public class HibernateMovieRepo extends AbstractHibernateRepo implements
 		return find("from Movie order by creationDate desc limit " + limit);
 	}
 
+	@Override
+	public void save(Movie movie) {
+		super.save(movie);		
+	}
+
+	@Override
+	public void delete(Movie movie) {
+		super.delete(movie);	
+	}
+
 }

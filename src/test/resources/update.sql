@@ -39,3 +39,6 @@ ALTER TABLE users
 
 ALTER TABLE users
 	RENAME COLUMN secret_question TO secretquestion;
+
+ALTER TABLE users
+	ADD COLUMN admin boolean DEFAULT FALSE;

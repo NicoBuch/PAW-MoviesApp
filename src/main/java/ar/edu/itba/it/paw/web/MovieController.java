@@ -1,11 +1,14 @@
 package ar.edu.itba.it.paw.web;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,20 +24,17 @@ import ar.edu.itba.it.paw.domain.movie.MovieRepo;
 import ar.edu.itba.it.paw.domain.movie.NoGenreException;
 import ar.edu.itba.it.paw.domain.user.NoMoreThanOneCommentPerUserPerMovieException;
 import ar.edu.itba.it.paw.domain.user.User;
-import ar.edu.itba.it.paw.domain.user.UserRepo;
 
 @Controller
 public class MovieController {
 	private MovieRepo movies;
-	private UserRepo users;
 	private final int DESCRIPTION_LENGTH = 300;
 	private final int TOP_RANKED_CANT = 5;
 	private final int MOST_RECENT_CANT = 5;
 
 	@Autowired
-	public MovieController(MovieRepo movies, UserRepo users) {
+	public MovieController(MovieRepo movies) {
 		this.movies = movies;
-		this.users = users;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -72,9 +72,7 @@ public class MovieController {
 		mav.addObject("movie", movie);
 		Iterable<Comment> comments = movie.getComments();
 		mav.addObject("comments", comments);
-		// HttpSession session = req.getSession();
 		User user = (User) req.getAttribute("user");
-		// User user = users.get(user_id);
 		if (user != null && user.canComment(movie)) {
 			mav.addObject("canComment", true);
 		} else {
@@ -93,10 +91,8 @@ public class MovieController {
 			CantCommentBeforeMoviesReleaseDateException {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("movie", movie);
-		// HttpSession session = req.getSession();
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.canComment(movie)) {
-			// manejo de errores?
 			throw new Exception();
 		}
 		user.comment(body, rating, movie);
@@ -124,6 +120,110 @@ public class MovieController {
 		return mav;
 	}
 
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView create(HttpServletRequest req) throws Exception {
+		User user = (User) req.getAttribute("user");
+		if (user == null || !user.isAdmin()) {
+			throw new Exception();
+		}
+		return new ModelAndView().addObject("genres", Movie.Genre.values());
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView create(
+			@RequestParam(value = "title", required = true) String title,
+			@RequestParam(value = "releaseDay", required = false) Integer releaseDay,
+			@RequestParam(value = "releaseMonth", required = false) Integer releaseMonth,
+			@RequestParam(value = "releaseYear", required = false) Integer releaseYear,
+			@RequestParam(value = "director", required = true) String director,
+			@RequestParam(value = "minutes", required = true) Integer minutes,
+			@RequestParam(value = "description", required = true) String description,
+			@RequestParam(value = "genre", required = true) String genre,
+			HttpServletRequest req) throws Exception {
+		User user = (User) req.getAttribute("user");
+		if (user == null || !user.isAdmin()) {
+			throw new Exception();
+		}
+		String releaseDate = releaseYear + "-" + releaseMonth + "-" + releaseDay;	
+		Movie movie = new Movie(title, Date.valueOf(releaseDate), director, genre, minutes,
+				description);
+		movies.save(movie);
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("movie/list");
+		mav.addObject("movies", movies.getAll());
+		return mav;
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView edit(
+			@RequestParam(value = "title", required = false) String title,
+			@RequestParam(value = "releaseDay", required = false) Integer releaseDay,
+			@RequestParam(value = "releaseMonth", required = false) Integer releaseMonth,
+			@RequestParam(value = "releaseYear", required = false) Integer releaseYear,
+			@RequestParam(value = "director", required = false) String director,
+			@RequestParam(value = "minutes", required = false) Integer minutes,
+			@RequestParam(value = "description", required = false) String description,
+			@RequestParam(value = "genre", required = false) String genre,
+			@RequestParam(value = "id", required = true) Movie movie,
+			HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		User user = (User) req.getAttribute("user");
+		if (user == null || !user.isAdmin()) {
+			throw new Exception();
+		}
+		if (!title.isEmpty()) {
+			movie.setTitle(title);
+		}
+		String releaseDate = releaseYear + "-" + releaseMonth + "-" + releaseDay;
+		if (!releaseDate.isEmpty() && isValidDate(releaseDate)) {
+			movie.setReleaseDate(Date.valueOf(releaseDate));
+		}
+		if (!director.isEmpty()) {
+			movie.setDirector(director);
+		}
+		if (minutes != null) {
+			movie.setMinutes(minutes);
+		}
+		if (!description.isEmpty()) {
+			movie.setDescription(description);
+		}
+		if (genre != null) {
+			movie.setGenre(genre);
+		}
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("movie/list");
+		mav.addObject("movies", movies.getAll());
+		return mav;
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView edit(
+			@RequestParam(value = "id", required = true) Movie movie,
+			HttpServletRequest req) throws Exception {
+		User user = (User) req.getAttribute("user");
+		if (user == null || !user.isAdmin()) {
+			throw new Exception();
+		}
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("movie", movie);
+		mav.addObject("genres", Movie.Genre.values());
+		return mav;
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView delete(
+			@RequestParam(value = "id", required = true) Movie movie,
+			HttpServletRequest req) throws Exception {
+		User user = (User) req.getAttribute("user");
+		if (user == null || !user.isAdmin()) {
+			throw new Exception();
+		}
+		movies.delete(movie);
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("movie/list");
+		mav.addObject("movies", movies.getAll());
+		return mav;
+	}
+
 	private void shortDescription(Iterable<Movie> movies) {
 		for (Movie m : movies) {
 			if (m.getDescription().length() > 300) {
@@ -132,5 +232,16 @@ public class MovieController {
 						+ "...");
 			}
 		}
+	}
+
+	public static boolean isValidDate(String inDate) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		dateFormat.setLenient(false);
+		try {
+			dateFormat.parse(inDate.trim());
+		} catch (ParseException pe) {
+			return false;
+		}
+		return true;
 	}
 }

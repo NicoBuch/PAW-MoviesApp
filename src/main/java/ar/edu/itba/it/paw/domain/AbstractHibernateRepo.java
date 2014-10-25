@@ -38,5 +38,9 @@ public abstract class AbstractHibernateRepo {
 	public Serializable save(Object o) {
 		return getSession().save(o);
 	}
+	
+	public void delete(Object o){
+		getSession().delete(o);
+	}
 
 }
