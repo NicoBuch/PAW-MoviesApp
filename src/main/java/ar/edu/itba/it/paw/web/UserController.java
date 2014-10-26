@@ -5,11 +5,14 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.it.paw.command.SignUpForm;
+import ar.edu.itba.it.paw.command.validator.SignUpFormValidator;
 import ar.edu.itba.it.paw.exceptions.LoginFailedException;
 import ar.edu.itba.it.paw.models.User;
 import ar.edu.itba.it.paw.services.UserService;
@@ -17,9 +20,12 @@ import ar.edu.itba.it.paw.services.UserService;
 @Controller
 public class UserController {
 	UserService userService;
+	SignUpFormValidator signUpValidator;
+	
 	@Autowired
-	public UserController(UserService userService){
+	public UserController(UserService userService, SignUpFormValidator signUpValidator){
 		this.userService = userService;
+		this.signUpValidator = signUpValidator;
 	}
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView sign_in(@RequestParam(value = "email", required = true)String email,
@@ -38,11 +44,33 @@ public class UserController {
 			}
 		return mav;
 	}
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView sign_in(){
 		ModelAndView mav = new ModelAndView();
 		return mav;
 	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView sign_up(SignUpForm signUpForm, Errors errors, HttpServletRequest req){
+			HttpSession session = req.getSession();
+			ModelAndView mav = new ModelAndView();
+			
+			signUpValidator.validate(signUpForm, errors);
+			if (errors.hasErrors()){
+				return null;
+			}
+		return mav;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView sign_up(){
+		ModelAndView mav = new ModelAndView();
+		return mav;
+	}
+	
+	
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView sign_out(HttpServletRequest req){
 		HttpSession session = req.getSession();
