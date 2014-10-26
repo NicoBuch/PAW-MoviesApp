@@ -57,14 +57,6 @@ public class User extends PersistentEntity {
 		this.secretAnswer = secretAnswer;
 	}
 
-	public void comment(String body, int rating, Movie movie){
-		if(this.canComment(movie)){
-			Comment comment = new Comment(body, rating, movie, this);
-			comments.add(comment);
-			movie.getComments().add(comment);
-		}
-	}
-
 	public String getEmail() {
 		return email;
 	}

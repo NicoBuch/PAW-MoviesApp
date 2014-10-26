@@ -17,12 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.itba.it.paw.domain.comment.CantCommentBeforeMoviesReleaseDateException;
 import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.movie.MovieRepo;
 import ar.edu.itba.it.paw.domain.movie.NoGenreException;
-import ar.edu.itba.it.paw.domain.user.NoMoreThanOneCommentPerUserPerMovieException;
 import ar.edu.itba.it.paw.domain.user.User;
 
 @Controller
@@ -78,27 +76,6 @@ public class MovieController {
 		} else {
 			mav.addObject("canComment", false);
 		}
-		return mav;
-	}
-
-	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView detail(
-			@RequestParam(value = "id", required = true) Movie movie,
-			@RequestParam(value = "rating", required = true) Integer rating,
-			@RequestParam(value = "body", required = true) String body,
-			HttpServletRequest req) throws Exception,
-			NoMoreThanOneCommentPerUserPerMovieException,
-			CantCommentBeforeMoviesReleaseDateException {
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("movie", movie);
-		User user = (User) req.getAttribute("user");
-		if (user == null || !user.canComment(movie)) {
-			throw new Exception();
-		}
-		user.comment(body, rating, movie);
-		Iterable<Comment> comments = movie.getComments();
-		mav.addObject("comments", comments);
-		mav.addObject("canComment", false);
 		return mav;
 	}
 
@@ -234,7 +211,7 @@ public class MovieController {
 		}
 	}
 
-	public static boolean isValidDate(String inDate) {
+	private static boolean isValidDate(String inDate) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		dateFormat.setLenient(false);
 		try {

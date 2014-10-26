@@ -11,7 +11,6 @@ import javax.persistence.OneToMany;
 
 import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.comment.Comment;
-import ar.edu.itba.it.paw.domain.user.User;
 
 @Entity
 public class Movie extends PersistentEntity {
@@ -67,13 +66,6 @@ public class Movie extends PersistentEntity {
 		this.creationDate = creationDate;
 	}
 
-	public void comment(String body, int rating, User user){
-		if(user.canComment(this)){
-			Comment comment = new Comment(body, rating, this, user);
-			comments.add(comment);
-			user.getComments().add(comment);
-		}
-	}
 	public String getGenre() {
 		return this.genre.toString();
 	}

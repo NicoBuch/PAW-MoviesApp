@@ -36,11 +36,16 @@ public abstract class AbstractHibernateRepo {
 	}
 
 	public Serializable save(Object o) {
-		return getSession().save(o);
+		Session session = getSession();
+		Serializable id = session.save(o);
+		session.flush();
+		return id;
 	}
 	
 	public void delete(Object o){
-		getSession().delete(o);
+		Session session = getSession();
+		session.delete(o);
+		session.flush();
 	}
 
 }
