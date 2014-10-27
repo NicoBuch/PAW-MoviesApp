@@ -3,6 +3,7 @@ package ar.edu.itba.it.paw.domain.movie;
 import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -10,7 +11,6 @@ import javax.persistence.OneToMany;
 
 import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.comment.Comment;
-import ar.edu.itba.it.paw.domain.user.User;
 
 @Entity
 public class Movie extends PersistentEntity {
@@ -29,7 +29,8 @@ public class Movie extends PersistentEntity {
 	private String description;
 	private Date creationDate;
 
-	@OneToMany(mappedBy="movie")
+	
+	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL)
 	private List<Comment> comments;
 
 	public Movie(){
@@ -65,13 +66,6 @@ public class Movie extends PersistentEntity {
 		this.creationDate = creationDate;
 	}
 
-	public void comment(String body, int rating, User user){
-		if(user.canComment(this)){
-			Comment comment = new Comment(body, rating, this, user);
-			comments.add(comment);
-			user.getComments().add(comment);
-		}
-	}
 	public String getGenre() {
 		return this.genre.toString();
 	}
@@ -144,6 +138,33 @@ public class Movie extends PersistentEntity {
 		} else if (!title.equals(other.title))
 			return false;
 		return true;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;		
+	}
+
+	public void setReleaseDate(Date releaseDate) {
+		this.releaseDate = releaseDate;
+		
+	}
+
+	public void setDirector(String director) {
+		this.director = director;
+		
+	}
+
+	public void setMinutes(Integer minutes) {
+		this.minutes = minutes;
+		
+	}
+
+	public void setGenre(String genre) throws NoGenreException{
+		if(Genre.valueOf(genre) != null){
+			this.genre = Genre.valueOf(genre);
+		}
+		else
+			throw new NoGenreException();
 	}
 
 
