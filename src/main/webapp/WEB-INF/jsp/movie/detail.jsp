@@ -12,7 +12,10 @@
 		<p class="text-center">
 			<label><b>Director</b></label><br>${movie.director}<br>
 			<br>
-			<label><b>Genre</b></label><br>${movie.genre}<br>
+			<label><b>Genres</b></label>
+			<c:forEach var="aGenre" items="${movie.genres}">
+				<br>${aGenre.name}<br>
+			</c:forEach>
 			<br>
 		</p>
 	</div>

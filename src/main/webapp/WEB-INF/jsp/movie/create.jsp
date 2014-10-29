@@ -88,13 +88,10 @@
           </div>
 
       <div class="col-xs-12">
-        <label class="label-control">Genre: </label>
-        <select class="form-control input-sm" name='genre'>
-          <option value='empty' disabled selected>Genre</option>
-          <c:forEach var="aGenre" items="${genres}">
-            <option value='${aGenre}'>${aGenre}</option>
-          </c:forEach>
-        </select>
+        <label class="label-control">Genres: </label><br>
+        <c:forEach var="aGenre" items="${genres}">
+          <input style="margin: 2px;" type="checkbox" name="genres" value='${aGenre.id}'>${aGenre.name}</input>
+        </c:forEach>
       </div>
 
 

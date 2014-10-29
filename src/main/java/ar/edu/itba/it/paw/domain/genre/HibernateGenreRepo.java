@@ -1,4 +1,6 @@
-package ar.edu.itba.it.paw.domain.comment;
+package ar.edu.itba.it.paw.domain.genre;
+
+import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -9,26 +11,25 @@ import ar.edu.itba.it.paw.domain.AbstractHibernateRepo;
 import ar.edu.itba.it.paw.domain.NoIdException;
 
 @Repository
-public class HibernateCommentRepo extends AbstractHibernateRepo implements CommentRepo{
+public class HibernateGenreRepo extends AbstractHibernateRepo implements GenreRepo{
 	
 	@Autowired
-	public HibernateCommentRepo(SessionFactory sessionFactory) {
+	public HibernateGenreRepo(SessionFactory sessionFactory) {
 		super(sessionFactory);
 	}
 
-	public void delete(Comment comment){
-		super.delete(comment);
+	@Override
+	public List<Genre> getAll() {
+		return find("from Genre");
 	}
-	
-	public Comment get(int id) throws NoIdException{
+
+	@Override
+	public Genre get(int genreId) throws NoIdException {
 		try {
-			return get(Comment.class, id);
+			return get(Genre.class, genreId);
 		} catch (HibernateException e) {
 			throw new NoIdException();
 		}
+	}
 
-	}
-	public void save(Comment comment){
-		super.save(comment);
-	}
 }

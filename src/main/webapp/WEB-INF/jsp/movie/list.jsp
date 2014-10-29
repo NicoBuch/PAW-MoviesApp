@@ -23,7 +23,7 @@
 			<select class="form-control input-sm" name='genre'>
 				<option value='empty'>Select genre...</option>
 				<c:forEach var="aGenre" items="${genres}">
-				   <option value='${aGenre}'>${aGenre}</option>
+				   <option value='${aGenre.id}'>${aGenre.name}</option>
 			     </c:forEach>
 			</select>
 			<button class="btn btn-primary btn-sm" type="submit">Filter</button>

@@ -109,19 +109,19 @@
           </div>
 
       <div class="col-xs-12">
-        <label class="label-control">Genre: </label>
-        <select class="form-control input-sm" name='genre' value = "<c:out value="${movie.genre}" />" >
-          <c:forEach var="aGenre" items="${genres}">
-            <c:choose>
-              <c:when test="${movie.genre == aGenre}">
-                <option value='${aGenre}'selected="selected">${aGenre}</option>
-              </c:when>
-              <c:otherwise>
-                <option value='${aGenre}'>${aGenre}</option>
-              </c:otherwise>
-            </c:choose>
+        <label class="label-control">Genres: </label><br>
+        <c:forEach var="aGenre" items="${genres}">
+          <c:set var="contains" value="false" />
+          <c:forEach var="moviesGenre" items="${movie.genres}">
+            <c:if test="${aGenre eq moviesGenre}">
+              <input style="margin: 2px;" type="checkbox" name="genres" value='${aGenre.id}' checked>${aGenre.name}</input>
+              <c:set var="contains" value="false" />
+            </c:if>
           </c:forEach>
-        </select>
+            <c:if test="${contains eq false}">
+              <input style="margin: 2px;" type="checkbox" name="genres" value='${aGenre.id}'>${aGenre.name}</input>
+            </c:if>
+        </c:forEach>
       </div>
 
 
