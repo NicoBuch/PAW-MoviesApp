@@ -3,6 +3,7 @@ package ar.edu.itba.it.paw.domain.user;
 import java.sql.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,8 +24,9 @@ public class User extends PersistentEntity {
 	private String secretQuestion;
 	private String secretAnswer;
 	private boolean vip;
+	private boolean admin;
 
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
 	private List<Comment> comments;
 
 	public User(){
@@ -53,14 +55,6 @@ public class User extends PersistentEntity {
 		this.vip = vip;
 		this.secretQuestion = secretQuestion;
 		this.secretAnswer = secretAnswer;
-	}
-
-	public void comment(String body, int rating, Movie movie){
-		if(this.canComment(movie)){
-			Comment comment = new Comment(body, rating, movie, this);
-			comments.add(comment);
-			movie.getComments().add(comment);
-		}
 	}
 
 	public String getEmail() {
@@ -104,6 +98,9 @@ public class User extends PersistentEntity {
 
 	public String getSecretAnswer() {
 		return secretAnswer;
+	}
+	public boolean isAdmin(){
+		return admin;
 	}
 
 	@Override

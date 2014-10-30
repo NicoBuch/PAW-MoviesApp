@@ -48,9 +48,9 @@
 				  </div>
 				  <div class="panel-body">
 
-						<form name="commentForm" class="" method="post">
+						<form name="commentForm" action="../comments/create" class="" method="post">
 
-						<input  type="hidden"name="movieId" value="${movie.id}"/>
+						<input  type="hidden" name="movieId" value="${movie.id}"/>
 
 						<div class="col-xs-2">
 							<div class="form-group">
@@ -90,7 +90,7 @@
 				  </div>
 				  <div class="panel-body">
 					    <c:forEach var="aComment" items="${comments}">
-							<p>
+							<p class="col-md-8">
 								<span class="glyphicon glyphicon-chevron-right"></span> ${aComment.user.firstName} ${aComment.user.lastName} (${aComment.user.email}) said: <br>
 								<label><b>Rating:</b></label> ${aComment.rating}
 								<c:choose>
@@ -100,6 +100,13 @@
 								<br/>
 								<i>"${aComment.body}"</i>
 							</p>
+							<c:if test= "${user.admin}">
+								<form action="../comments/delete", method="POST" class="col-md-4">
+									<input  type="hidden" name="movieId" value="${movie.id}"/>
+					    		<input  type="hidden" name="commentId" value="${aComment.id}"/>
+					    		<input type="submit" value="Delete">
+			    			</form>
+							</c:if>
 						</c:forEach>
 					</div>
 				</div>

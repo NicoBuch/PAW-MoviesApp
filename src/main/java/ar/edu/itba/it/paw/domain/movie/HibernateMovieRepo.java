@@ -4,7 +4,9 @@ import java.sql.Date;
 import java.util.List;
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.classic.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -43,18 +45,45 @@ public class HibernateMovieRepo extends AbstractHibernateRepo implements
 		return find("from Movie where director = ?", director);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Movie> getByRating(int limit) {
-		return find("select movie from Movie movie join movie.comments comment group by movie.id order by avg(comment.rating) desc limit "
-				+ limit);
+		Session session = getSession();
+
+		Query query = session.createQuery(
+				"select movie from Movie movie join movie.comments comment group by movie.id "
+			  + "order by avg(comment.rating) desc").setMaxResults(limit);
+		List<Movie> list = query.list();
+		return list;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Movie> getByReleaseDate(Date from, Date to) {
-		return find("from Movie where releaseDate > ? and releaseDate < ?",
-				from, to);
+		Session session = getSession();
+		
+		Query query = session.createQuery(
+				"from Movie where releaseDate > :from and releaseDate < :to").setTimestamp("from", from).setTimestamp("to", to);
+		List<Movie> list = query.list();
+		return list;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Movie> getByCreationDate(int limit) {
-		return find("from Movie order by creationDate desc limit " + limit);
+		Session session = getSession();
+
+		Query query = session.createQuery(
+				"from Movie order by creationDate desc").setMaxResults(limit);
+		List<Movie> list = query.list();
+		return list;
+	}
+
+	@Override
+	public void save(Movie movie) {
+		super.save(movie);
+	}
+
+	@Override
+	public void delete(Movie movie) {
+		super.delete(movie);
 	}
 
 }
