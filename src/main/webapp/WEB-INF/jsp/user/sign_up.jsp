@@ -20,7 +20,10 @@
 		</c:if>
 
 
-		<form action="sign_up" name='signUpForm' method='POST' novalidate>
+		<form:form action="sign_up" commandName='signUpForm' method='POST' novalidate>
+			
+			<form:errors path="*"/>
+
 			<div class="col-md-8 col-md-offset-2" id="feedbackPanel" />
 				
 				<fieldset>
@@ -28,21 +31,21 @@
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label">First Name</label>
-							<input class="form-control" required type="text" autofocus name="firstName" value = <c:out value="${firstName}" /> >
+							<form:input class="form-control" required type="text" autofocus name="firstName" value = <c:out value="${firstName}" /> >
 						</div>
 					</div>
 
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label">Last Name</label>
-							<input class="form-control" required type="text" name="lastName" value = <c:out value="${lastName}" /> >
+							<form:input class="form-control" required type="text" name="lastName" value = <c:out value="${lastName}" /> >
 						</div>
 					</div>
 
 					<div class="col-xs-12">
 						<div class="form-group">
 							<label class="control-label">Email</label>
-							<input class="form-control" required type="email" name="email" value = <c:out value="${email}" /> >
+							<form:input class="form-control" required type="email" name="email" value = <c:out value="${email}" /> >
 						</div>
 					</div>
 
@@ -51,30 +54,30 @@
 							<label class="control-label">Birth Date</label>
 							<div class=" col-md-offset-2">
 								<div class="col-xs-4">
-									<select class="form-control" name="bDay" value = <c:out value="${bDay}" /> >
-										<option value='empty' disabled selected>Day</option>
+									<form:select class="form-control" name="bDay" value = <c:out value="${bDay}" /> >
+										<form:option value='empty' disabled selected>Day</form:option>
 										<c:forEach var="i" begin="1" end="31">
-										   <option value='${i}'>${i}</option>
+										   <form:option value='${i}'>${i}</form:option>
 									     </c:forEach>	
-									</select>
+									</form:select>
 								</div>
 								
 								<div class="col-xs-4">
-									<select class="form-control" name="bMonth" value = <c:out value="${bMonth}" /> >
-										<option value='empty' disabled selected>Month</option>
+									<form:select class="form-control" name="bMonth" value = <c:out value="${bMonth}" /> >
+										<form:option value='empty' disabled selected>Month</form:option>
 										<c:forEach var="i" begin="1" end="12">
-										   <option value='${i}'>${i}</option>
+										   <form:option value='${i}'>${i}</form:option>
 									     </c:forEach>
-									</select>
+									</form:select>
 								</div>
 								
 								<div class="col-xs-4">
-									<select class="form-control" name="bYear" value = <c:out value="${bYear}" />>
-										<option value='empty' disabled selected>Year</option>
+									<form:select class="form-control" name="bYear" value = <c:out value="${bYear}" />>
+										<form:option value='empty' disabled selected>Year</form:option>
 										<c:forEach var="i" begin="1930" end="2014">
-										   <option value='${i}'>${i}</option>
+										   <form:option value='${i}'>${i}</form:option>
 									     </c:forEach>
-									</select>
+									</form:select>
 								</div>
 							</div>
 							<!-- <input class="form-control" required type="date" name="birthDate" value = <c:out value="${birthDate}" /> > --> <br/>
@@ -84,28 +87,28 @@
 					<div class="col-xs-12">
 						<div class="form-group">
 							<label class="control-label">Password</label>
-							<input class="form-control" required type="password" name="password"/>
+							<form:input class="form-control" required type="password" name="password"/>
 						</div>
 					</div>
 
 					<div class="col-xs-12">
 						<div class="form-group">
 							<label class="control-label">Confirm your Password</label>
-							<input class="form-control" required type="password" name="passwordConfirmation"/>
+							<form:input class="form-control" required type="password" name="passwordConfirmation"/>
 						</div>
 					</div>
 
 					<div class="col-xs-12">
 						<div class="form-group">
 							<label class="control-label">Secret Question</label>
-							<input class="form-control" required type="text" name="secretQuestion" value = <c:out value="${secretQuestion}" /> >
+							<form:input class="form-control" required type="text" name="secretQuestion" value = <c:out value="${secretQuestion}" /> >
 						</div>
 					</div>
 
 					<div class="col-xs-12">
 						<div class="form-group">
 							<label class="control-label">Secret Answer</label>
-							<input class="form-control" required type="text" name="secretAnswer" />
+							<form:input class="form-control" required type="text" name="secretAnswer" />
 						</div>
 					</div>
 
@@ -117,7 +120,7 @@
 
 				</fieldset>
 			</div>
-		</form>
+		</form:form>
 	
 	</div>
 	

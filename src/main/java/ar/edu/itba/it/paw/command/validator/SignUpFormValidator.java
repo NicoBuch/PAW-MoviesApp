@@ -17,8 +17,36 @@ public class SignUpFormValidator implements Validator{
 	public void validate(Object target, Errors errors) {
 		SignUpForm form =(SignUpForm) target;
 
-		//Aca checkear que sea un formato de email valido!
-		//errors.rejectValue("email", "");
+		if (form.getFirstName() == null){
+			errors.rejectValue("firstName", "empty");
+		}
+		if (form.getLastName() == null){
+			errors.rejectValue("lastName", "empty");
+		}
+		if (form.getEmail() == null){
+			errors.rejectValue("email", "empty");
+		}
+		if (form.getDay() == null){
+			errors.rejectValue("day", "empty");
+		}
+		if (form.getMonth() == null){
+			errors.rejectValue("month", "empty");
+		}
+		if (form.getYear() == null){
+			errors.rejectValue("year", "empty");
+		}
+		if (form.getPassword() == null){
+			errors.rejectValue("password", "empty");
+		}
+		if (form.getConfirmPassword() == null){
+			errors.rejectValue("confirmPassword", "empty");
+		}
+		if (form.getSecretQuestion() == null){
+			errors.rejectValue("secretQuestion", "empty");
+		}
+		if (form.getSecretAnswer() == null){
+			errors.rejectValue("secretAnswer", "empty");
+		}		
 		
 	}
 

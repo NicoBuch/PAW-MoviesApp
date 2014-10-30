@@ -6,16 +6,17 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.format.support.FormattingConversionServiceFactoryBean;
 
 
-public class EnhancedFormattingConversionServiceFactoryBean
-				extends FormattingConversionServiceFactoryBean{
-	private Converter<?,?>[] converters ;
+public class EnhancedFormattingConversionServiceFactoryBean extends FormattingConversionServiceFactoryBean {
+	
+	private final Converter<?, ?>[] converters;
+	
 	@Autowired
-	public EnhancedFormattingConversionServiceFactoryBean(Converter<?,?>[] converters) {
+	public EnhancedFormattingConversionServiceFactoryBean(Converter<?, ?>[] converters) {
 		this.converters = converters;
 	}
 	
 	@Override
-	protected void installFormatters(FormatterRegistry registry){
+	protected void installFormatters(FormatterRegistry registry) {
 		super.installFormatters(registry);
 		for (Converter<?,?> c: converters) {
 			registry.addConverter(c);

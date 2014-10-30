@@ -1,6 +1,9 @@
 package ar.edu.itba.it.paw.web;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,33 +16,35 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.it.paw.command.SignUpForm;
 import ar.edu.itba.it.paw.command.validator.SignUpFormValidator;
-import ar.edu.itba.it.paw.exceptions.LoginFailedException;
-import ar.edu.itba.it.paw.models.User;
-import ar.edu.itba.it.paw.services.UserService;
+import ar.edu.itba.it.paw.domain.comment.Comment;
+import ar.edu.itba.it.paw.domain.user.LoginFailedException;
+import ar.edu.itba.it.paw.domain.user.User;
+import ar.edu.itba.it.paw.domain.user.UserRepo;
 
 @Controller
 public class UserController {
-	UserService userService;
+	UserRepo users;
 	SignUpFormValidator signUpValidator;
-	
+	SignUpForm signUpForm;
 	@Autowired
-	public UserController(UserService userService, SignUpFormValidator signUpValidator){
-		this.userService = userService;
+	public UserController(UserRepo users, SignUpForm signUpForm, SignUpFormValidator signUpValidator){
+		this.users = users;
+		this.signUpForm = signUpForm;
 		this.signUpValidator = signUpValidator;
 	}
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView sign_in(@RequestParam(value = "email", required = true)String email,
 							@RequestParam(value = "password", required = true)String password,
-							HttpServletRequest req){
+							HttpServletRequest req,
+							HttpServletResponse resp) throws IOException{
 			HttpSession session = req.getSession();
 			ModelAndView mav = new ModelAndView();
 			try {
-				User us = userService.login(email, password);
-				session.setAttribute("user", us);
-				//Aca deberia hacer un redirect al index!!
-				
+				User us = users.login(email, password);
+				session.setAttribute("user_id", us.getId());
+				resp.sendRedirect("../movie/index");
+
 			} catch (LoginFailedException e) {
-				// Preguntar como mostrar los errores en los nuevos formularios
 				mav.addObject("errorMessage", "Invalid user or password");
 			}
 		return mav;
@@ -52,8 +57,7 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView sign_up(SignUpForm signUpForm, Errors errors, HttpServletRequest req){
-			HttpSession session = req.getSession();
+	public ModelAndView sign_up(SignUpForm signUpForm, Errors errors){
 			ModelAndView mav = new ModelAndView();
 			
 			signUpValidator.validate(signUpForm, errors);
@@ -72,11 +76,70 @@ public class UserController {
 	
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView sign_out(HttpServletRequest req){
+	public ModelAndView sign_out(HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		HttpSession session = req.getSession();
-		session.setAttribute("user", null);
+		if(session!=null){
+			session.invalidate();
+		}
 		ModelAndView mav = new ModelAndView();
-		//Ahora deberia hacer un redirect a index!!
+		resp.sendRedirect("../movie/index");
 		return mav;
 	}
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView recovery(@RequestParam(value = "email", required = true)String email,
+							@RequestParam(value = "newPassword", required = false)String newPassword,
+							@RequestParam(value = "newPasswordConfirmation", required = false)String newPasswordConfirmation,
+							@RequestParam(value = "answer", required = false)String answer,
+							HttpServletResponse resp) throws IOException{
+
+		ModelAndView mav = new ModelAndView();
+		User user = users.getByEmail(email);
+		if(user == null){
+			mav.addObject("errorMessage", "Invalid Email");
+			return mav;
+		}
+		else{
+			mav.addObject("email", email);
+			mav.addObject("question", user.getSecretQuestion());
+		}
+		//Checkear si son correctos
+		if(answer != null){
+			if(user.compareAnswer(answer)){
+				if(newPassword.equals(newPasswordConfirmation)){
+					user.setPassword(newPassword);
+					resp.sendRedirect("sign_in");
+				}
+				else{
+					mav.addObject("errorMessage", "Passwords dont match");
+					return mav;
+				}
+
+			}
+			else{
+				mav.addObject("errorMessage", "Invalid Answer");
+				return mav;
+			}
+		}
+		return mav;
+
+	}
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView recovery(){
+		ModelAndView mav = new ModelAndView();
+		return mav;
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView comments(HttpServletRequest req){
+		User user = (User) req.getAttribute("user");
+		if( user == null){
+			//Como se manejan los errores?
+			return null;
+		}
+		Iterable<Comment> comments = user.getComments();
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("comments", comments);
+		return mav;
+	}
+
 }

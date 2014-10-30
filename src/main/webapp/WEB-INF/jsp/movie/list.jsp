@@ -1,5 +1,5 @@
 
-<%@ include file="header.jsp" %>
+<%@ include file="../header.jsp" %>
 
 	<div class="page-header">
 		<h2>Movie List
@@ -51,5 +51,5 @@
 
 
 
-<%@ include file="footer.jsp" %>
+<%@ include file="../footer.jsp" %>
 

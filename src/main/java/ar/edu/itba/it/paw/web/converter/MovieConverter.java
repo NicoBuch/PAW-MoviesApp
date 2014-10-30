@@ -4,20 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import ar.edu.itba.it.paw.exceptions.NoMovieIdException;
-import ar.edu.itba.it.paw.models.Movie;
-import ar.edu.itba.it.paw.services.MovieService;
+import ar.edu.itba.it.paw.domain.movie.Movie;
+import ar.edu.itba.it.paw.domain.movie.MovieRepo;
+import ar.edu.itba.it.paw.domain.movie.NoMovieIdException;
 @Component
 public class MovieConverter implements Converter<String,Movie>{
-	private MovieService  movieService;
+	private MovieRepo  movies;
 	@Autowired
-	public MovieConverter(MovieService movieService){
-		this.movieService = movieService;
+	public MovieConverter(MovieRepo movies){
+		this.movies = movies;
 	}
-	@Override
 	public Movie convert(String source) {
 		try {
-			return (movieService.getById(Integer.valueOf(source)));
+			return (movies.get(Integer.valueOf(source)));
 		} catch (NoMovieIdException e) {
 			throw new RuntimeException();
 		}
