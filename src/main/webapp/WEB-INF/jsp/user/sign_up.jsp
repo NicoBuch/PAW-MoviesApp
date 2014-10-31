@@ -1,4 +1,4 @@
-<%@ include file="header.jsp" %>
+<%@ include file="../header.jsp" %>
 
 
 	<div class="page-header">
@@ -20,7 +20,7 @@
 		</c:if>
 
 
-		<form:form action="sign_up" commandName='signUpForm' method='POST' novalidate>
+		<form:form action="sign_up" commandName='signUpForm' method='POST' novalidate='novalidate'>
 			
 			<form:errors path="*"/>
 
@@ -30,22 +30,22 @@
 
 					<div class="col-xs-6">
 						<div class="form-group">
-							<label class="control-label">First Name</label>
-							<form:input class="form-control" required type="text" autofocus name="firstName" value = <c:out value="${firstName}" /> >
+							<form:label class="control-label" path="firstName">First Name</form:label>
+							<form:input class="form-control" type="text" path="firstName" autofocus='autofocus' required='required'/>
 						</div>
 					</div>
 
 					<div class="col-xs-6">
 						<div class="form-group">
-							<label class="control-label">Last Name</label>
-							<form:input class="form-control" required type="text" name="lastName" value = <c:out value="${lastName}" /> >
+							<form:label class="control-label" path="lastName">Last Name</form:label>
+							<form:input class="form-control" type="text" path="lastName" required='required'/>
 						</div>
 					</div>
 
 					<div class="col-xs-12">
 						<div class="form-group">
-							<label class="control-label">Email</label>
-							<form:input class="form-control" required type="email" name="email" value = <c:out value="${email}" /> >
+							<form:label class="control-label" path="email">Email</form:label>
+							<form:input class="form-control" type="email" path="email" required='required'/>
 						</div>
 					</div>
 
@@ -54,8 +54,8 @@
 							<label class="control-label">Birth Date</label>
 							<div class=" col-md-offset-2">
 								<div class="col-xs-4">
-									<form:select class="form-control" name="bDay" value = <c:out value="${bDay}" /> >
-										<form:option value='empty' disabled selected>Day</form:option>
+									<form:select class="form-control" path="birthDay">
+										<form:option value='empty' disabled='disabled' selected='selected'>Day</form:option>
 										<c:forEach var="i" begin="1" end="31">
 										   <form:option value='${i}'>${i}</form:option>
 									     </c:forEach>	
@@ -63,8 +63,8 @@
 								</div>
 								
 								<div class="col-xs-4">
-									<form:select class="form-control" name="bMonth" value = <c:out value="${bMonth}" /> >
-										<form:option value='empty' disabled selected>Month</form:option>
+									<form:select class="form-control" path="birthMonth">
+										<form:option value='empty' disabled='disabled' selected='selected'>Month</form:option>
 										<c:forEach var="i" begin="1" end="12">
 										   <form:option value='${i}'>${i}</form:option>
 									     </c:forEach>
@@ -72,43 +72,43 @@
 								</div>
 								
 								<div class="col-xs-4">
-									<form:select class="form-control" name="bYear" value = <c:out value="${bYear}" />>
-										<form:option value='empty' disabled selected>Year</form:option>
+									<form:select class="form-control" path="birthYear">
+										<form:option value='empty' disabled='disabled' selected='selected'>Year</form:option>
 										<c:forEach var="i" begin="1930" end="2014">
 										   <form:option value='${i}'>${i}</form:option>
 									     </c:forEach>
 									</form:select>
 								</div>
 							</div>
-							<!-- <input class="form-control" required type="date" name="birthDate" value = <c:out value="${birthDate}" /> > --> <br/>
+							<br/>
 						</div>
 					</div>
 
 					<div class="col-xs-12">
 						<div class="form-group">
-							<label class="control-label">Password</label>
-							<form:input class="form-control" required type="password" name="password"/>
+							<form:label class="control-label" path="password">Password</form:label>
+							<form:input class="form-control" type="password" path="password" required='required'/>
 						</div>
 					</div>
 
 					<div class="col-xs-12">
 						<div class="form-group">
-							<label class="control-label">Confirm your Password</label>
-							<form:input class="form-control" required type="password" name="passwordConfirmation"/>
+							<form:label class="control-label" path="confirmPassword">Confirm your Password</form:label>
+							<form:input class="form-control" type="password" path="confirmPassword" required='required'/>
 						</div>
 					</div>
 
 					<div class="col-xs-12">
 						<div class="form-group">
-							<label class="control-label">Secret Question</label>
-							<form:input class="form-control" required type="text" name="secretQuestion" value = <c:out value="${secretQuestion}" /> >
+							<form:label class="control-label" path="secretQuestion">Secret Question</form:label>
+							<form:input class="form-control" type="text" path="secretQuestion" required='required' />
 						</div>
 					</div>
 
 					<div class="col-xs-12">
 						<div class="form-group">
-							<label class="control-label">Secret Answer</label>
-							<form:input class="form-control" required type="text" name="secretAnswer" />
+							<form:label class="control-label" path="secretAnswer">Secret Answer</form:label>
+							<form:input class="form-control" type="text" path="secretAnswer" required='required'/>
 						</div>
 					</div>
 
@@ -127,4 +127,4 @@
 
 
 
-<%@ include file="footer.jsp" %>
+<%@ include file="../footer.jsp" %>

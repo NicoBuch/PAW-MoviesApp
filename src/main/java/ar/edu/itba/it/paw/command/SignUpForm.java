@@ -6,25 +6,30 @@ public class SignUpForm {
 	String lastName;
 	String email;
 	//Birth Date
-	String day;
-	String month;
-	String year;
+	String birthDay;
+	String birthMonth;
+	String birthYear;
 	/////////////
 	String password;
 	String confirmPassword;
 	String secretQuestion;
 	String secretAnswer;
 	
+	
+	public SignUpForm() {
+		
+	}
+
 	public SignUpForm(String firstName, String lastName, String email,
-			String day, String month, String year, String password,
+			String birthDay, String birthMonth, String birthYear, String password,
 			String confirmPassword, String secretQuestion, String secretAnswer) {
-		super();
+		
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.day = day;
-		this.month = month;
-		this.year = year;
+		this.birthDay = birthDay;
+		this.birthMonth = birthMonth;
+		this.birthYear = birthYear;
 		this.password = password;
 		this.confirmPassword = confirmPassword;
 		this.secretQuestion = secretQuestion;
@@ -55,28 +60,28 @@ public class SignUpForm {
 		this.email = email;
 	}
 
-	public String getDay() {
-		return day;
+	public String getBirthDay() {
+		return birthDay;
 	}
 
-	public void setDay(String day) {
-		this.day = day;
+	public void setBirthDay(String birthDay) {
+		this.birthDay = birthDay;
 	}
 
-	public String getMonth() {
-		return month;
+	public String getBirthMonth() {
+		return birthMonth;
 	}
 
-	public void setMonth(String month) {
-		this.month = month;
+	public void setBirthMonth(String birthMonth) {
+		this.birthMonth = birthMonth;
 	}
 
-	public String getYear() {
-		return year;
+	public String getBirthYear() {
+		return birthYear;
 	}
 
-	public void setYear(String year) {
-		this.year = year;
+	public void setBirthYear(String birthYear) {
+		this.birthYear = birthYear;
 	}
 
 	public String getPassword() {
@@ -110,9 +115,10 @@ public class SignUpForm {
 	public void setSecretAnswer(String secretAnswer) {
 		this.secretAnswer = secretAnswer;
 	}
+
 	
-	
-	
+
+
 	
 	
 }

@@ -25,11 +25,10 @@ import ar.edu.itba.it.paw.domain.user.UserRepo;
 public class UserController {
 	UserRepo users;
 	SignUpFormValidator signUpValidator;
-	SignUpForm signUpForm;
+	
 	@Autowired
-	public UserController(UserRepo users, SignUpForm signUpForm, SignUpFormValidator signUpValidator){
+	public UserController(UserRepo users, SignUpFormValidator signUpValidator){
 		this.users = users;
-		this.signUpForm = signUpForm;
 		this.signUpValidator = signUpValidator;
 	}
 	@RequestMapping(method = RequestMethod.POST)
@@ -57,19 +56,22 @@ public class UserController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView sign_up(SignUpForm signUpForm, Errors errors){
+	public ModelAndView sign_up( SignUpForm signUpForm, Errors errors){
 			ModelAndView mav = new ModelAndView();
 			
 			signUpValidator.validate(signUpForm, errors);
 			if (errors.hasErrors()){
 				return null;
 			}
+		mav.setViewName("movie/index");
+		System.out.println("Todo ok");
 		return mav;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView sign_up(){
 		ModelAndView mav = new ModelAndView();
+		mav.addObject(new SignUpForm());
 		return mav;
 	}
 	

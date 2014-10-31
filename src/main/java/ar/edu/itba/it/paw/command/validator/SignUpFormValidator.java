@@ -17,35 +17,35 @@ public class SignUpFormValidator implements Validator{
 	public void validate(Object target, Errors errors) {
 		SignUpForm form =(SignUpForm) target;
 
-		if (form.getFirstName() == null){
-			errors.rejectValue("firstName", "empty");
+		if (form.getFirstName().isEmpty()){
+			errors.rejectValue("firstName", "empty", "Empty");
 		}
-		if (form.getLastName() == null){
-			errors.rejectValue("lastName", "empty");
+		if (form.getLastName().isEmpty()){
+			errors.rejectValue("lastName", "empty", "Empty");
 		}
-		if (form.getEmail() == null){
-			errors.rejectValue("email", "empty");
+		if (form.getEmail().isEmpty()){
+			errors.rejectValue("email", "empty", "Empty");
 		}
-		if (form.getDay() == null){
-			errors.rejectValue("day", "empty");
+		if (form.getBirthDay().isEmpty()){
+			errors.rejectValue("day", "empty", "Empty");
 		}
-		if (form.getMonth() == null){
-			errors.rejectValue("month", "empty");
+		if (form.getBirthMonth().isEmpty()){
+			errors.rejectValue("month", "empty", "Empty");
 		}
-		if (form.getYear() == null){
-			errors.rejectValue("year", "empty");
+		if (form.getBirthYear().isEmpty()){
+			errors.rejectValue("year", "empty", "Empty");
 		}
-		if (form.getPassword() == null){
-			errors.rejectValue("password", "empty");
+		if (form.getPassword().isEmpty()){
+			errors.rejectValue("password", "empty", "Empty");
 		}
-		if (form.getConfirmPassword() == null){
-			errors.rejectValue("confirmPassword", "empty");
+		if (form.getConfirmPassword().isEmpty()){
+			errors.rejectValue("confirmPassword", "empty", "Empty");
 		}
-		if (form.getSecretQuestion() == null){
-			errors.rejectValue("secretQuestion", "empty");
+		if (form.getSecretQuestion().isEmpty()){
+			errors.rejectValue("secretQuestion", "empty", "Empty");
 		}
-		if (form.getSecretAnswer() == null){
-			errors.rejectValue("secretAnswer", "empty");
+		if (form.getSecretAnswer().isEmpty()){
+			errors.rejectValue("secretAnswer", "empty", "Empty");
 		}		
 		
 	}
