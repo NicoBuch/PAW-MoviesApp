@@ -42,8 +42,11 @@
 
 			    <!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				    <ul class="nav navbar-nav">
+				    <ul class="nav navbar-nav">				    
 					    <li><a href="../movie/list">List Movies</a></li>
+					    <c:if test='${not empty user && user.email!=""}'>
+							<li><a href="../user/list">List Users</a></li>
+						</c:if>
 					</ul>
 				    <ul class="nav navbar-nav navbar-right">
 				    	<c:choose>

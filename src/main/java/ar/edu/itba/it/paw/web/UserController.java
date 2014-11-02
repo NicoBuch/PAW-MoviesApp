@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.web;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -84,6 +85,19 @@ public class UserController {
 		mav.addObject(new SignUpForm());
 		return mav;
 	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView list(HttpServletRequest req) throws Exception{
+		ModelAndView mav = new ModelAndView();
+		User logUser = (User) req.getAttribute("user");
+		if (logUser == null) {
+			throw new Exception();
+		}
+		
+		List<User> listUsers = users.getAll();
+		mav.addObject("users", listUsers);
+		return mav;
+	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView sign_out(HttpServletRequest req,
@@ -141,13 +155,14 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView comments(HttpServletRequest req) throws Exception {
-		User user = (User) req.getAttribute("user");
-		if (user == null) {
+	public ModelAndView comments(@RequestParam(value = "user_id", required = true) User user, HttpServletRequest req) throws Exception {
+		User logUser = (User) req.getAttribute("user");
+		if (logUser == null) {
 			throw new Exception();
 		}
 		Iterable<Comment> comments = user.getComments();
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("user", user);
 		mav.addObject("comments", comments);
 		return mav;
 	}

@@ -1,9 +1,9 @@
 <%@ include file="../header.jsp" %>
 
 	<div class="page-header">
-		<h2>My Comments
+		<h2>${user.firstName} ${user.lastName}'s Comments
 			<br>
-			<small> These are the movies you have commented </small>
+			<small>These are the movies ${user.firstName} has commented</small>
 		</h2>
 	</div>
 
@@ -11,7 +11,7 @@
 
 	<table class="table table-striped">
 		<thead>
-		     <tr>
+		    <tr>
 		            <th>Movie</th>
 		            <th>Comment Date</th>
 		 	</tr>

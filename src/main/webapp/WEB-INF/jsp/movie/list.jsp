@@ -21,7 +21,7 @@
 		<form class="form-inline" name="filterByGenreForm" method='get'>
 			<label class="label-control">Genre: </label>
 			<select class="form-control input-sm" name='genre'>
-				<option value='empty'>Select genre...</option>
+				<option value='empty' >Select genre...</option>
 				<c:forEach var="aGenre" items="${genres}">
 				   <option value='${aGenre.id}'>${aGenre.name}</option>
 			     </c:forEach>
