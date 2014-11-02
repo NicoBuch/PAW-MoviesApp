@@ -12,7 +12,7 @@
 			<c:choose>
 	  		<c:when test="${movie.picture == null}">
 	  			<c:if test="${user.admin}">
-	  				<form action="setPicture" method="POST">
+	  				<form action="setPicture" method="POST" enctype="multipart/form-data">
 	  					<input type="hidden" name="movieId" value="${movie.id}" required>
 	  					<input type="file" name="pic" required>
 	  					<br>
@@ -21,14 +21,14 @@
 					</c:if>
 	  		</c:when>
 			  <c:otherwise>
-			  	<img src="${movie.picture}"/>
+			  	<img src="/MoviesApp/bin/movie/showPicture?movieId=${movie.id}"/>
 			  	<c:if test="${user.admin}">
 			  		<form action="setPicture" method="POST" enctype="multipart/form-data">
 			  			<input type="hidden" name="movieId" value="${movie.id}" required>
 	  					<input type="file" name="pic" required>
 							<input type="submit" value="Edit Picture">
 						</form>
-						<form action="setPicture" method="POST">
+						<form action="setPicture" method="POST" enctype="multipart/form-data">
 							<input type="hidden" name="movieId" value="${movie.id}" required>
 	  					<input type="hidden" value="null" name="pic" required>
 							<input type="submit" value="Delete Picture">
@@ -60,6 +60,43 @@
 
 	</div>
 
+
+	<div class="col-md-5 col-md-offset-2">
+		<c:if test="${!empty movie.prices}">
+			<p class="text-center">
+				<label><b>Prices:</b></label><br>
+			</p>
+				<c:forEach var="aPrice" items="${movie.prices}">
+					<div>
+						${aPrice.name}
+						<c:if test="${user.admin}">
+							<form action="../movie/deletePrize", method="POST" class="col-md-4">
+								<input  type="hidden" name="prizeId" value="${aPrize.id}"/>
+				    		<input type="submit" value="Delete">
+			  			</form>
+			  		</c:if>
+		  		</div>
+					<br>
+				</c:forEach>
+		</c:if>
+		<c:if test="${!empty movie.nominations}">
+			<br>
+			<label><b>Nominations:</b></label><br>
+			<c:forEach var="aNomination" items="${movie.nominations}">
+				${aNomination.name}
+				<c:if test="${user.admin}">
+					<form action="../movie/deletePrize", method="POST" class="col-md-4">
+						<input  type="hidden" name="prizeId" value="${aNomination.id}"/>
+		    		<input type="submit" value="Delete">
+	  			</form>
+	  		</c:if>
+				<br>
+			</c:forEach>
+			<br>
+		</c:if>
+		</p>
+	</div>
+
 	<div class="col-md-6 col-md-offset-3">
 		<div class="well">
 			<p class="text-center">
@@ -71,10 +108,23 @@
 
 	<div class="col-md-10 col-md-offset-1"/>
 
+	<c:if test= "${ user.admin }">
+		<div>
+			<br>
+			<h4><strong>Add a new prize or nomination</strong></h4>
+			<form action="addPrize" method="POST">
+		  	<input type="hidden" name="movieId" value="${movie.id}" required>
+		  	Name:
+		  	<input type="text" name="name" required><br>
+		  	<label><input type="checkbox" name="prize">Checked for prize, Not checked for nomination</label>
+		  	<br>
+				<input type="submit" value="Add new Price or Nomination">
+				<br><br>
+			</form>
+		</div>
+	</c:if>
 		<!-- Show CommentForm -->
 		<c:if test="${canComment}">
-
-
 
 			<div class="panel panel-primary">
 				  <div class="panel-heading">
@@ -141,24 +191,26 @@
 					    		<input type="submit" value="Delete">
 			    			</form>
 							</c:if>
-							<c:if test="${ aComment.user != user }">
-							<c:set var="canRate" value="${true}"/>
-								<c:forEach var="aCommentRating" items="${aComment.commentRatings}">
-									<c:if test= "${aCommentRating.user == user}">
-										<c:set var="canRate" value="${false}"/>
-									</c:if>
-								</c:forEach>
-							</c:if>
-							<c:if test="${ canRate }">
-								<form action="../comments/rate", method="POST" class="col-md-4">
-					    		<input  type="hidden" name="commentId" value="${aComment.id}"/>
-					    		<select class="form-control" name='rating'>
-										<c:forEach var="i" begin="0" end="5">
-								   		<option value='${i}'>${i}</option>
-										</c:forEach>
-									</select>
-					    		<input type="submit" value="Rate this comment">
-			    			</form>
+							<c:if test="${! empty user }">
+								<c:if test="${! (user == aComment.user)}">
+									<c:set var="canRate" value="${true}"/>
+									<c:forEach var="aCommentRating" items="${aComment.commentRatings}">
+										<c:if test= "${aCommentRating.user == user}">
+											<c:set var="canRate" value="${false}"/>
+										</c:if>
+									</c:forEach>
+									<c:if test="${ canRate }">
+										<form action="../comments/rate", method="POST" class="col-md-4">
+							    		<input  type="hidden" name="commentId" value="${aComment.id}"/>
+							    		<select class="form-control" name='rating'>
+												<c:forEach var="i" begin="0" end="5">
+										   		<option value='${i}'>${i}</option>
+												</c:forEach>
+											</select>
+							    		<input type="submit" value="Rate this comment">
+					    			</form>
+					    		</c:if>
+								</c:if>
 							</c:if>
 						</c:forEach>
 					</div>
