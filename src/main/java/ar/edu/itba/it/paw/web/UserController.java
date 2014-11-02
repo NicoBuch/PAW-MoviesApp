@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.itba.it.paw.command.SignUpForm;
-import ar.edu.itba.it.paw.command.validator.SignUpFormValidator;
 import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.user.LoginFailedException;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.domain.user.UserRepo;
+import ar.edu.itba.it.paw.web.command.SignUpForm;
+import ar.edu.itba.it.paw.web.validator.SignUpFormValidator;
 
 @Controller
 public class UserController {
@@ -62,11 +62,19 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 
 		signUpValidator.validate(signUpForm, errors);
+		try {
+			users.getByEmail(signUpForm.getEmail());
+			errors.rejectValue("email", "taken", "The email is already in use.");
+		}catch( Exception e){
+			
+		}
+		
 		if (errors.hasErrors()) {
 			return null;
 		}
+		
+		users.save(signUpForm.build());	
 		mav.setViewName("movie/index");
-		System.out.println("Todo ok");
 		return mav;
 	}
 

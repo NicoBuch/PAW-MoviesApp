@@ -32,5 +32,10 @@ public class HibernateUserRepo extends AbstractHibernateRepo implements UserRepo
 		}
 
 	}
+	
+	@Override
+	public void save(User user){
+		super.save(user);
+	}
 }
 

@@ -10,4 +10,6 @@ public interface UserRepo {
 	
 	public User login(String email, String password) throws LoginFailedException ;
 
+	void save(User user);
+
 }

@@ -1,4 +1,8 @@
-package ar.edu.itba.it.paw.command;
+package ar.edu.itba.it.paw.web.command;
+
+import java.sql.Date;
+
+import ar.edu.itba.it.paw.domain.user.User;
 
 public class SignUpForm {
 	
@@ -35,7 +39,16 @@ public class SignUpForm {
 		this.secretQuestion = secretQuestion;
 		this.secretAnswer = secretAnswer;
 	}
-
+	
+	public User build(){
+		return new User( email, confirmPassword, firstName, lastName, getBirthDate(), secretQuestion, secretAnswer, false);
+	}	
+	
+	public Date getBirthDate(){
+		String releaseDate = birthYear + "-" + birthMonth + "-" + birthDay;
+		return Date.valueOf(releaseDate);
+	}
+	
 	public String getFirstName() {
 		return firstName;
 	}
