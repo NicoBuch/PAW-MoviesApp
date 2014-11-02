@@ -5,7 +5,7 @@ import java.sql.Date;
 import ar.edu.itba.it.paw.domain.user.User;
 
 public class SignUpForm {
-	
+
 	String firstName;
 	String lastName;
 	String email;
@@ -18,16 +18,16 @@ public class SignUpForm {
 	String confirmPassword;
 	String secretQuestion;
 	String secretAnswer;
-	
-	
+
+
 	public SignUpForm() {
-		
+
 	}
 
 	public SignUpForm(String firstName, String lastName, String email,
 			String birthDay, String birthMonth, String birthYear, String password,
 			String confirmPassword, String secretQuestion, String secretAnswer) {
-		
+
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -39,16 +39,16 @@ public class SignUpForm {
 		this.secretQuestion = secretQuestion;
 		this.secretAnswer = secretAnswer;
 	}
-	
+
 	public User build(){
 		return new User( email, confirmPassword, firstName, lastName, getBirthDate(), secretQuestion, secretAnswer, false);
-	}	
-	
+	}
+
 	public Date getBirthDate(){
 		String releaseDate = birthYear + "-" + birthMonth + "-" + birthDay;
 		return Date.valueOf(releaseDate);
 	}
-	
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -129,9 +129,9 @@ public class SignUpForm {
 		this.secretAnswer = secretAnswer;
 	}
 
-	
 
 
-	
-	
+
+
+
 }
