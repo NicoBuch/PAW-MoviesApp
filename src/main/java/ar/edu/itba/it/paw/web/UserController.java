@@ -120,14 +120,17 @@ public class UserController {
 			HttpServletResponse resp) throws IOException {
 
 		ModelAndView mav = new ModelAndView();
-		User user = users.getByEmail(email);
-		if (user == null) {
+		User user;
+		try {
+			user = users.getByEmail(email);
+			
+		}catch(Exception e){
 			mav.addObject("errorMessage", "Invalid Email");
 			return mav;
-		} else {
-			mav.addObject("email", email);
-			mav.addObject("question", user.getSecretQuestion());
 		}
+		
+		mav.addObject("email", email);
+		mav.addObject("question", user.getSecretQuestion());
 		// Checkear si son correctos
 		if (answer != null) {
 			if (user.compareAnswer(answer)) {
