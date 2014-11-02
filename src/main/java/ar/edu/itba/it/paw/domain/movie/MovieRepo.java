@@ -3,14 +3,17 @@ package ar.edu.itba.it.paw.domain.movie;
 import java.sql.Date;
 import java.util.List;
 
+import ar.edu.itba.it.paw.domain.NoIdException;
+import ar.edu.itba.it.paw.domain.genre.Genre;
+
 
 public interface MovieRepo {
 
 	public List<Movie> getAll();
 	
-	public Movie get(int studentId) throws NoMovieIdException;
+	public Movie get(int studentId) throws NoIdException;
 	
-	public List<Movie> getByGenre(String genre)  throws NoGenreException;
+	public List<Movie> getByGenre(Genre genre);
 	
 	public List<Movie> getByDirector(String director);
 	
@@ -23,5 +26,5 @@ public interface MovieRepo {
 	public void save(Movie movie);
 	
 	public void delete(Movie movie);
-	
+
 }

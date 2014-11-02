@@ -2,17 +2,51 @@
 
 
 	<div class="page-header">
+		<div class="col-md-8">
 		<h2>Movie Detail
 			<br>
 			<small>${movie.title}</small>
 		</h2>
+		</div>
+		<div class="col-md-4">
+			<c:choose>
+	  		<c:when test="${movie.picture == null}">
+	  			<c:if test="${user.admin}">
+	  				<form action="setPicture" method="POST">
+	  					<input type="hidden" name="movieId" value="${movie.id}" required>
+	  					<input type="file" name="pic" required>
+	  					<br>
+							<input type="submit" value="Add Picture">
+						</form>
+					</c:if>
+	  		</c:when>
+			  <c:otherwise>
+			  	<img src="${movie.picture}"/>
+			  	<c:if test="${user.admin}">
+			  		<form action="setPicture" method="POST" enctype="multipart/form-data">
+			  			<input type="hidden" name="movieId" value="${movie.id}" required>
+	  					<input type="file" name="pic" required>
+							<input type="submit" value="Edit Picture">
+						</form>
+						<form action="setPicture" method="POST">
+							<input type="hidden" name="movieId" value="${movie.id}" required>
+	  					<input type="hidden" value="null" name="pic" required>
+							<input type="submit" value="Delete Picture">
+						</form>
+					</c:if>
+	  		</c:otherwise>
+			</c:choose>
+		</div>
 	</div>
 
 	<div class="col-md-5 col-md-offset-0">
 		<p class="text-center">
 			<label><b>Director</b></label><br>${movie.director}<br>
 			<br>
-			<label><b>Genre</b></label><br>${movie.genre}<br>
+			<label><b>Genres</b></label>
+			<c:forEach var="aGenre" items="${movie.genres}">
+				<br>${aGenre.name}<br>
+			</c:forEach>
 			<br>
 		</p>
 	</div>
@@ -94,8 +128,8 @@
 								<span class="glyphicon glyphicon-chevron-right"></span> ${aComment.user.firstName} ${aComment.user.lastName} (${aComment.user.email}) said: <br>
 								<label><b>Rating:</b></label> ${aComment.rating}
 								<c:choose>
-							      	<c:when test="${aComment.rating=='1'}"> star.</c:when>
-						      		<c:otherwise> stars.</c:otherwise>
+							    <c:when test="${aComment.rating=='1'}"> star.</c:when>
+						      <c:otherwise> stars.</c:otherwise>
 								</c:choose>
 								<br/>
 								<i>"${aComment.body}"</i>
@@ -105,6 +139,25 @@
 									<input  type="hidden" name="movieId" value="${movie.id}"/>
 					    		<input  type="hidden" name="commentId" value="${aComment.id}"/>
 					    		<input type="submit" value="Delete">
+			    			</form>
+							</c:if>
+							<c:if test="${ aComment.user != user }">
+							<c:set var="canRate" value="${true}"/>
+								<c:forEach var="aCommentRating" items="${aComment.commentRatings}">
+									<c:if test= "${aCommentRating.user == user}">
+										<c:set var="canRate" value="${false}"/>
+									</c:if>
+								</c:forEach>
+							</c:if>
+							<c:if test="${ canRate }">
+								<form action="../comments/rate", method="POST" class="col-md-4">
+					    		<input  type="hidden" name="commentId" value="${aComment.id}"/>
+					    		<select class="form-control" name='rating'>
+										<c:forEach var="i" begin="0" end="5">
+								   		<option value='${i}'>${i}</option>
+										</c:forEach>
+									</select>
+					    		<input type="submit" value="Rate this comment">
 			    			</form>
 							</c:if>
 						</c:forEach>

@@ -1,9 +1,9 @@
 <%@ include file="../header.jsp" %>
 
   <div class="page-header">
-    <h2>Edit
+    <h2>Save Movie
       <br>
-      <small>Please complete the fields you would like to edit</small>
+      <small>Please complete these fields to save a movie</small>
     </h2>
   </div>
 
@@ -13,129 +13,100 @@
       <c:forEach var="error" items="${errors}">
         <div class="alert alert-warning alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            <strong>Edition Error!</strong> ${error.message}
+            <strong>Movie Error!</strong> ${error.message}
         </div>
       </c:forEach>
     </c:if>
 
 
-    <form action="edit" method=POST novalidate>
+    <form:form action="edit" commandName='movieForm' method='POST' novalidate='novalidate'>
+
+      <form:errors path="*"/>
+      <form:hidden path="id"/>
+
       <div class="col-md-8 col-md-offset-2" id="feedbackPanel" />
 
         <fieldset>
-          <input type="hidden" name="id" value = "<c:out value="${movie.id}" />" />
+
           <div class="col-xs-12">
             <div class="form-group">
-              <label class="control-label">Title</label>
-              <input class="form-control" required type="text" autofocus name="title" value = "<c:out value="${movie.title}" />" >
+              <form:label class="control-label" path="title">Title</form:label>
+              <form:input class="form-control" type="text" path="title" autofocus='autofocus' required='required'/>
             </div>
           </div>
 
+          <div class="col-xs-12">
+            <div class="form-group">
+              <form:label class="control-label" path="director">Director</form:label>
+              <form:input class="form-control" type="text" path="director" required='required'/>
+            </div>
+          </div>
 
           <div class="col-xs-12">
             <div class="form-group">
               <label class="control-label">Release Date</label>
-              <div class=" col-md-offset-2">
+              <div class=" col-md-offset-1">
                 <div class="col-xs-4">
-                  <select class="form-control" name="releaseDay">
-                    <option value='empty' disabled selected>Day</option>
+                  <form:select class="form-control" path="releaseDay">
+                    <form:option value='0' disabled='disabled' selected='selected'>Day</form:option>
                     <c:forEach var="i" begin="1" end="31">
-                      <c:choose>
-                        <c:when test="${movie.releaseDate.date == i}">
-                          <option value='${i}'selected="selected">${i}</option>
-                        </c:when>
-                        <c:otherwise>
-                          <option value='${i}'>${i}</option>
-                        </c:otherwise>
-                      </c:choose>
-                    </c:forEach>
-                  </select>
+                       <form:option value='${i}'>${i}</form:option>
+                       </c:forEach>
+                  </form:select>
                 </div>
 
                 <div class="col-xs-4">
-                  <select class="form-control" name="releaseMonth" >
-                    <option value='empty' disabled selected>Month</option>
+                  <form:select class="form-control" path="releaseMonth">
+                    <form:option value='0' disabled='disabled' selected='selected'>Month</form:option>
                     <c:forEach var="i" begin="1" end="12">
-                      <c:choose>
-                        <c:when test="${movie.releaseDate.month == i}">
-                          <option value='${i}'selected="selected">${i}</option>
-                        </c:when>
-                        <c:otherwise>
-                          <option value='${i}'>${i}</option>
-                        </c:otherwise>
-                      </c:choose>
+                      <form:option value='${i}'>${i}</form:option>
                     </c:forEach>
-                  </select>
+                  </form:select>
                 </div>
 
                 <div class="col-xs-4">
-                  <select class="form-control" name="releaseYear">
-                    <option value='empty' disabled selected>Year</option>
-                    <c:forEach var="i" begin="1930" end="2015">
-                      <c:choose>
-                        <c:when test="${movie.releaseDate.year + 1900 == i}">
-                          <option value='${i}'selected="selected">${i}</option>
-                        </c:when>
-                        <c:otherwise>
-                          <option value='${i}'>${i}</option>
-                        </c:otherwise>
-                      </c:choose>
-                    </c:forEach>
-                  </select>
+                  <form:select class="form-control" path="releaseYear">
+                    <form:option value='0' disabled='disabled' selected='selected'>Year</form:option>
+                    <c:forEach var="i" begin="1930" end="2014">
+                       <form:option value='${i}'>${i}</form:option>
+                       </c:forEach>
+                  </form:select>
                 </div>
               </div>
+              <br/>
             </div>
           </div>
 
           <div class="col-xs-12">
             <div class="form-group">
-              <label class="control-label">Director</label>
-              <input class="form-control" required type="text" name="director" value = "<c:out value="${movie.director}" />" >
+              <form:label class="control-label" path="minutes">Movie Length in Minutes</form:label>
+              <form:input class="form-control" type="number" path="minutes" required='required'/>
             </div>
           </div>
 
           <div class="col-xs-12">
             <div class="form-group">
-              <label class="control-label">Movie Length in minutes</label>
-              <input class="form-control" required type="text" name="minutes" value = "<c:out value="${movie.minutes}" />" >
+              <form:label class="control-label" path="description">Description</form:label>
+              <form:textarea class="form-control" path="description" rows="6" cols="60" required='required'/>
             </div>
           </div>
 
           <div class="col-xs-12">
             <div class="form-group">
-              <label class="control-label">Description</label>
-              <input class="form-control" required type="text" name="description" value = "<c:out value="${movie.description}" />" >
+              <form:checkboxes element="div" path="genres" items="${genresList}" itemValue="id" itemLabel="name" />
             </div>
           </div>
 
-      <div class="col-xs-12">
-        <label class="label-control">Genre: </label>
-        <select class="form-control input-sm" name='genre' value = "<c:out value="${movie.genre}" />" >
-          <c:forEach var="aGenre" items="${genres}">
-            <c:choose>
-              <c:when test="${movie.genre == aGenre}">
-                <option value='${aGenre}'selected="selected">${aGenre}</option>
-              </c:when>
-              <c:otherwise>
-                <option value='${aGenre}'>${aGenre}</option>
-              </c:otherwise>
-            </c:choose>
-          </c:forEach>
-        </select>
-      </div>
-
-
-      <div class="col-md-8 col-md-offset-2">
-        <button class="btn btn-primary btn-block" type="submit">Edit</button>
-        <a class="btn btn-default btn-block" href="./list">Cancel</a>
-      </div>
+          <div class="col-md-8 col-md-offset-2">
+            <button class="btn btn-primary btn-block" type="submit">Save</button>
+            <a class="btn btn-default btn-block" href="/MoviesApp">Cancel</a>
+          </div>
 
         </fieldset>
       </div>
-    </form>
+    </form:form>
 
   </div>
-
 
 
 

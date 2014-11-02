@@ -5,29 +5,29 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.comment.Comment;
+import ar.edu.itba.it.paw.domain.genre.Genre;
 
 @Entity
 public class Movie extends PersistentEntity {
 
-	public enum Genre {
-		ACTION, TERROR, THRILLER, DRAMA, PORN, COMEDY, ANIMATION, FANTASY, SCIFI
-	}
-
+	private static final int DESCRIPTION_LENGTH = 300;
+	
 	private String title;
 	private Date releaseDate;
 	private String director;
 
-	@Enumerated(EnumType.STRING)
-	private Genre genre;
+	@ManyToMany
+	private List<Genre> genres;
+	
 	private int minutes;
 	private String description;
 	private Date creationDate;
+	private byte[] picture;
 
 	
 	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL)
@@ -37,37 +37,37 @@ public class Movie extends PersistentEntity {
 	}
 
 	public Movie(String movieName, Date releaseDate,
-			String directorName, String genre, int minutes, String description,
+			String directorName, List<Genre> genres, int minutes, String description,
 			Date creationDate) {
-		setFields(movieName, directorName, minutes, genre, description,
+		setFields(movieName, directorName, minutes, genres, description,
 				releaseDate, creationDate);
 	}
 
 	public Movie(String movieName, Date releaseDate, String directorName,
-			String genre, int minutes, String description) {
+			List<Genre> genres, int minutes, String description) {
 		super();
-		setFields(movieName, directorName, minutes, genre, description,
+		setFields(movieName, directorName, minutes, genres, description,
 				releaseDate, new Date(System.currentTimeMillis()));
 	}
 
 	private void setFields(String movieName, String directorName, int minutes,
-			String genre, String description, Date releaseDate,
+			List<Genre> genres, String description, Date releaseDate,
 			Date creationDate) {
 		if (movieName.length() > 255 || directorName.length() > 255
-				|| releaseDate == null || genre == null || description == null) {
+				|| releaseDate == null || genres == null ||genres.isEmpty() || description == null) {
 			throw new IllegalArgumentException();
 		}
 		this.title = movieName;
 		this.director = directorName;
 		this.minutes = minutes;
-		this.genre = Genre.valueOf(genre.toUpperCase());
+		this.genres = genres;
 		this.description = description;
 		this.releaseDate = releaseDate;
 		this.creationDate = creationDate;
 	}
 
-	public String getGenre() {
-		return this.genre.toString();
+	public List<Genre> getGenres() {
+		return genres;
 	}
 
 	public String getTitle() {
@@ -89,9 +89,12 @@ public class Movie extends PersistentEntity {
 	public String getDescription() {
 		return this.description;
 	}
-
-
-
+	public void setPicture(byte[] pic){
+		this.picture = pic;
+	}
+	public byte[] getPicture(){
+		return picture;
+	}
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -99,8 +102,14 @@ public class Movie extends PersistentEntity {
 	public void setDescription(String string) {
 		this.description = string;
 	}
-
-	/* Se fija si es estreno la pelicula */
+	public String getShortDescription(){
+		if(description.length() >= DESCRIPTION_LENGTH){
+			return description.substring(0, DESCRIPTION_LENGTH) + "...";
+		}
+		return description;
+	}
+	
+	// Y ese numero que carajo es??? VARIABLE ESTATICA!!!!
 	public boolean isNew() {
 		return releaseDate.after(new Date(System.currentTimeMillis() - 604800000));
 	}
@@ -159,12 +168,24 @@ public class Movie extends PersistentEntity {
 		
 	}
 
-	public void setGenre(String genre) throws NoGenreException{
-		if(Genre.valueOf(genre) != null){
-			this.genre = Genre.valueOf(genre);
+	public void setGenres(List<Genre> genres){
+		if(genres != null && !genres.isEmpty()){
+			for(Genre g : genres){
+				if(!this.genres.contains(g)){
+					this.genres.add(g);
+				}
+			}
+			for(int i=0; i< this.genres.size();i++){
+				Genre g = this.genres.get(i);
+				if(!genres.contains(g)){
+					this.genres.remove(g);
+				}
+			}
 		}
-		else
-			throw new NoGenreException();
+		else{
+			throw new IllegalArgumentException();
+		}
+			
 	}
 
 

@@ -25,99 +25,99 @@ import ar.edu.itba.it.paw.domain.user.UserRepo;
 public class UserController {
 	UserRepo users;
 	SignUpFormValidator signUpValidator;
-	
+
 	@Autowired
-	public UserController(UserRepo users, SignUpFormValidator signUpValidator){
+	public UserController(UserRepo users, SignUpFormValidator signUpValidator) {
 		this.users = users;
 		this.signUpValidator = signUpValidator;
 	}
-	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView sign_in(@RequestParam(value = "email", required = true)String email,
-							@RequestParam(value = "password", required = true)String password,
-							HttpServletRequest req,
-							HttpServletResponse resp) throws IOException{
-			HttpSession session = req.getSession();
-			ModelAndView mav = new ModelAndView();
-			try {
-				User us = users.login(email, password);
-				session.setAttribute("user_id", us.getId());
-				resp.sendRedirect("../movie/index");
 
-			} catch (LoginFailedException e) {
-				mav.addObject("errorMessage", "Invalid user or password");
-			}
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView sign_in(
+			@RequestParam(value = "email", required = true) String email,
+			@RequestParam(value = "password", required = true) String password,
+			HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
+		HttpSession session = req.getSession();
+		ModelAndView mav = new ModelAndView();
+		try {
+			User us = users.login(email, password);
+			session.setAttribute("user_id", us.getId());
+			resp.sendRedirect("../movie/index");
+
+		} catch (LoginFailedException e) {
+			mav.addObject("errorMessage", "Invalid user or password");
+		}
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView sign_in(){
+	public ModelAndView sign_in() {
 		ModelAndView mav = new ModelAndView();
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView sign_up( SignUpForm signUpForm, Errors errors){
-			ModelAndView mav = new ModelAndView();
-			
-			signUpValidator.validate(signUpForm, errors);
-			if (errors.hasErrors()){
-				return null;
-			}
+	public ModelAndView sign_up(SignUpForm signUpForm, Errors errors) {
+		ModelAndView mav = new ModelAndView();
+
+		signUpValidator.validate(signUpForm, errors);
+		if (errors.hasErrors()) {
+			return null;
+		}
 		mav.setViewName("movie/index");
 		System.out.println("Todo ok");
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView sign_up(){
+	public ModelAndView sign_up() {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(new SignUpForm());
 		return mav;
 	}
-	
-	
-	
+
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView sign_out(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+	public ModelAndView sign_out(HttpServletRequest req,
+			HttpServletResponse resp) throws IOException {
 		HttpSession session = req.getSession();
-		if(session!=null){
+		if (session != null) {
 			session.invalidate();
 		}
 		ModelAndView mav = new ModelAndView();
 		resp.sendRedirect("../movie/index");
 		return mav;
 	}
+
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView recovery(@RequestParam(value = "email", required = true)String email,
-							@RequestParam(value = "newPassword", required = false)String newPassword,
-							@RequestParam(value = "newPasswordConfirmation", required = false)String newPasswordConfirmation,
-							@RequestParam(value = "answer", required = false)String answer,
-							HttpServletResponse resp) throws IOException{
+	public ModelAndView recovery(
+			@RequestParam(value = "email", required = true) String email,
+			@RequestParam(value = "newPassword", required = false) String newPassword,
+			@RequestParam(value = "newPasswordConfirmation", required = false) String newPasswordConfirmation,
+			@RequestParam(value = "answer", required = false) String answer,
+			HttpServletResponse resp) throws IOException {
 
 		ModelAndView mav = new ModelAndView();
 		User user = users.getByEmail(email);
-		if(user == null){
+		if (user == null) {
 			mav.addObject("errorMessage", "Invalid Email");
 			return mav;
-		}
-		else{
+		} else {
 			mav.addObject("email", email);
 			mav.addObject("question", user.getSecretQuestion());
 		}
-		//Checkear si son correctos
-		if(answer != null){
-			if(user.compareAnswer(answer)){
-				if(newPassword.equals(newPasswordConfirmation)){
+		// Checkear si son correctos
+		if (answer != null) {
+			if (user.compareAnswer(answer)) {
+				if (newPassword.equals(newPasswordConfirmation)) {
 					user.setPassword(newPassword);
 					resp.sendRedirect("sign_in");
-				}
-				else{
+				} else {
 					mav.addObject("errorMessage", "Passwords dont match");
 					return mav;
 				}
 
-			}
-			else{
+			} else {
 				mav.addObject("errorMessage", "Invalid Answer");
 				return mav;
 			}
@@ -125,16 +125,17 @@ public class UserController {
 		return mav;
 
 	}
+
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView recovery(){
+	public ModelAndView recovery() {
 		ModelAndView mav = new ModelAndView();
 		return mav;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView comments(HttpServletRequest req) throws Exception{
+	public ModelAndView comments(HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
-		if( user == null){
+		if (user == null) {
 			throw new Exception();
 		}
 		Iterable<Comment> comments = user.getComments();

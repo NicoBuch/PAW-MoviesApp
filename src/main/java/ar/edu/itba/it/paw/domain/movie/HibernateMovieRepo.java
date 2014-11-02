@@ -3,14 +3,18 @@ package ar.edu.itba.it.paw.domain.movie;
 import java.sql.Date;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.it.paw.domain.AbstractHibernateRepo;
+import ar.edu.itba.it.paw.domain.NoIdException;
+import ar.edu.itba.it.paw.domain.genre.Genre;
 
 @Repository
 public class HibernateMovieRepo extends AbstractHibernateRepo implements
@@ -25,24 +29,25 @@ public class HibernateMovieRepo extends AbstractHibernateRepo implements
 		return find("from Movie");
 	}
 
-	public Movie get(int movieId) throws NoMovieIdException {
+	public Movie get(int movieId) throws NoIdException {
 		try {
 			return get(Movie.class, movieId);
 		} catch (HibernateException e) {
-			throw new NoMovieIdException();
+			throw new NoIdException();
 		}
 
 	}
 
-	public List<Movie> getByGenre(String genre) throws NoGenreException {
-		if (Movie.Genre.valueOf(genre) == null)
-			throw new NoGenreException();
-		return find("from Movie where genre = ?", Movie.Genre.valueOf(genre));
+	@SuppressWarnings("unchecked")
+	public List<Movie> getByGenre(Genre genre){
+		Criteria c = getSession().createCriteria(Movie.class, "movie");
+		c.createAlias("movie.genres", "genres");
+		c.add(Restrictions.eq("genres.id", genre.getId()));
+		return c.list();
 	}
 
 	public List<Movie> getByDirector(String director) {
-		// Queda ver como hacer que no sea exacto (como implementar ilike )
-		return find("from Movie where director = ?", director);
+		return find("from Movie m where lower(m.director) like ?","%" + director.toLowerCase() + "%");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -58,12 +63,9 @@ public class HibernateMovieRepo extends AbstractHibernateRepo implements
 
 	@SuppressWarnings("unchecked")
 	public List<Movie> getByReleaseDate(Date from, Date to) {
-		Session session = getSession();
-		
-		Query query = session.createQuery(
-				"from Movie where releaseDate > :from and releaseDate < :to").setTimestamp("from", from).setTimestamp("to", to);
-		List<Movie> list = query.list();
-		return list;
+		Criteria c = getSession().createCriteria(Movie.class, "movie");
+		c.add(Restrictions.between("releaseDate", from, to));
+		return c.list();
 	}
 
 	@SuppressWarnings("unchecked")
