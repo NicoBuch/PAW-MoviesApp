@@ -83,3 +83,15 @@ CREATE TABLE commentrating
 WITH (
   OIDS=FALSE
 );
+
+CREATE TABLE prize
+(
+  id serial NOT NULL,
+  movie_id int4 NOT NULL references movie (id),
+  name character varying(255) NOT NULL,
+  prize boolean NOT NULL,
+  CONSTRAINT pk_prize PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);

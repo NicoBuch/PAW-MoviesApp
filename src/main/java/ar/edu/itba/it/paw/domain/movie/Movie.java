@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.domain.movie;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.OneToMany;
 import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.genre.Genre;
+import ar.edu.itba.it.paw.domain.prize.Prize;
 
 @Entity
 public class Movie extends PersistentEntity {
@@ -23,6 +25,9 @@ public class Movie extends PersistentEntity {
 
 	@ManyToMany
 	private List<Genre> genres;
+	
+	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL)
+	private List<Prize> prices;
 	
 	private int minutes;
 	private String description;
@@ -73,7 +78,6 @@ public class Movie extends PersistentEntity {
 	public String getTitle() {
 		return this.title;
 	}
-
 	public String getDirector() {
 		return this.director;
 	}
@@ -186,6 +190,26 @@ public class Movie extends PersistentEntity {
 			throw new IllegalArgumentException();
 		}
 			
+	}
+	
+	public List<Prize> getPrices(){
+		List<Prize> list= new ArrayList<Prize>();
+		for(Prize p : prices){
+			if(p.isPrize()){
+				list.add(p);
+			}
+		}
+		return list;
+	}
+	
+	public List<Prize> getNominations(){
+		List<Prize> list= new ArrayList<Prize>();
+		for(Prize p : prices){
+			if(!p.isPrize()){
+				list.add(p);
+			}
+		}
+		return list;
 	}
 
 
