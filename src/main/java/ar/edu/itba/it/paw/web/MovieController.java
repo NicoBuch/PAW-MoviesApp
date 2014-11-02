@@ -1,9 +1,6 @@
 package ar.edu.itba.it.paw.web;
 
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -11,31 +8,39 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.itba.it.paw.domain.NoIdException;
 import ar.edu.itba.it.paw.domain.comment.Comment;
+import ar.edu.itba.it.paw.domain.comment.CommentRepo;
 import ar.edu.itba.it.paw.domain.genre.Genre;
 import ar.edu.itba.it.paw.domain.genre.GenreRepo;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.movie.MovieRepo;
 import ar.edu.itba.it.paw.domain.user.User;
+import ar.edu.itba.it.paw.web.command.MovieForm;
+import ar.edu.itba.it.paw.web.validator.MovieFormValidator;
 
 @Controller
 public class MovieController {
 	private MovieRepo movies;
 	private GenreRepo genres;
-	private final int DESCRIPTION_LENGTH = 300;
+	private CommentRepo comments;
+	private MovieFormValidator validator;
 	private final int TOP_RANKED_CANT = 5;
 	private final int MOST_RECENT_CANT = 5;
 
 	@Autowired
-	public MovieController(MovieRepo movies, GenreRepo genres) {
+	public MovieController(MovieRepo movies, GenreRepo genres, MovieFormValidator validator, CommentRepo comments) {
 		this.movies = movies;
 		this.genres = genres;
+		this.validator = validator;
+		this.comments = comments;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -51,8 +56,8 @@ public class MovieController {
 		} else {
 			filteredMovies = movies.getAll();
 		}
-		mav.addObject("movies", filteredMovies);
 		List<Genre> genresIterable = genres.getAll();
+		mav.addObject("movies", filteredMovies);
 		mav.addObject("genres", genresIterable);
 		return mav;
 	}
@@ -63,8 +68,8 @@ public class MovieController {
 			HttpServletRequest req) {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("movie", movie);
-		Iterable<Comment> comments = movie.getComments();
-		mav.addObject("comments", comments);
+		List<Comment> commentList = comments.getByMovie(movie);
+		mav.addObject("comments", commentList);
 		User user = (User) req.getAttribute("user");
 		if (user != null && user.canComment(movie)) {
 			mav.addObject("canComment", true);
@@ -84,7 +89,6 @@ public class MovieController {
 		Iterable<Movie> releases = movies.getByReleaseDate(
 				new Date(c.getTimeInMillis()), now);
 		Iterable<Movie> recents = movies.getByCreationDate(MOST_RECENT_CANT);
-		shortDescription(releases);
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("recents", recents);
 		mav.addObject("releases", releases);
@@ -98,77 +102,13 @@ public class MovieController {
 		if (user == null || !user.isAdmin()) {
 			throw new Exception();
 		}
-		return new ModelAndView().addObject("genres", genres.getAll());
-	}
-
-	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView create(
-			@RequestParam(value = "title", required = true) String title,
-			@RequestParam(value = "releaseDay", required = false) Integer releaseDay,
-			@RequestParam(value = "releaseMonth", required = false) Integer releaseMonth,
-			@RequestParam(value = "releaseYear", required = false) Integer releaseYear,
-			@RequestParam(value = "director", required = true) String director,
-			@RequestParam(value = "minutes", required = true) Integer minutes,
-			@RequestParam(value = "description", required = true) String description,
-			@RequestParam(value = "genres", required = true) String[] genresArray,
-			HttpServletRequest req) throws Exception {
-		User user = (User) req.getAttribute("user");
-		if (user == null || !user.isAdmin()) {
-			throw new Exception();
-		}
-		String releaseDate = releaseYear + "-" + releaseMonth + "-" + releaseDay;
-		List<Genre> genresList = parseGenres(genresArray);
-		Movie movie = new Movie(title, Date.valueOf(releaseDate), director,genresList , minutes,
-				description);
-		movie.setGenres(genresList);
-		movies.save(movie);
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("movie/list");
-		mav.addObject("movies", movies.getAll());
+		mav.addObject(new MovieForm());
+		mav.addObject("genresList", genres.getAll());
+		mav.setViewName("movie/edit");
 		return mav;
 	}
-
-	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView edit(
-			@RequestParam(value = "title", required = false) String title,
-			@RequestParam(value = "releaseDay", required = false) Integer releaseDay,
-			@RequestParam(value = "releaseMonth", required = false) Integer releaseMonth,
-			@RequestParam(value = "releaseYear", required = false) Integer releaseYear,
-			@RequestParam(value = "director", required = false) String director,
-			@RequestParam(value = "minutes", required = false) Integer minutes,
-			@RequestParam(value = "description", required = false) String description,
-			@RequestParam(value = "genres", required = true) String[] genresArray,
-			@RequestParam(value = "id", required = true) Movie movie,
-			HttpServletRequest req) throws Exception {
-		User user = (User) req.getAttribute("user");
-		
-		List<Genre> genresList = parseGenres(genresArray);
-		if (user == null || !user.isAdmin()) {
-			throw new Exception();
-		}
-		if (!title.isEmpty()) {
-			movie.setTitle(title);
-		}
-		String releaseDate = releaseYear + "-" + releaseMonth + "-" + releaseDay;
-		if (!releaseDate.isEmpty() && isValidDate(releaseDate)) {
-			movie.setReleaseDate(Date.valueOf(releaseDate));
-		}
-		if (!director.isEmpty()) {
-			movie.setDirector(director);
-		}
-		if (minutes != null) {
-			movie.setMinutes(minutes);
-		}
-		if (!description.isEmpty()) {
-			movie.setDescription(description);
-		}
-		movie.setGenres(genresList);
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("movie/list");
-		mav.addObject("movies", movies.getAll());
-		return mav;
-	}
-
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView edit(
 			@RequestParam(value = "id", required = true) Movie movie,
@@ -178,10 +118,34 @@ public class MovieController {
 			throw new Exception();
 		}
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("movie", movie);
-		mav.addObject("genres", genres.getAll());
+		mav.addObject(new MovieForm(movie));
+		mav.addObject("genresList", genres.getAll());
 		return mav;
 	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView edit(
+			MovieForm movieForm, Errors errors,
+			HttpServletRequest req) throws Exception {
+		User user = (User) req.getAttribute("user");
+		
+		if (user == null || !user.isAdmin()) {
+			throw new Exception();
+		}
+		validator.validate(movieForm, errors);
+		if(errors.hasErrors()){
+			return null;
+		}
+		if (movieForm.isNew()) {
+			movies.save(movieForm.build());
+		}
+		else{
+			Movie oldMovie = movies.get(movieForm.getId());
+			movieForm.update(oldMovie);
+		}
+		return set_empty_list();
+	}
+
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView delete(
@@ -192,43 +156,31 @@ public class MovieController {
 			throw new Exception();
 		}
 		movies.delete(movie);
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("movie/list");
-		mav.addObject("movies", movies.getAll());
-		return mav;
-	}
-
-	private void shortDescription(Iterable<Movie> movies) {
-		for (Movie m : movies) {
-			if (m.getDescription().length() > 300) {
-				m.setDescription(m.getDescription().substring(0,
-						DESCRIPTION_LENGTH)
-						+ "...");
-			}
-		}
-	}
-
-	private static boolean isValidDate(String inDate) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		dateFormat.setLenient(false);
-		try {
-			dateFormat.parse(inDate.trim());
-		} catch (ParseException pe) {
-			return false;
-		}
-		return true;
+		return set_empty_list();
 	}
 	
-	private List<Genre> parseGenres(String[] array){
-		List<Genre> genresList = new ArrayList<Genre>();
-		for(String each : array){
-			try {
-				genresList.add(genres.get(Integer.valueOf(each)));
-			} catch (NoIdException e) {
-				throw new RuntimeException();
-			}
-		}
-		return genresList;
-		
+//	@RequestMapping(method = RequestMethod.POST)
+//	public ModelAndView setPicture(
+//			@RequestParam(value = "movieId", required = true) Movie movie,
+//			ServletRequestDataBinder binder,
+//			HttpServletRequest req) throws Exception {
+//		User user = (User) req.getAttribute("user");
+//		if (user == null || !user.isAdmin()) {
+//			throw new Exception();
+//		}
+//		binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
+//		movie.setPicture();
+//		return set_empty_list();
+//	}
+	
+	private ModelAndView set_empty_list(){
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("movies", movies.getAll());
+		mav.addObject("genres", genres.getAll());
+		mav.setViewName("movie/list");
+		return mav;
 	}
+	
 }
+
+// [Pendiente: mejorar el manejo de errores y la deteccion de errores (validator) en los forms]

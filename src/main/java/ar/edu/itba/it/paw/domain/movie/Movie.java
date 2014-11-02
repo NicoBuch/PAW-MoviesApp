@@ -15,16 +15,19 @@ import ar.edu.itba.it.paw.domain.genre.Genre;
 @Entity
 public class Movie extends PersistentEntity {
 
-
+	private static final int DESCRIPTION_LENGTH = 300;
+	
 	private String title;
 	private Date releaseDate;
 	private String director;
 
 	@ManyToMany
 	private List<Genre> genres;
+	
 	private int minutes;
 	private String description;
 	private Date creationDate;
+	private byte[] picture;
 
 	
 	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL)
@@ -86,7 +89,12 @@ public class Movie extends PersistentEntity {
 	public String getDescription() {
 		return this.description;
 	}
-
+	public void setPicture(byte[] pic){
+		this.picture = pic;
+	}
+	public byte[] getPicture(){
+		return picture;
+	}
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -94,7 +102,14 @@ public class Movie extends PersistentEntity {
 	public void setDescription(String string) {
 		this.description = string;
 	}
-
+	public String getShortDescription(){
+		if(description.length() >= DESCRIPTION_LENGTH){
+			return description.substring(0, DESCRIPTION_LENGTH) + "...";
+		}
+		return description;
+	}
+	
+	// Y ese numero que carajo es??? VARIABLE ESTATICA!!!!
 	public boolean isNew() {
 		return releaseDate.after(new Date(System.currentTimeMillis() - 604800000));
 	}

@@ -25,6 +25,9 @@ ALTER TABLE movie
 ALTER TABLE movie
 	RENAME COLUMN release_date TO releasedate;
 
+ALTER TABLE movie
+  ADD COLUMN picture bytea;
+
 ALTER TABLE users
 	RENAME COLUMN birth_date TO birthdate;
 
@@ -57,8 +60,8 @@ WITH (
 
 CREATE TABLE movie_genre
 (
-  movies_id int4 NOT NULL ,
-  genres_id int4 NOT NULL,
+  movies_id int4 NOT NULL references movie (id),
+  genres_id int4 NOT NULL references genre (id),
   CONSTRAINT pk_movie_genre PRIMARY KEY (movies_id, genres_id)
 )
 WITH (
@@ -67,3 +70,16 @@ WITH (
 
 ALTER TABLE movie
 	DROP COLUMN genre;
+
+CREATE TABLE commentrating
+(
+  id serial NOT NULL,
+  comment_id int4 NOT NULL references comment (id),
+  user_id int4 NOT NULL references users (id),
+  rating int,
+  CONSTRAINT pk_commentRating PRIMARY KEY (id),
+  CONSTRAINT uq_commentRating UNIQUE (comment_id, user_id)
+)
+WITH (
+  OIDS=FALSE
+);

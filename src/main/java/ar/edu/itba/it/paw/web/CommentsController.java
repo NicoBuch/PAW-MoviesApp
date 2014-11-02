@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.itba.it.paw.domain.comment.CantCommentBeforeMoviesReleaseDateException;
 import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.comment.CommentRepo;
+import ar.edu.itba.it.paw.domain.commentRating.CommentRating;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.user.NoMoreThanOneCommentPerUserPerMovieException;
 import ar.edu.itba.it.paw.domain.user.User;
@@ -36,17 +37,7 @@ public class CommentsController {
 			throw new Exception();
 		}
 		comments.delete(comment);
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("movie", movie);
-		Iterable<Comment> commentsList = movie.getComments();
-		mav.addObject("comments", commentsList);
-		if (user.canComment(movie)) {
-			mav.addObject("canComment", true);
-		} else {
-			mav.addObject("canComment", false);
-		}
-		mav.setViewName("movie/detail");
-		return mav;
+		return set_detail(movie, user.canComment(movie));
 	}
 	
 
@@ -58,8 +49,6 @@ public class CommentsController {
 			HttpServletRequest req) throws Exception,
 			NoMoreThanOneCommentPerUserPerMovieException,
 			CantCommentBeforeMoviesReleaseDateException {
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("movie", movie);
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.canComment(movie)) {
 			throw new Exception();
@@ -68,9 +57,28 @@ public class CommentsController {
 			Comment comment = new Comment(body, rating, movie, user);
 			comments.save(comment);
 		}
-		Iterable<Comment> comments = movie.getComments();
-		mav.addObject("comments", comments);
-		mav.addObject("canComment", false);
+		return set_detail(movie, false);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView rate(
+			@RequestParam(value = "commentId", required = true) Comment comment,
+			@RequestParam(value = "rating", required = true) int rating,
+			HttpServletRequest req) throws Exception{
+		User user = (User) req.getAttribute("user");
+		if(user == null){
+			throw new Exception();
+		}
+		comments.rate(new CommentRating(user, comment, rating));
+		return set_detail(comment.getMovie(), user.canComment(comment.getMovie()));
+	}
+	
+	private ModelAndView set_detail(Movie movie, boolean canComment){
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("movie", movie);
+		Iterable<Comment> commentList = comments.getByMovie(movie);
+		mav.addObject("comments", commentList);
+		mav.addObject("canComment", canComment);
 		mav.setViewName("movie/detail");
 		return mav;
 	}

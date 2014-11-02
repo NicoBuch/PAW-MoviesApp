@@ -10,6 +10,7 @@ import javax.persistence.Table;
 
 import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.comment.Comment;
+import ar.edu.itba.it.paw.domain.commentRating.CommentRating;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 
 @Entity
@@ -25,9 +26,12 @@ public class User extends PersistentEntity {
 	private String secretAnswer;
 	private boolean vip;
 	private boolean admin;
-
+	
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
 	private List<Comment> comments;
+	
+	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
+	private List<CommentRating> commentRatings;
 
 	public User(){
 	}
@@ -140,5 +144,18 @@ public class User extends PersistentEntity {
 			}
 		}
 		return false;
+	}
+	
+	public boolean canRate(Comment comment){
+		for(CommentRating cr : commentRatings){
+			if(cr.getComment().equals(comment)){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public void rate(Comment comment, int rating){
+		commentRatings.add(new CommentRating(this, comment, rating));
 	}
 }

@@ -26,5 +26,5 @@ public interface MovieRepo {
 	public void save(Movie movie);
 	
 	public void delete(Movie movie);
-	
+
 }

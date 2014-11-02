@@ -15,7 +15,7 @@
       <c:forEach var="aMovie" items="${releases}">
        <a href="detail?id=${aMovie.id}" class="list-group-item ">
           <h4 class="text-center list-group-item-heading"><b><u>${aMovie.title}</u></b></h4>
-          <p class="text-center list-group-item-text"><i>"${aMovie.description}"</i></p>
+          <p class="text-center list-group-item-text"><i>"${aMovie.shortDescription}"</i></p>
        </a>
 
       </c:forEach>
