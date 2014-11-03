@@ -1,13 +1,33 @@
 <%@ include file="../header.jsp" %>
 
 	<div class="page-header">
-		<h2>${user.firstName} ${user.lastName}'s Comments
+		<h2>${aUser.firstName} ${aUser.lastName}'s Comments
 			<br>
-			<small>These are the movies ${user.firstName} has commented</small>
+			<small>These are the movies ${aUser.firstName} has commented</small>
 		</h2>
 	</div>
 
-
+	<div>
+		<c:forEach var="interestUser" items="${user.usersOfInterest}">
+			<c:if test="${interestUser.id == aUser.id}">
+				<c:set var="isInterest" value="${true}"/>
+			</c:if>
+		</c:forEach>
+		<c:choose>
+			<c:when test="${isInterest}">
+				<form action="removeUserOfInterest", method="POST">
+	    		<input  type="hidden" name="userOfInterest" value="${aUser.id}"/>
+	    		<input type="submit" value="Remove from Users of Interest">
+				</form>
+			</c:when>
+			<c:otherwise>
+				<form action="addUserOfInterest", method="POST">
+	    		<input  type="hidden" name="userOfInterest" value="${aUser.id}"/>
+	    		<input type="submit" value="Add to Users of Interest">
+				</form>
+			</c:otherwise>
+		</c:choose>
+	</div>
 
 	<table class="table table-striped">
 		<thead>

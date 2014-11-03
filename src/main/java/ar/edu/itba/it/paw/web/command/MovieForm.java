@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.web.command;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.itba.it.paw.domain.genre.Genre;
@@ -15,7 +16,7 @@ public class MovieForm {
 	private String director;
 	private int minutes;
 	private String description;
-	private List<Genre> genres;
+	private List<Genre> genres = new ArrayList<Genre>();
 	private int id;
 
 	public MovieForm(){
@@ -32,7 +33,9 @@ public class MovieForm {
 		this.minutes = movie.getMinutes();
 		this.description = movie.getDescription();
 		this.id = movie.getId();
-		this.genres = movie.getGenres();
+		for(Genre g : movie.getGenres()){
+			this.genres.add(g);
+		}
 //		List<Genre> genresList = movie.getGenres();
 //		this.genres = new Genre[genresList.size()];
 //		for(int i = 0; i< genresList.size(); i++){

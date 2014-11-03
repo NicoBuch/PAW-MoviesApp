@@ -1,10 +1,12 @@
 package ar.edu.itba.it.paw.web;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.comment.CommentRepo;
 import ar.edu.itba.it.paw.domain.genre.Genre;
@@ -83,7 +86,7 @@ public class MovieController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView index() {
+	public ModelAndView index(HttpServletRequest req) {
 		Iterable<Movie> ranked = movies.getByRating(TOP_RANKED_CANT);
 		Date now = new Date(System.currentTimeMillis());
 		Calendar c = Calendar.getInstance();
@@ -93,6 +96,7 @@ public class MovieController {
 				new Date(c.getTimeInMillis()), now);
 		Iterable<Movie> recents = movies.getByCreationDate(MOST_RECENT_CANT);
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("aWeekBefore", new Date(c.getTimeInMillis()));
 		mav.addObject("recents", recents);
 		mav.addObject("releases", releases);
 		mav.addObject("ranked", ranked);
@@ -204,7 +208,9 @@ public class MovieController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public @ResponseBody byte[] showPicture(@RequestParam(value="movieId", required= true)Movie movie) {
+	public @ResponseBody byte[] showPicture(@RequestParam(value="movieId", required= true)Movie movie, HttpServletResponse response) throws IOException {
+		response.setContentType("image/jpeg");
+		response.getOutputStream().write(movie.getPicture());
 		return movie.getPicture();
 	}
 		
