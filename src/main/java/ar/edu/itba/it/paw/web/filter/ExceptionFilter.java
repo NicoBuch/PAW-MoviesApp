@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import ar.edu.itba.it.paw.web.email.EmailSender;
+
 @Component
 public class ExceptionFilter extends OncePerRequestFilter {
 
@@ -20,6 +22,8 @@ public class ExceptionFilter extends OncePerRequestFilter {
         } catch ( Throwable ex ) {
 	       	request.setAttribute("exceptionMsg", ex.getMessage());
 	       	request.getRequestDispatcher("/WEB-INF/jsp/exceptionPage.jsp").forward(request, response);
+	       	EmailSender emailSender = new EmailSender();
+	       	emailSender.sendEmail("Error" + ex.toString(), ex.getMessage());
         	ex.printStackTrace();
         }
 
