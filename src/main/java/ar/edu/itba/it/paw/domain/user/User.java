@@ -12,6 +12,7 @@ import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.commentRating.CommentRating;
 import ar.edu.itba.it.paw.domain.movie.Movie;
+import ar.edu.itba.it.paw.domain.report.Report;
 
 @Entity
 @Table(name = "Users")
@@ -33,9 +34,12 @@ public class User extends PersistentEntity {
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
 	private List<CommentRating> commentRatings;
 
+	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
+	private List<Report> reports;
+	
 	public User(){
 	}
-
+	
 	public User(String email, String password, String firstName, String lastName, Date birthDate,
 			String secretQuestion, String secretAnswer,boolean vip) {
 		super();
@@ -126,6 +130,10 @@ public class User extends PersistentEntity {
 	public List<Comment> getComments(){
 		return comments;
 	}
+	
+	public List<Report> getReports(){
+		return reports;
+	}
 
 	public boolean canComment(Movie movie) {
 		if((movie.alreadyReleased() || isVip()) && !(alreadyCommented(movie))){
@@ -155,7 +163,17 @@ public class User extends PersistentEntity {
 		return true;
 	}
 	
+	
 	public void rate(Comment comment, int rating){
 		commentRatings.add(new CommentRating(this, comment, rating));
+	}
+	
+	public boolean canReport(Comment comment){
+		for(Report report : reports){
+			if(report.getComment().equals(comment)){
+				return false;
+			}
+		}
+		return true;
 	}
 }

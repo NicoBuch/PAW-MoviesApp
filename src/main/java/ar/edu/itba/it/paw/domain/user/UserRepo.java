@@ -10,7 +10,7 @@ public interface UserRepo {
 	
 	public List<User> getAll();
 	
-	public User getByEmail(String email);
+	public User getByEmail(String email) throws EmailNotFound;
 	
 	public User get(int id) throws NoIdException;
 	

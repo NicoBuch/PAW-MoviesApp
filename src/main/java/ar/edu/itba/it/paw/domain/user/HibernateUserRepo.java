@@ -29,14 +29,22 @@ public class HibernateUserRepo extends AbstractHibernateRepo implements UserRepo
 		}
 	}
 
-	public User getByEmail(String email) {
-		return (User) find("from User where email = ?", email).get(0);
+	public User getByEmail(String email) throws EmailNotFound {
+		try{
+			return (User) find("from User where email = ?", email).get(0);
+		}catch(IndexOutOfBoundsException e){
+			throw new EmailNotFound();
+		}
 	}
 
 	public User login(String email, String password)
 			throws LoginFailedException {
-
-		User user = getByEmail(email);
+		User user;
+		try{
+			user = getByEmail(email);
+		}catch(EmailNotFound e){
+			throw new LoginFailedException();
+		}
 		if (user != null && user.getPassword().equals(password)) {
 			return user;
 		} else {

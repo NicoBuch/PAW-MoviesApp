@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.it.paw.domain.comment.Comment;
+import ar.edu.itba.it.paw.domain.user.EmailNotFound;
 import ar.edu.itba.it.paw.domain.user.LoginFailedException;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.domain.user.UserRepo;
@@ -123,14 +124,14 @@ public class UserController {
 		User user;
 		try {
 			user = users.getByEmail(email);
-			
-		}catch(Exception e){
+
+		} catch (EmailNotFound e) {
 			mav.addObject("errorMessage", "Invalid Email");
 			return mav;
 		}
-		
 		mav.addObject("email", email);
 		mav.addObject("question", user.getSecretQuestion());
+		
 		// Checkear si son correctos
 		if (answer != null) {
 			if (user.compareAnswer(answer)) {
