@@ -218,6 +218,8 @@ public class MovieController {
 	
 }
 
+
 // [ANDY] Como muestro la foto una vez que la tengo guardada?
 // [Pendiente: ver porque no anda bien el checkbox (quedan todos seleccionados)]
 // [Pendiente: mejorar el manejo de errores y la deteccion de errores (validator) en los forms]
+// [Andy : Como hacer para poner el rate y el report en el modelo en vez del repo]

@@ -14,6 +14,8 @@ import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.comment.CommentRepo;
 import ar.edu.itba.it.paw.domain.commentRating.CommentRating;
 import ar.edu.itba.it.paw.domain.movie.Movie;
+import ar.edu.itba.it.paw.domain.report.Report;
+import ar.edu.itba.it.paw.domain.report.ReportRepo;
 import ar.edu.itba.it.paw.domain.user.NoMoreThanOneCommentPerUserPerMovieException;
 import ar.edu.itba.it.paw.domain.user.User;
 
@@ -21,23 +23,38 @@ import ar.edu.itba.it.paw.domain.user.User;
 public class CommentsController {
 
 	private CommentRepo comments;
+	private ReportRepo reports;
 
 	@Autowired
-	public CommentsController(CommentRepo comments) {
+	public CommentsController(CommentRepo comments, ReportRepo reports) {
 		this.comments = comments;
+		this.reports = reports;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView delete(
 			@RequestParam(value = "commentId", required = true) Comment comment,
-			@RequestParam(value = "movieId", required = true) Movie movie,
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
 			throw new Exception();
 		}
+		Movie movie = comment.getMovie();
 		comments.delete(comment);
 		return set_detail(movie, user.canComment(movie));
+	}
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView clean(
+			@RequestParam(value = "commentId", required = true) Comment comment,
+			HttpServletRequest req) throws Exception {
+		User user = (User) req.getAttribute("user");
+		if (user == null || !user.isAdmin()) {
+			throw new Exception();
+		}
+		reports.deleteByComment(comment);
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("comments/list");
+		return mav;
 	}
 	
 
@@ -73,6 +90,31 @@ public class CommentsController {
 		return set_detail(comment.getMovie(), user.canComment(comment.getMovie()));
 	}
 	
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView report(
+			@RequestParam( value = "commentId", required = true) Comment comment,
+			HttpServletRequest req) throws Exception{
+		User user = (User) req.getAttribute("user");
+		if(user == null){
+			throw new Exception();
+		}
+		comments.report(new Report(user, comment));
+		return set_detail(comment.getMovie(), user.canComment(comment.getMovie()));
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView list(
+			HttpServletRequest req) throws Exception{
+		User user = (User) req.getAttribute("user");
+		if(user == null || user.isAdmin() == false){
+			throw new Exception();
+		}
+		ModelAndView mav = new ModelAndView();
+		Iterable<Report> reports = comments.getByReports();
+		mav.addObject("comments", reports);
+		return mav;
+	}
+	
 	private ModelAndView set_detail(Movie movie, boolean canComment){
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("movie", movie);
@@ -82,5 +124,6 @@ public class CommentsController {
 		mav.setViewName("movie/detail");
 		return mav;
 	}
+	
 
 }
