@@ -12,13 +12,13 @@
 		    	<td><a href="../movie/detail?id=${aComment.movie.id}">${aComment.body}</a></td>
 		    	<td>${aComment.creationDate}</td>
 		    	<td>
-		    		<form action="../comments/delete", method="POST" class="col-md-4">
+		    		<form action="../comments/delete" method="POST" class="col-md-4">
 					<input  type="hidden" name="commentId" value="${aComment.id}"/>
 					<input type="submit" value="Delete">
 			    	</form>
 				</td>
 				<td>
-			    <form action="../comments/clean", method="POST" class="col-md-4">
+			    <form action="../comments/clean" method="POST" class="col-md-4">
 					<input  type="hidden" name="commentId" value="${aComment.id}"/>
 					<input type="submit" value="Clean">
 			    </form>
