@@ -61,7 +61,7 @@ public class SignUpFormValidator implements Validator{
 		}else if (form.getConfirmPassword().isEmpty()){
 			errors.rejectValue("confirmPassword", "empty", "Password Confirmation is a required field.");		
 		}else if (!form.getPassword().equals(form.getConfirmPassword())){
-			errors.rejectValue("password", "notMatch", "Passwords does not match.");
+			errors.rejectValue("confirmPassword", "notMatch", "Passwords does not match.");
 		}else if (form.getPassword().length() > 255){
 			errors.rejectValue("password", "tooLong", "Password is too long (Max 255).");
 		} 

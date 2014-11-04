@@ -21,7 +21,6 @@
 
     <form:form action="edit" commandName='movieForm' method='POST' novalidate='novalidate'>
 
-      <form:errors path="*"/>
       <form:hidden path="id"/>
 
       <div class="col-md-8 col-md-offset-2" id="feedbackPanel" />
@@ -31,6 +30,7 @@
           <div class="col-xs-12">
             <div class="form-group">
               <form:label class="control-label" path="title">Title</form:label>
+              <span class="help-block"><form:errors class="text-danger" path="title"/></span>
               <form:input class="form-control" type="text" path="title" autofocus='autofocus' required='required'/>
             </div>
           </div>
@@ -38,14 +38,17 @@
           <div class="col-xs-12">
             <div class="form-group">
               <form:label class="control-label" path="director">Director</form:label>
+              <span class="help-block"><form:errors class="text-danger" path="director"/></span>
               <form:input class="form-control" type="text" path="director" required='required'/>
+
             </div>
           </div>
 
           <div class="col-xs-12">
             <div class="form-group">
               <label class="control-label">Release Date</label>
-              <div class=" col-md-offset-1">
+              <span class="help-block"><form:errors class="text-danger" path="releaseDay"/></span>
+              <div class=" col-md-offset-0">
                 <div class="col-xs-4">
                   <form:select class="form-control" path="releaseDay">
                     <form:option value='0' disabled='disabled' selected='selected'>Day</form:option>
@@ -73,26 +76,33 @@
                   </form:select>
                 </div>
               </div>
-              <br/>
             </div>
+          <br><br>
           </div>
-
           <div class="col-xs-12">
             <div class="form-group">
-              <form:label class="control-label" path="minutes">Movie Length in Minutes</form:label>
-              <form:input class="form-control" type="number" path="minutes" required='required'/>
+              <form:label class="control-label" path="minutes">Duration (minutes)</form:label>
+              <span class="help-block"><form:errors class="text-danger" path="minutes"/></span>
+              <div class="col-md-offset-2">
+                <div class="col-xs-10">
+                  <form:input class="form-control" type="number" path="minutes" required='required'/>
+                </div>
+              </div>
             </div>
           </div>
 
           <div class="col-xs-12">
             <div class="form-group">
               <form:label class="control-label" path="description">Description</form:label>
+              <span class="help-block"><form:errors class="text-danger" path="description"/></span>
               <form:textarea class="form-control" path="description" rows="6" cols="60" required='required'/>
             </div>
           </div>
 
           <div class="col-xs-12">
             <div class="form-group">
+              <form:label class="control-label" path="genres">Genres</form:label>
+              <span class="help-block"><form:errors class="text-danger" path="genres"/></span>
               <form:checkboxes element="div" path="genres" items="${genresList}" itemValue="id" itemLabel="name" />
             </div>
           </div>

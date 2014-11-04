@@ -45,8 +45,7 @@ public class UserController {
 			User us = users.login(email, password);
 			session.setAttribute("user_id", us.getId());
 			resp.sendRedirect("../movie/index");
-
-		} catch (LoginFailedException e) {
+		} catch (Exception e) {
 			mav.addObject("errorMessage", "Invalid user or password");
 		}
 		return mav;

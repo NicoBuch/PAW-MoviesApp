@@ -26,7 +26,7 @@
 		</c:if>
 		
 		
-		<form name="loginForm" method='post'>
+		<form name="loginForm" method='post' novalidate>
 			<div class="col-md-8 col-md-offset-2" id="feedbackPanel" />
 				<div class="col-xs-12">
 					<div class="form-group">
