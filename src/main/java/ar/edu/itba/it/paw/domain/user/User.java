@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -12,6 +15,7 @@ import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.commentRating.CommentRating;
 import ar.edu.itba.it.paw.domain.movie.Movie;
+import ar.edu.itba.it.paw.domain.report.Report;
 
 @Entity
 @Table(name = "Users")
@@ -26,12 +30,19 @@ public class User extends PersistentEntity {
 	private String secretAnswer;
 	private boolean vip;
 	private boolean admin;
-	
-	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
+
+	@ManyToMany
+	@JoinTable(name = "users_of_interest", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "user_of_interest_id") })
+	private List<User> usersOfInterest;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Comment> comments;
-	
-	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<CommentRating> commentRatings;
+
+	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
+	private List<Report> reports;
 
 	public User(){
 	}
@@ -42,6 +53,7 @@ public class User extends PersistentEntity {
 		setFields(email, password, firstName, lastName, birthDate,
 				secretQuestion, secretAnswer, vip);
 	}
+
 	private void setFields(String email, String password, String firstName,
 			String lastName, Date birthDate, String secretQuestion,
 			String secretAnswer, boolean vip) {
@@ -68,7 +80,8 @@ public class User extends PersistentEntity {
 	public String getPassword() {
 		return password;
 	}
-	public void setPassword(String password){
+
+	public void setPassword(String password) {
 		this.password = password;
 	}
 
@@ -92,7 +105,7 @@ public class User extends PersistentEntity {
 		return birthDate;
 	}
 
-	public boolean isVip(){
+	public boolean isVip() {
 		return vip;
 	}
 
@@ -103,8 +116,17 @@ public class User extends PersistentEntity {
 	public String getSecretAnswer() {
 		return secretAnswer;
 	}
-	public boolean isAdmin(){
+
+	public boolean isAdmin() {
 		return admin;
+	}
+
+	public List<User> getUsersOfInterest() {
+		return usersOfInterest;
+	}
+
+	public void setUsersOfInterest(List<User> usersOfInterest) {
+		this.usersOfInterest = usersOfInterest;
 	}
 
 	@Override
@@ -123,39 +145,60 @@ public class User extends PersistentEntity {
 		return secretAnswer.equals(answer);
 	}
 
-	public List<Comment> getComments(){
+	public List<Comment> getComments() {
 		return comments;
 	}
 
+	public List<Report> getReports(){
+		return reports;
+	}
+
 	public boolean canComment(Movie movie) {
-		if((movie.alreadyReleased() || isVip()) && !(alreadyCommented(movie))){
+		if ((movie.alreadyReleased() || isVip()) && !(alreadyCommented(movie))) {
 			return true;
-		}
-		else{
+		} else {
 			return false;
 		}
 
 	}
 
-	public boolean alreadyCommented(Movie movie){
-		for(Comment comment : comments){
-			if(comment.getMovie().equals(movie)){
+	public boolean alreadyCommented(Movie movie) {
+		for (Comment comment : comments) {
+			if (comment.getMovie().equals(movie)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
-	public boolean canRate(Comment comment){
-		for(CommentRating cr : commentRatings){
-			if(cr.getComment().equals(comment)){
+
+	public boolean canRate(Comment comment) {
+		for (CommentRating cr : commentRatings) {
+			if (cr.getComment().equals(comment)) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
-	public void rate(Comment comment, int rating){
+
+	public boolean canReport(Comment comment){
+		for(Report report : reports){
+			if(report.getComment().equals(comment)){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void rate(Comment comment, int rating) {
 		commentRatings.add(new CommentRating(this, comment, rating));
+	}
+
+	public void addUserOfInterest(User user_of_interest) {
+		usersOfInterest.add(user_of_interest);
+	}
+
+	public void removeUserOfInterest(User user_of_interest) {
+		usersOfInterest.remove(user_of_interest);
+
 	}
 }

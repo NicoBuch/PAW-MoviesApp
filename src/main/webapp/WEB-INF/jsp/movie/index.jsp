@@ -9,7 +9,7 @@
   </div>
 
 
-  <div class="col-md-10 col-md-offset-1">
+  <div class="col-md-10 col-md-offset-0">
      <h2 class="col-md-offset-0 text-center">Weekly Releases</h2>
      <div class="list-group">
       <c:forEach var="aMovie" items="${releases}">
@@ -43,5 +43,28 @@
       </c:forEach>
     </div>
   </div>
+
+  <c:if test="${! empty user }">
+    <div class="col-md-10 col-md-offset-0">
+      <h2 class="col-md-offset-0 text-center">Users Of Interest</h2>
+      <div class="list-group">
+      <c:forEach var="aUser" items="${user.usersOfInterest}">
+        <a class="list-group-item" href="../user/comments?user_id=${aUser.id}"><u><b>${aUser.email}</b></u>
+        </a><br>
+        <div class="list-group">
+        <c:forEach var="aComment" items="${aUser.comments}">
+          <c:if test="${aComment.creationDate > aWeekBefore}">
+            <div class="list-group-item">
+              <b>Commented on movie:</b> <a href="detail?id=${aComment.movie.id}">${aComment.movie.title}</a>
+              <br>
+              ${aComment.body}
+              <br>
+            </div>
+          </c:if>
+        </c:forEach>
+      </c:forEach>
+      </div>
+    </div>
+  </c:if>
 
 <%@ include file="../footer.jsp" %>

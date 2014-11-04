@@ -14,7 +14,7 @@
 			<tr>
 				<th>Email</th>
 				<th>First Name</th>
-				<th>Last Name</th>				
+				<th>Last Name</th>
 			</tr>
 		</thead>
 		<c:forEach var="aUser" items="${users}">

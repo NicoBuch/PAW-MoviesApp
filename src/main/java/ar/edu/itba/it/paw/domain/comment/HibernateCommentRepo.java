@@ -13,6 +13,7 @@ import ar.edu.itba.it.paw.domain.AbstractHibernateRepo;
 import ar.edu.itba.it.paw.domain.NoIdException;
 import ar.edu.itba.it.paw.domain.commentRating.CommentRating;
 import ar.edu.itba.it.paw.domain.movie.Movie;
+import ar.edu.itba.it.paw.domain.report.Report;
 
 @Repository
 public class HibernateCommentRepo extends AbstractHibernateRepo implements
@@ -58,6 +59,25 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 
 	@Override
 	public void rate(CommentRating commentRating) {
-		super.save(commentRating);		
+		super.save(commentRating);
 	}
+
+	public void report(Report report){
+		super.save(report);
+	}
+
+	@Override
+	public List<Report> getByReports() {
+		Session session = getSession();
+
+		Query query = session
+				.createQuery(
+						"select c from Comment c join c.reports reports "
+					  + "group by c "
+					  + "order by count(reports) desc");
+
+		List<Report> list = query.list();
+		return list;
+	}
+
 }

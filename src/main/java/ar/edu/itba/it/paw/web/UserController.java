@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.it.paw.domain.comment.Comment;
+import ar.edu.itba.it.paw.domain.user.EmailNotFound;
 import ar.edu.itba.it.paw.domain.user.LoginFailedException;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.domain.user.UserRepo;
@@ -65,15 +66,15 @@ public class UserController {
 		try {
 			users.getByEmail(signUpForm.getEmail());
 			errors.rejectValue("email", "taken", "The email is already in use.");
-		}catch( Exception e){
-			
+		} catch (Exception e) {
+
 		}
-		
+
 		if (errors.hasErrors()) {
 			return null;
 		}
-		
-		users.save(signUpForm.build());	
+
+		users.save(signUpForm.build());
 		mav.setViewName("movie/index");
 		return mav;
 	}
@@ -84,18 +85,14 @@ public class UserController {
 		mav.addObject(new SignUpForm());
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView list(HttpServletRequest req) throws Exception{
-		ModelAndView mav = new ModelAndView();
+	public ModelAndView list(HttpServletRequest req) throws Exception {
 		User logUser = (User) req.getAttribute("user");
 		if (logUser == null) {
 			throw new Exception();
 		}
-		
-		List<User> listUsers = users.getAll();
-		mav.addObject("users", listUsers);
-		return mav;
+		return set_users_list();
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -122,14 +119,14 @@ public class UserController {
 		User user;
 		try {
 			user = users.getByEmail(email);
-			
-		}catch(Exception e){
+
+		} catch (EmailNotFound e) {
 			mav.addObject("errorMessage", "Invalid Email");
 			return mav;
 		}
-		
 		mav.addObject("email", email);
 		mav.addObject("question", user.getSecretQuestion());
+
 		// Checkear si son correctos
 		if (answer != null) {
 			if (user.compareAnswer(answer)) {
@@ -157,15 +154,52 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView comments(@RequestParam(value = "user_id", required = true) User user, HttpServletRequest req) throws Exception {
+	public ModelAndView comments(
+			@RequestParam(value = "user_id", required = true) User user,
+			HttpServletRequest req) throws Exception {
 		User logUser = (User) req.getAttribute("user");
 		if (logUser == null) {
 			throw new Exception();
 		}
 		Iterable<Comment> comments = user.getComments();
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("user", user);
+		mav.addObject("aUser", user);
 		mav.addObject("comments", comments);
 		return mav;
 	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView addUserOfInterest(
+			@RequestParam(value = "userOfInterest", required = true) User userOfInterest,
+			HttpServletRequest req) throws Exception {
+		User user = (User) req.getAttribute("user");
+		if (user == null) {
+			throw new Exception();
+		}
+		user.addUserOfInterest(userOfInterest);
+		return set_users_list();
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView removeUserOfInterest(
+			@RequestParam(value = "userOfInterest", required = true) User userOfInterest,
+			HttpServletRequest req) throws Exception {
+		User user = (User) req.getAttribute("user");
+		if (user == null) {
+			throw new Exception();
+		}
+		user.removeUserOfInterest(userOfInterest);
+		return set_users_list();
+
+	}
+
+	private ModelAndView set_users_list(){
+		ModelAndView mav = new ModelAndView();
+		List<User> listUsers = users.getAll();
+		mav.addObject("users", listUsers);
+		mav.setViewName("user/list");
+		return mav;
+	}
+
+
 }

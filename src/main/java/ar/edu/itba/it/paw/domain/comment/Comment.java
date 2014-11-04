@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.domain.comment;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.OneToMany;
 import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.commentRating.CommentRating;
 import ar.edu.itba.it.paw.domain.movie.Movie;
+import ar.edu.itba.it.paw.domain.report.Report;
 import ar.edu.itba.it.paw.domain.user.User;
 
 @Entity
@@ -20,6 +22,8 @@ public class Comment extends PersistentEntity{
 	private Date creationDate;
 	private int rating; 
 	
+	
+	
 	@OneToMany(mappedBy="comment", cascade=CascadeType.ALL)
 	private List<CommentRating> commentRatings;
 	
@@ -28,6 +32,9 @@ public class Comment extends PersistentEntity{
 	
 	@ManyToOne
 	private User user;
+	
+	@OneToMany(mappedBy="comment" ,  cascade=CascadeType.ALL )
+	private List<Report> reports;
 	
 	public Comment(){
 	}
@@ -40,6 +47,9 @@ public class Comment extends PersistentEntity{
 		creationDate = new Date(System.currentTimeMillis());
 		setFields(body,rating,movie,user);
 		
+	}
+	public void clean(){
+		reports = new ArrayList<Report>();
 	}
 	private void setFields(String body, Date creationDate, int rating, Movie movie, User user){
 		this.creationDate = creationDate;
@@ -55,6 +65,7 @@ public class Comment extends PersistentEntity{
 		this.movie = movie;
 		this.user = user;
 	}
+	
 	public String getBody() {
 		return body;
 	}
@@ -69,6 +80,9 @@ public class Comment extends PersistentEntity{
 	}
 	public User getUser() {
 		return user;
+	}
+	public List<Report> getReports(){
+		return reports;
 	}
 	
 	public List<CommentRating> getCommentRatings(){

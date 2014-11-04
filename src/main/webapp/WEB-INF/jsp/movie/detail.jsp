@@ -148,8 +148,11 @@
 						</div>
 
 						<div class="col-xs-12">
-							<div class="form-group">
+							<div class="form-group <c:if test='${emptyComment}'>has-error</c:if>">
 								<label class="control-label" for='body'>Comment</label>
+								<c:if test='${emptyComment}'>
+									<br><label class="control-label" for='body'>It can not be empty</label>
+								</c:if>
 								<textarea class="form-control" name='body' rows="6" cols="60"></textarea>
 							</div>
 						</div>
@@ -186,19 +189,28 @@
 							</p>
 							<c:if test= "${user.admin}">
 								<form action="../comments/delete", method="POST" class="col-md-4">
-									<input  type="hidden" name="movieId" value="${movie.id}"/>
-					    		<input  type="hidden" name="commentId" value="${aComment.id}"/>
-					    		<input type="submit" value="Delete">
-			    			</form>
+						    		<input  type="hidden" name="commentId" value="${aComment.id}"/>
+						    		<input type="submit" value="Delete">
+			    				</form>
 							</c:if>
+
 							<c:if test="${! empty user }">
 								<c:if test="${! (user == aComment.user)}">
 									<c:set var="canRate" value="${true}"/>
+									<c:set var="canReport" value="${true}"/>
 									<c:forEach var="aCommentRating" items="${aComment.commentRatings}">
 										<c:if test= "${aCommentRating.user == user}">
 											<c:set var="canRate" value="${false}"/>
 										</c:if>
 									</c:forEach>
+									<c:if test= "${! empty aComment.reports}">
+										<c:forEach var="aReport" items="${aComment.reports}">
+											<c:if test= "${aReport.user == user}">
+												<c:set var="canReport" value="${false}"/>
+											</c:if>
+										</c:forEach>
+									</c:if>
+
 									<c:if test="${ canRate }">
 										<form action="../comments/rate", method="POST" class="col-md-4">
 							    		<input  type="hidden" name="commentId" value="${aComment.id}"/>
@@ -208,8 +220,15 @@
 												</c:forEach>
 											</select>
 							    		<input type="submit" value="Rate this comment">
-					    			</form>
-					    		</c:if>
+					    				</form>
+					    			</c:if>
+									<c:if test="${ canReport }">
+										<form action="../comments/report", method="POST" class="col-md-4">
+							    		<input  type="hidden" name="commentId" value="${aComment.id}"/>
+							    		<input type="submit" value="Report this comment">
+					    				</form>
+									</c:if>
+
 								</c:if>
 							</c:if>
 						</c:forEach>

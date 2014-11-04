@@ -95,3 +95,25 @@ CREATE TABLE prize
 WITH (
   OIDS=FALSE
 );
+
+CREATE TABLE report
+(
+  id serial NOT NULL,
+  comment_id int4 NOT NULL references comment (id),
+  user_id int4 NOT NULL references users (id),
+  CONSTRAINT pk_report PRIMARY KEY (id),
+  CONSTRAINT uq_report UNIQUE (comment_id, user_id)
+)
+WITH (
+  OIDS=FALSE
+);
+
+CREATE TABLE users_of_interest
+(
+  user_id int4 NOT NULL references users (id),
+  user_of_interest_id int4 NOT NULL references users (id),
+  CONSTRAINT pk_user_of_interest PRIMARY KEY (user_id, user_of_interest_id)
+)
+WITH (
+  OIDS=FALSE
+);
