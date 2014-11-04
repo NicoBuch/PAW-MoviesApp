@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.web;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -14,7 +15,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -39,9 +39,11 @@ public class MovieController {
 	private MovieFormValidator validator;
 	private final int TOP_RANKED_CANT = 5;
 	private final int MOST_RECENT_CANT = 5;
+	private final int DEFAULT_BUFFER_SIZE = 102400;
 
 	@Autowired
-	public MovieController(MovieRepo movies, GenreRepo genres, MovieFormValidator validator, CommentRepo comments, PrizeRepo prices) {
+	public MovieController(MovieRepo movies, GenreRepo genres,
+			MovieFormValidator validator, CommentRepo comments, PrizeRepo prices) {
 		this.movies = movies;
 		this.genres = genres;
 		this.prices = prices;
@@ -115,7 +117,7 @@ public class MovieController {
 		mav.setViewName("movie/edit");
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView edit(
 			@RequestParam(value = "id", required = true) Movie movie,
@@ -129,30 +131,27 @@ public class MovieController {
 		mav.addObject("genresList", genres.getAll());
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView edit(
-			MovieForm movieForm, Errors errors,
+	public ModelAndView edit(MovieForm movieForm, Errors errors,
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
-		
+
 		if (user == null || !user.isAdmin()) {
 			throw new Exception();
 		}
 		validator.validate(movieForm, errors);
-		if(errors.hasErrors()){
+		if (errors.hasErrors()) {
 			return null;
 		}
 		if (movieForm.isNew()) {
 			movies.save(movieForm.build());
-		}
-		else{
+		} else {
 			Movie oldMovie = movies.get(movieForm.getId());
 			movieForm.update(oldMovie);
 		}
 		return set_empty_list();
 	}
-
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView delete(
@@ -165,39 +164,39 @@ public class MovieController {
 		movies.delete(movie);
 		return set_empty_list();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView addPrize(
 			@RequestParam(value = "movieId", required = true) Movie movie,
 			@RequestParam(value = "name", required = true) String name,
-			@RequestParam(value= "prize", required = false) boolean prize,
+			@RequestParam(value = "prize", required = false) boolean prize,
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
 			throw new Exception();
 		}
-		
+
 		prices.save(new Prize(movie, name, prize));
 		return set_empty_list();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView deletePrize(
-			@RequestParam(value= "prizeId", required = false) Prize prize,
+			@RequestParam(value = "prizeId", required = false) Prize prize,
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
 			throw new Exception();
 		}
-		
+
 		prices.delete(prize);
 		return set_empty_list();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView setPicture(
 			@RequestParam(value = "movieId", required = true) Movie movie,
-			@RequestParam(value="pic", required= true) MultipartFile pic,
+			@RequestParam(value = "pic", required = true) MultipartFile pic,
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
@@ -206,24 +205,35 @@ public class MovieController {
 		movie.setPicture(pic.getBytes());
 		return set_empty_list();
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
-	public @ResponseBody byte[] showPicture(@RequestParam(value="movieId", required= true)Movie movie, HttpServletResponse response) throws IOException {
-		response.setContentType("image/jpeg");
-		response.getOutputStream().write(movie.getPicture());
-		return movie.getPicture();
+	public void showPicture(
+			@RequestParam(value = "movieId", required = true) Movie movie,
+			HttpServletResponse resp) throws IOException {
+		OutputStream os = null;
+		try {
+			resp.reset();
+			resp.setBufferSize(DEFAULT_BUFFER_SIZE);
+			resp.setContentType("image/jpeg");
+			resp.setContentLength(movie.getPicture().length);
+			os = resp.getOutputStream();
+			os.write(movie.getPicture());
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			os.flush();
+		}
 	}
-		
-	private ModelAndView set_empty_list(){
+
+	private ModelAndView set_empty_list() {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("movies", movies.getAll());
 		mav.addObject("genres", genres.getAll());
 		mav.setViewName("movie/list");
 		return mav;
 	}
-	
-}
 
+}
 
 // [ANDY] Como muestro la foto una vez que la tengo guardada?
 // [Pendiente: ver porque no anda bien el checkbox (quedan todos seleccionados)]
