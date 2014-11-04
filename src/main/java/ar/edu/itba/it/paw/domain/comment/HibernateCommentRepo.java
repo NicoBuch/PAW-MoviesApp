@@ -59,10 +59,9 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 
 	@Override
 	public void rate(CommentRating commentRating) {
-		super.save(commentRating);		
+		super.save(commentRating);
 	}
-	
-	
+
 	public void report(Report report){
 		super.save(report);
 	}
@@ -76,8 +75,9 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 						"select c from Comment c join c.reports reports "
 					  + "group by c "
 					  + "order by count(reports) desc");
-				
+
 		List<Report> list = query.list();
 		return list;
 	}
+
 }
