@@ -137,7 +137,9 @@ public class MovieController {
 		}
 		validator.validate(movieForm, errors);
 		if(errors.hasErrors()){
-			return null;
+			ModelAndView mav = new ModelAndView();
+			mav.addObject("genresList", genres.getAll());
+			return mav;
 		}
 		if (movieForm.isNew()) {
 			movies.save(movieForm.build());

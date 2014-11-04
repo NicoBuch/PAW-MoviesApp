@@ -10,9 +10,9 @@ public class SignUpForm {
 	String lastName;
 	String email;
 	//Birth Date
-	String birthDay;
-	String birthMonth;
-	String birthYear;
+	int birthDay;
+	int birthMonth;
+	int birthYear;
 	/////////////
 	String password;
 	String confirmPassword;
@@ -24,29 +24,14 @@ public class SignUpForm {
 
 	}
 
-	public SignUpForm(String firstName, String lastName, String email,
-			String birthDay, String birthMonth, String birthYear, String password,
-			String confirmPassword, String secretQuestion, String secretAnswer) {
-
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.birthDay = birthDay;
-		this.birthMonth = birthMonth;
-		this.birthYear = birthYear;
-		this.password = password;
-		this.confirmPassword = confirmPassword;
-		this.secretQuestion = secretQuestion;
-		this.secretAnswer = secretAnswer;
-	}
-
+	
 	public User build(){
 		return new User( email, confirmPassword, firstName, lastName, getBirthDate(), secretQuestion, secretAnswer, false);
 	}
 
 	public Date getBirthDate(){
-		String releaseDate = birthYear + "-" + birthMonth + "-" + birthDay;
-		return Date.valueOf(releaseDate);
+		String birthDate = birthYear + "-" + birthMonth + "-" + birthDay;
+		return Date.valueOf(birthDate);
 	}
 
 	public String getFirstName() {
@@ -73,27 +58,27 @@ public class SignUpForm {
 		this.email = email;
 	}
 
-	public String getBirthDay() {
+	public int getBirthDay() {
 		return birthDay;
 	}
 
-	public void setBirthDay(String birthDay) {
+	public void setBirthDay(int birthDay) {
 		this.birthDay = birthDay;
 	}
 
-	public String getBirthMonth() {
+	public int getBirthMonth() {
 		return birthMonth;
 	}
 
-	public void setBirthMonth(String birthMonth) {
+	public void setBirthMonth(int birthMonth) {
 		this.birthMonth = birthMonth;
 	}
 
-	public String getBirthYear() {
+	public int getBirthYear() {
 		return birthYear;
 	}
 
-	public void setBirthYear(String birthYear) {
+	public void setBirthYear(int birthYear) {
 		this.birthYear = birthYear;
 	}
 

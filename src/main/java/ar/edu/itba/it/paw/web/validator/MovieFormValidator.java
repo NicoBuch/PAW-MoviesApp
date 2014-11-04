@@ -1,7 +1,8 @@
 package ar.edu.itba.it.paw.web.validator;
 
-import java.sql.Date;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -16,35 +17,54 @@ public class MovieFormValidator implements Validator {
 		return MovieForm.class.equals(clazz);
 	}
 
-	@SuppressWarnings("deprecation")
+
 	@Override
 	public void validate(Object target, Errors errors) {
-		MovieForm obj = (MovieForm) target;
-		if (errors.getFieldErrorCount("title") == 0 && obj.getTitle().isEmpty()) {
-			errors.rejectValue("title", "empty");
+		MovieForm form = (MovieForm) target;
+		
+		if (form.getTitle().isEmpty()) {
+			errors.rejectValue("title", "empty", "Title is a required field.");
+		}else if(form.getTitle().length() > 255){
+			errors.rejectValue("title", "tooLong", "Title is too long (Max 255).");
 		}
-		if (errors.getFieldErrorCount("releaseDay") == 0 && (obj.getReleaseDay()< 0 || obj.getReleaseDay() > 31) ){
-			errors.rejectValue("releaseDay", "invalid");
+		
+		if (form.getDirector().isEmpty()) {
+			errors.rejectValue("director", "empty", "Director is a required field.");
+		}else if(form.getDirector().length() > 255){
+			errors.rejectValue("director", "tooLong", "Director is too long (Max 255).");
 		}
-		if (errors.getFieldErrorCount("releaseMonth") == 0 && (obj.getReleaseMonth()< 0 || obj.getReleaseMonth() > 12) ){
-			errors.rejectValue("releaseMonth", "invalid");
+		
+		if (form.getReleaseDay() == 0 || form.getReleaseMonth() == 0 || form.getReleaseYear() == 0){
+			errors.rejectValue("releaseDay", "empty", "Release Date is incomplete.");
+		}else{
+			String birthDate = form.getReleaseYear() + "-" + form.getReleaseMonth() + "-" + form.getReleaseDay();			
+			if(! isValidDate(birthDate)){
+				errors.rejectValue("releaseDay", "invalid", "Release Date is invalid.");
+			}
 		}
-		int actualYear = new Date(System.currentTimeMillis()).getYear() + 1900; 
-		if (errors.getFieldErrorCount("releaseYear") == 0 && (obj.getReleaseYear()< 1930 || obj.getReleaseYear() > actualYear) ){
-			errors.rejectValue("releaseYear", "invalid");
+				
+		if (form.getDescription().isEmpty()) {
+			errors.rejectValue("description", "empty", "Description is a required field.");
 		}
-		if (errors.getFieldErrorCount("director") == 0 && obj.getDirector().isEmpty()) {
-			errors.rejectValue("director", "empty");
+		
+		if (form.getMinutes() <= 0 || form.getMinutes() == 0) {
+			errors.rejectValue("minutes", "invalid", "Duration is invalid.");
 		}
-		if (errors.getFieldErrorCount("description") == 0 && obj.getDescription().isEmpty()) {
-			errors.rejectValue("description", "empty");
-		}
-		if (errors.getFieldErrorCount("minutes") == 0 && obj.getMinutes() <= 0) {
-			errors.rejectValue("minutes", "negative");
-		}
-		if(errors.getFieldErrorCount("genres") == 0 && obj.getGenres().size() <= 0){
-			errors.rejectValue("genres", "empty");
+		if(form.getGenres() == null || form.getGenres().size() <= 0){
+			errors.rejectValue("genres", "empty", "Please select a genre.");
 		}
 
+	}
+	
+
+	public static boolean isValidDate(String inDate) {
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    dateFormat.setLenient(false);
+	    try {
+	      dateFormat.parse(inDate.trim());
+	    } catch (ParseException pe) {
+	      return false;
+	    }
+	    return true;
 	}
 }

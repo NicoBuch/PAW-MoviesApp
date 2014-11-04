@@ -45,14 +45,14 @@ public class SignUpFormValidator implements Validator{
 			errors.rejectValue("email", "invalid", "The email is invalid.");
 		}
 		
-		if (form.getBirthDay().isEmpty() || form.getBirthMonth().isEmpty() || form.getBirthYear().isEmpty()){
-			errors.rejectValue("birthDate", "empty", "Birth Date is incomplete.");
+		if (form.getBirthDay() == 0 || form.getBirthMonth() == 0 || form.getBirthYear() == 0){
+			errors.rejectValue("birthDay", "empty", "Birth Date is incomplete.");
 		}else{
-			String birthDate = form.getBirthYear() + '-' + form.getBirthMonth() + '-' + form.getBirthDay();			
+			String birthDate = form.getBirthYear() + "-" + form.getBirthMonth() + "-" + form.getBirthDay();			
 			if(! isValidDate(birthDate)){
-				errors.rejectValue("birthDate", "invalid", "Birth Date is invalid.");
+				errors.rejectValue("birthDay", "invalid", "Birth Date is invalid.");
 			}else if(Date.valueOf(birthDate).after(new Date(System.currentTimeMillis()))){
-				errors.rejectValue("birthDate", "invalid", "Birth Date is invalid.");
+				errors.rejectValue("birthDay", "invalid", "Birth Date is invalid.");
 			}
 		}
 		

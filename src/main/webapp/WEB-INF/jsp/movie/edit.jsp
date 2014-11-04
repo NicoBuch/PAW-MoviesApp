@@ -99,7 +99,7 @@
 
           <div class="col-md-8 col-md-offset-2">
             <button class="btn btn-primary btn-block" type="submit">Save</button>
-            <a class="btn btn-default btn-block" href="/MoviesApp">Cancel</a>
+            <a class="btn btn-default btn-block" href="../movie/index">Cancel</a>
           </div>
 
         </fieldset>
