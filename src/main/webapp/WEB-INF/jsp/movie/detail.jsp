@@ -148,8 +148,11 @@
 						</div>
 
 						<div class="col-xs-12">
-							<div class="form-group">
+							<div class="form-group <c:if test='${emptyComment}'>has-error</c:if>">
 								<label class="control-label" for='body'>Comment</label>
+								<c:if test='${emptyComment}'>
+									<br><label class="control-label" for='body'>It can not be empty</label>
+								</c:if>
 								<textarea class="form-control" name='body' rows="6" cols="60"></textarea>
 							</div>
 						</div>

@@ -66,6 +66,11 @@ public class CommentsController {
 			HttpServletRequest req) throws Exception,
 			NoMoreThanOneCommentPerUserPerMovieException,
 			CantCommentBeforeMoviesReleaseDateException {
+		if(body.isEmpty()){
+			ModelAndView mav = new ModelAndView();
+			mav.addObject("emptyComment", true);
+			return set_detail(mav, movie, true);
+		}
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.canComment(movie)) {
 			throw new Exception();
@@ -117,6 +122,10 @@ public class CommentsController {
 	
 	private ModelAndView set_detail(Movie movie, boolean canComment){
 		ModelAndView mav = new ModelAndView();
+		return set_detail(mav, movie, canComment);
+	}
+	
+	private ModelAndView set_detail(ModelAndView mav, Movie movie, boolean canComment){
 		mav.addObject("movie", movie);
 		Iterable<Comment> commentList = comments.getByMovie(movie);
 		mav.addObject("comments", commentList);
