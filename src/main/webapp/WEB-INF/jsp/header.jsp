@@ -47,6 +47,9 @@
 					    <c:if test='${not empty user && user.email!=""}'>
 							<li><a href="../user/list">List Users</a></li>
 						</c:if>
+						<c:if test='${not empty user && user.email!="" && user.admin == true}'>
+							<li><a href="../comments/list">Reports</a></li>
+						</c:if>
 					</ul>
 				    <ul class="nav navbar-nav navbar-right">
 				    	<c:choose>
