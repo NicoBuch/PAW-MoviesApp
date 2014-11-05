@@ -3,99 +3,88 @@
 
 	<div class="page-header">
 		<div class="col-md-8">
-		<h2>Movie Detail
-			<br>
-			<small>${movie.title}</small>
-		</h2>
+			<h2>Movie Detail
+				<br>
+				<small>${movie.title}</small>
+			</h2>
 		</div>
-		<div class="col-md-4">
+	</div>
+
+	<div class="col-md-12">
+		<div class="col-md-6">
+			<p class="text-center">
+				<label><b>Director</b></label><br>${movie.director}<br>
+				<br>
+				<label><b>Genres</b></label><br>
+				<c:forEach var="aGenre" items="${movie.genres}">
+					- ${aGenre.name} -
+				</c:forEach>
+				<br><br>			
+				<label><b>Release Date</b></label><br>${movie.releaseDate}<br>
+				<br>
+				<label><b>Duration</b></label><br>${movie.minutes} minutes.<br>
+				<br>		
+				<label><b>Prizes</b></label><br>
+				<c:choose>
+					<c:when test="${!empty movie.prices}">
+						<c:forEach var="aPrice" items="${movie.prices}">
+							<div>
+								${aPrice.name}
+								<c:if test="${user.admin}">
+									<form action="../movie/deletePrize", method="POST" class="col-md-4">
+										<input  type="hidden" name="prizeId" value="${aPrize.id}"/>
+						    			<input type="submit" value="Delete">
+					  				</form>
+					  			</c:if>
+				  			</div>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						None
+					</c:otherwise>
+				</c:choose>
+				<br><br>
+				<label><b>Nominations</b></label><br>
+				<c:choose>
+					<c:when test="${!empty movie.nominations}">
+						<c:forEach var="aNomination" items="${movie.nominations}">
+							${aNomination.name}
+							<c:if test="${user.admin}">
+								<form action="../movie/deletePrize", method="POST" class="col-md-4">
+									<input  type="hidden" name="prizeId" value="${aNomination.id}"/>
+					    			<input type="submit" value="Delete">
+				  				</form>
+				  			</c:if>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						None
+					</c:otherwise>
+				</c:choose>
+			</p>
+		</div>
+
+		<div class="col-md-6">
 			<c:choose>
-	  		<c:when test="${movie.picture == null}">
-	  			<c:if test="${user.admin}">
-	  				<form action="setPicture" method="POST" enctype="multipart/form-data">
-	  					<input type="hidden" name="movieId" value="${movie.id}" required>
-	  					<input type="file" name="pic" required>
-	  					<br>
-							<input type="submit" value="Add Picture">
-						</form>
-					</c:if>
-	  		</c:when>
-			  <c:otherwise>
-			  	<img src="/MoviesApp/bin/movie/showPicture?movieId=${movie.id}"/>
-			  	<c:if test="${user.admin}">
-			  		<form action="setPicture" method="POST" enctype="multipart/form-data">
-			  			<input type="hidden" name="movieId" value="${movie.id}" required>
-	  					<input type="file" name="pic" required>
-							<input type="submit" value="Edit Picture">
-						</form>
+		  		<c:when test="${movie.picture == null}">
+		  			<img src="http://www.jordans.com/~/media/Jordans%20Redesign/No-image-found.jpg" class="img-responsive" />
+		  		</c:when>
+				<c:otherwise>
+					<img src="/MoviesApp/bin/movie/showPicture?movieId=${movie.id}" class="img-responsive" />
+				  	<c:if test="${user.admin}">
 						<form action="setPicture" method="POST" enctype="multipart/form-data">
 							<input type="hidden" name="movieId" value="${movie.id}" required>
-	  					<input type="hidden" value="null" name="pic" required>
-							<input type="submit" value="Delete Picture">
+		  					<input type="hidden" value="null" name="pic" required>
+							<input type="submit" class="btn btn-danger btn-sm" value="Delete">
 						</form>
 					</c:if>
-	  		</c:otherwise>
+		  		</c:otherwise>
 			</c:choose>
 		</div>
-	</div>
 
-	<div class="col-md-5 col-md-offset-0">
-		<p class="text-center">
-			<label><b>Director</b></label><br>${movie.director}<br>
-			<br>
-			<label><b>Genres</b></label>
-			<c:forEach var="aGenre" items="${movie.genres}">
-				<br>${aGenre.name}<br>
-			</c:forEach>
-			<br>
-		</p>
-	</div>
-	<div class="col-md-5 col-md-offset-2">
-		<p class="text-center">
-			<label><b>Release Date</b></label><br>${movie.releaseDate}<br>
-			<br>
-			<label><b>Duration:</b></label><br>${movie.minutes} minutes.<br>
-			<br>
-		</p>
 
 	</div>
 
-
-	<div class="col-md-5 col-md-offset-2">
-		<c:if test="${!empty movie.prices}">
-			<p class="text-center">
-				<label><b>Prices:</b></label><br>
-			</p>
-				<c:forEach var="aPrice" items="${movie.prices}">
-					<div>
-						${aPrice.name}
-						<c:if test="${user.admin}">
-							<form action="../movie/deletePrize", method="POST" class="col-md-4">
-								<input  type="hidden" name="prizeId" value="${aPrize.id}"/>
-				    		<input type="submit" value="Delete">
-			  			</form>
-			  		</c:if>
-		  		</div>
-					<br>
-				</c:forEach>
-		</c:if>
-		<c:if test="${!empty movie.nominations}">
-			<br>
-			<label><b>Nominations:</b></label><br>
-			<c:forEach var="aNomination" items="${movie.nominations}">
-				${aNomination.name}
-				<c:if test="${user.admin}">
-					<form action="../movie/deletePrize", method="POST" class="col-md-4">
-						<input  type="hidden" name="prizeId" value="${aNomination.id}"/>
-		    		<input type="submit" value="Delete">
-	  			</form>
-	  		</c:if>
-				<br>
-			</c:forEach>
-			<br>
-		</c:if>
-		</p>
-	</div>
 
 	<div class="col-md-6 col-md-offset-3">
 		<div class="well">
@@ -106,23 +95,44 @@
 		</div>
 	</div>
 
-	<div class="col-md-10 col-md-offset-1"/>
 
-	<c:if test= "${ user.admin }">
-		<div>
-			<br>
-			<h4><strong>Add a new prize or nomination</strong></h4>
-			<form action="addPrize" method="POST">
-		  	<input type="hidden" name="movieId" value="${movie.id}" required>
-		  	Name:
-		  	<input type="text" name="name" required><br>
-		  	<label><input type="checkbox" name="prize">Checked for prize, Not checked for nomination</label>
-		  	<br>
-				<input type="submit" value="Add new Price or Nomination">
-				<br><br>
-			</form>
-		</div>
-	</c:if>
+	
+	<div class="col-md-10 col-md-offset-1">
+		<c:if test= "${ user.admin }">
+
+			<h3><strong>Admin Settings</strong></h3>
+			<div class="col-md-5">
+				<h4><strong>Prizes and Nominations</strong></h4>
+				<form action="addPrize" method="POST">
+				  	<input type="hidden" name="movieId" value="${movie.id}" required>
+				  	<div class='col-md-12'>
+				  		<input type="text" class="form-control" name="name" placeholder="Prize or Nomination name..."required>		
+				   	</div>
+				   	<div class='col-md-6'>
+				  		<label><input type="checkbox" class="pull-left" name="prize">Awarded</label>
+				  	</div>
+				  	<div class='col-md-5 pull-right'>
+				  		<input type="submit" class="pull-right btn btn-default btn-block" value="Add">
+				  	</div>
+				</form>
+			</div>
+
+			<div class="col-md-5 pull-right">
+				<h4><strong>Picture</strong></h4>
+				<form action="setPicture" method="POST" enctype="multipart/form-data">
+			  		<input type="hidden" name="movieId" value="${movie.id}" required>
+			  		<input type="file" name="pic" required>
+			  		<div class='col-md-5 pull-right'>
+						<input type="submit" class="btn btn-default btn-block" value="Upload">
+					</div>
+				</form>				
+			</div>
+
+		</c:if>
+
+	</div>
+	<div class="col-md-10 col-md-offset-1"/>
+		<br><br>
 		<!-- Show CommentForm -->
 		<c:if test="${canComment}">
 

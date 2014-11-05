@@ -1,7 +1,7 @@
 <%@ include file="../header.jsp" %>
 
 	<div class="page-header">
-		<h2>Movie List
+		<h2>User List
 			<br>
 			<small>A complete list of all users</small>
 		</h2>

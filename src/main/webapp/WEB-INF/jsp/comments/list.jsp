@@ -1,4 +1,12 @@
 <%@ include file="../header.jsp" %>
+	
+	<div class="page-header">
+		<h2>Report List
+			<br>
+			<small>A complete list of reported comments</small>
+		</h2>
+	</div>
+	<br/>
 
 	<table class="table table-striped">
 		<thead>

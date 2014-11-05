@@ -6,35 +6,39 @@
 			<br>
 			<small>A complete list of all movies</small>
 		</h2>
-		<c:if test= "${user.admin}">
-			<div class="pull-right">
-	    	<form action="./create", method="GET">
-					<input type="submit" value="+ Create New Movie">
-				</form>
-			</div>
-		</c:if>
 	</div>
 	<br/>
 
-	<!-- Filter by genre Form -->
-	<div class="pull-right">
-		<form class="form-inline" name="filterByGenreForm" method='get'>
-			<label class="label-control">Genre: </label>
-			<select class="form-control input-sm" name='genre'>
-				<option value='empty' >Select genre...</option>
-				<c:forEach var="aGenre" items="${genres}">
-				   <option value='${aGenre.id}'>${aGenre.name}</option>
-			     </c:forEach>
-			</select>
-			<button class="btn btn-primary btn-sm" type="submit">Filter</button>
-		</form>
-	</div>
-	<div class="pull-left">
-		<form class="form-inline" name="filterByDirectorForm" method='get'>
-			<label class="label-control">Director:</label>
-			<input  type="text" name="director" class="form-control input-sm">
-			<button class="btn btn-primary btn-sm" type="submit">Filter</button>
-		</form>
+	
+	<c:if test= "${user.admin}">
+		<div class="col-md-2 col-md-offset-5">
+	    	<form action="./create", method="GET">
+				<input type="submit" class="btn btn-success btn-block" value="Add Movie">
+			</form>
+		</div>
+	</c:if>
+
+	<div class="col-md-12">
+		<!-- Filter by genre Form -->
+		<div class="pull-right">
+			<form class="form-inline" name="filterByGenreForm" method='get'>
+				<label class="label-control">Genre: </label>
+				<select class="form-control input-sm" name='genre'>
+					<option value='empty' >Select genre...</option>
+					<c:forEach var="aGenre" items="${genres}">
+					   <option value='${aGenre.id}'>${aGenre.name}</option>
+				     </c:forEach>
+				</select>
+				<button class="btn btn-primary btn-sm" type="submit">Filter</button>
+			</form>
+		</div>
+		<div class="pull-left">
+			<form class="form-inline" name="filterByDirectorForm" method='get'>
+				<label class="label-control">Director:</label>
+				<input  type="text" name="director" class="form-control input-sm">
+				<button class="btn btn-primary btn-sm" type="submit">Filter</button>
+			</form>
+		</div>
 	</div>
 
 
@@ -58,16 +62,16 @@
 		    	<td>${aMovie.director}</td>
 		    	<td>${aMovie.releaseDate}</td>
 		    	<c:if test="${user.admin}">
-		    	<td>
+		    	<td width="9%">
 			    	<form action="./edit">
 			    		<input  type="hidden" name="id" value="${aMovie.id}"/>
-			    		<input type="submit" value="Edit">
+			    		<input type="submit" class="btn btn-default btn-xs btn-block" value="Edit">
 			    	</form>
 		    	</td>
 		    	<td>
 			    	<form action="./delete", method="POST">
 			    		<input  type="hidden" name="id" value="${aMovie.id}"/>
-			    		<input type="submit" value="Delete">
+			    		<input type="submit" class="btn btn-danger btn-xs btn-block" value="Delete">
 			    	</form>
 			    </td>
 			    </c:if>
