@@ -35,4 +35,14 @@ public class Report extends PersistentEntity{
 	public User getUser(){
 		return user;
 	}
+
+	public void setUser(User user) {
+		this.user = user;
+		
+	}
+
+	public void setComment(Comment comment) {
+		this.comment = comment;
+		
+	}
 }

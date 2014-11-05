@@ -18,14 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.itba.it.paw.domain.comment.Comment;
-import ar.edu.itba.it.paw.domain.comment.CommentRepo;
 import ar.edu.itba.it.paw.domain.genre.Genre;
 import ar.edu.itba.it.paw.domain.genre.GenreRepo;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.movie.MovieRepo;
 import ar.edu.itba.it.paw.domain.prize.Prize;
-import ar.edu.itba.it.paw.domain.prize.PrizeRepo;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.web.command.MovieForm;
 import ar.edu.itba.it.paw.web.validator.MovieFormValidator;
@@ -34,8 +31,6 @@ import ar.edu.itba.it.paw.web.validator.MovieFormValidator;
 public class MovieController {
 	private MovieRepo movies;
 	private GenreRepo genres;
-	private PrizeRepo prices;
-	private CommentRepo comments;
 	private MovieFormValidator validator;
 	private final int TOP_RANKED_CANT = 5;
 	private final int MOST_RECENT_CANT = 5;
@@ -43,12 +38,10 @@ public class MovieController {
 
 	@Autowired
 	public MovieController(MovieRepo movies, GenreRepo genres,
-			MovieFormValidator validator, CommentRepo comments, PrizeRepo prices) {
+			MovieFormValidator validator) {
 		this.movies = movies;
 		this.genres = genres;
-		this.prices = prices;
 		this.validator = validator;
-		this.comments = comments;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -76,8 +69,6 @@ public class MovieController {
 			HttpServletRequest req) {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("movie", movie);
-		List<Comment> commentList = comments.getByMovie(movie);
-		mav.addObject("comments", commentList);
 		User user = (User) req.getAttribute("user");
 		if (user != null && user.canComment(movie)) {
 			mav.addObject("canComment", true);
@@ -175,8 +166,8 @@ public class MovieController {
 		if (user == null || !user.isAdmin()) {
 			throw new Exception();
 		}
-
-		prices.save(new Prize(movie, name, prize));
+		Prize newPrize = new Prize(movie, name, prize);
+		movie.addPrize(newPrize);
 		return set_empty_list();
 	}
 
@@ -188,8 +179,8 @@ public class MovieController {
 		if (user == null || !user.isAdmin()) {
 			throw new Exception();
 		}
-
-		prices.delete(prize);
+		Movie movie = prize.getMovie();
+		movie.removePrice(prize);
 		return set_empty_list();
 	}
 
@@ -237,5 +228,3 @@ public class MovieController {
 
 // [ANDY] Como muestro la foto una vez que la tengo guardada?
 // [Pendiente: ver porque no anda bien el checkbox (quedan todos seleccionados)]
-// [Pendiente: mejorar el manejo de errores y la deteccion de errores (validator) en los forms]
-// [Andy : Como hacer para poner el rate y el report en el modelo en vez del repo]
