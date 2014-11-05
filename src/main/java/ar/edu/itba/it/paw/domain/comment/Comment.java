@@ -16,7 +16,7 @@ import ar.edu.itba.it.paw.domain.report.Report;
 import ar.edu.itba.it.paw.domain.user.User;
 
 @Entity
-public class Comment extends PersistentEntity{
+public class Comment extends PersistentEntity implements Comparable<Comment>{
 	
 	private String body;
 	private Date creationDate;
@@ -78,8 +78,14 @@ public class Comment extends PersistentEntity{
 	public Movie getMovie() {
 		return movie;
 	}
+	public void setMovie(Movie movie){
+		this.movie = movie;
+	}
 	public User getUser() {
 		return user;
+	}
+	public void setUser(User u){
+		this.user = u;
 	}
 	public List<Report> getReports(){
 		return reports;
@@ -93,4 +99,50 @@ public class Comment extends PersistentEntity{
 		commentRatings.add(new CommentRating(user, this, rating));
 	}
 	
+	 public int compareTo(Comment comment) {
+		int compare = this.getAvgCommentRatings().compareTo(comment.getAvgCommentRatings());
+		if (compare == 0){
+			return 1;
+		}
+		return -compare;
+	 }
+
+	public Double getAvgCommentRatings(){
+		if(commentRatings == null || commentRatings.size() == 0){
+			return Double.valueOf(0);
+		}
+		int sum = 0;
+		for(CommentRating cr : commentRatings){
+			sum += cr.getRating();
+		}
+		return Double.valueOf(sum/commentRatings.size());
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		return true;
+	}
+
+	public void rate(CommentRating commentRating) {
+		commentRatings.add(commentRating);
+		commentRating.setComment(this);
+	}
+
+	public void addReport(Report report) {
+		reports.add(report);
+		report.setComment(this);
+		
+	}
+
+	public void cleanReports() {
+		reports.clear();		
+	}
+	
+
 }

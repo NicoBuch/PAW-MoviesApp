@@ -15,7 +15,6 @@ import ar.edu.itba.it.paw.domain.comment.CommentRepo;
 import ar.edu.itba.it.paw.domain.commentRating.CommentRating;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.report.Report;
-import ar.edu.itba.it.paw.domain.report.ReportRepo;
 import ar.edu.itba.it.paw.domain.user.NoMoreThanOneCommentPerUserPerMovieException;
 import ar.edu.itba.it.paw.domain.user.User;
 
@@ -23,12 +22,10 @@ import ar.edu.itba.it.paw.domain.user.User;
 public class CommentsController {
 
 	private CommentRepo comments;
-	private ReportRepo reports;
 
 	@Autowired
-	public CommentsController(CommentRepo comments, ReportRepo reports) {
+	public CommentsController(CommentRepo comments) {
 		this.comments = comments;
-		this.reports = reports;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -51,7 +48,7 @@ public class CommentsController {
 		if (user == null || !user.isAdmin()) {
 			throw new Exception();
 		}
-		reports.deleteByComment(comment);
+		comment.cleanReports();
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("comments/list");
 		return mav;
@@ -77,7 +74,8 @@ public class CommentsController {
 		}
 		if(user.canComment(movie)){
 			Comment comment = new Comment(body, rating, movie, user);
-			comments.save(comment);
+			movie.addComment(comment);
+			user.addComment(comment);
 		}
 		return set_detail(movie, false);
 	}
@@ -91,7 +89,9 @@ public class CommentsController {
 		if(user == null){
 			throw new Exception();
 		}
-		comments.rate(new CommentRating(user, comment, rating));
+		CommentRating commentRating = new CommentRating(user, comment, rating);
+		user.rate(commentRating);
+		comment.rate(commentRating);
 		return set_detail(comment.getMovie(), user.canComment(comment.getMovie()));
 	}
 	
@@ -103,7 +103,9 @@ public class CommentsController {
 		if(user == null){
 			throw new Exception();
 		}
-		comments.report(new Report(user, comment));
+		Report report = new Report(user, comment);
+		user.report(report);
+		comment.addReport(report);
 		return set_detail(comment.getMovie(), user.canComment(comment.getMovie()));
 	}
 	
@@ -127,8 +129,6 @@ public class CommentsController {
 	
 	private ModelAndView set_detail(ModelAndView mav, Movie movie, boolean canComment){
 		mav.addObject("movie", movie);
-		Iterable<Comment> commentList = comments.getByMovie(movie);
-		mav.addObject("comments", commentList);
 		mav.addObject("canComment", canComment);
 		mav.setViewName("movie/detail");
 		return mav;
