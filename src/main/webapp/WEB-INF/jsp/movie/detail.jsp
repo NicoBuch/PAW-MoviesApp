@@ -187,61 +187,79 @@
 				  </div>
 				  <div class="panel-body">
 					    <c:forEach var="aComment" items="${movie.comments}">
-							<p class="col-md-8">
-								<span class="glyphicon glyphicon-chevron-right"></span> ${aComment.user.firstName} ${aComment.user.lastName} (${aComment.user.email}) said: <br>
-								<label><b>Rating:</b></label> ${aComment.rating}
-								<c:choose>
-							    <c:when test="${aComment.rating=='1'}"> star.</c:when>
-						      <c:otherwise> stars.</c:otherwise>
-								</c:choose>
-								<br/>
-								<i>"${aComment.body}"</i>
-								<p>This Comment has ${aComment.avgCommentRatings} average rating.
-							</p>
-							<c:if test= "${user.admin}">
-								<form action="../comments/delete", method="POST" class="col-md-4">
-						    		<input  type="hidden" name="commentId" value="${aComment.id}"/>
-						    		<input type="submit" value="Delete">
-			    				</form>
-							</c:if>
+							<div class="col-md-12"> 
+								<p>
+									<span class="glyphicon glyphicon-chevron-right"></span> ${aComment.user.firstName} ${aComment.user.lastName} (${aComment.user.email}) said: <br>
+									<label><b>Rating:</b></label> ${aComment.rating}
+									<c:choose>
+									    <c:when test="${aComment.rating=='1'}"> star.</c:when>
+								      	<c:otherwise> stars.</c:otherwise>
+									</c:choose>
+									<br/>
+									<i>"${aComment.body}"</i>
+									<p class="pull-right">This comment has ${aComment.avgCommentRatings} average rating.</p>
+								</p>
+							</div>
+							
+							<div class="col-md-12">
+								<c:if test="${! empty user }">
+									<!-- User Settings -->
+									<div class="col-md-8">
+										<c:if test="${! (user == aComment.user)}">
+											<c:set var="canRate" value="${true}"/>
+											<c:set var="canReport" value="${true}"/>
+											<c:forEach var="aCommentRating" items="${aComment.commentRatings}">
+												<c:if test= "${aCommentRating.user == user}">
+													<c:set var="canRate" value="${false}"/>
+												</c:if>
+											</c:forEach>
 
-							<c:if test="${! empty user }">
-								<c:if test="${! (user == aComment.user)}">
-									<c:set var="canRate" value="${true}"/>
-									<c:set var="canReport" value="${true}"/>
-									<c:forEach var="aCommentRating" items="${aComment.commentRatings}">
-										<c:if test= "${aCommentRating.user == user}">
-											<c:set var="canRate" value="${false}"/>
-										</c:if>
-									</c:forEach>
-									<c:if test= "${! empty aComment.reports}">
-										<c:forEach var="aReport" items="${aComment.reports}">
-											<c:if test= "${aReport.user == user}">
-												<c:set var="canReport" value="${false}"/>
-											</c:if>
-										</c:forEach>
-									</c:if>
-
-									<c:if test="${ canRate }">
-										<form action="../comments/rate", method="POST" class="col-md-4">
-							    		<input  type="hidden" name="commentId" value="${aComment.id}"/>
-							    		<select class="form-control" name='rating'>
-												<c:forEach var="i" begin="0" end="5">
-										   		<option value='${i}'>${i}</option>
+											<c:if test= "${! empty aComment.reports}">
+												<c:forEach var="aReport" items="${aComment.reports}">
+													<c:if test= "${aReport.user == user}">
+														<c:set var="canReport" value="${false}"/>
+													</c:if>
 												</c:forEach>
-											</select>
-							    		<input type="submit" value="Rate this comment">
-					    				</form>
-					    			</c:if>
-									<c:if test="${ canReport }">
-										<form action="../comments/report", method="POST" class="col-md-4">
-							    		<input  type="hidden" name="commentId" value="${aComment.id}"/>
-							    		<input type="submit" value="Report this comment">
-					    				</form>
-									</c:if>
+											</c:if>
 
+											<c:if test="${ canRate }">
+												<form action="../comments/rate", method="POST" class="form-inline"> 
+									    			<input  type="hidden" name="commentId" value="${aComment.id}"/>
+									    			<select class="form-control input-sm" name='rating'>
+														<c:forEach var="i" begin="0" end="5">
+												   			<option value='${i}'>${i}</option>
+														</c:forEach>
+													</select>
+									    			<input type="submit" class="btn btn-default btn-sm" value="Rate Comment">
+						    					</form>
+						    				</c:if>
+
+											
+										</c:if>
+								
+									</div>
+									<div class="col-md-3 pull-right">
+										<div class="col-md-6">
+											<c:if test="${ canReport }">
+												<form action="../comments/report", method="POST">
+										    		<input  type="hidden" name="commentId" value="${aComment.id}"/>
+										    		<input type="submit" class="btn btn-warning btn-xs btn-block"  value="Report">
+							    				</form>
+											</c:if>
+										</div>
+										<div class="col-md-6 pull-right">
+											<c:if test= "${user.admin}">
+												<form action="../comments/delete", method="POST">
+								    				<input  type="hidden" name="commentId" value="${aComment.id}"/>
+								    				<input type="submit" class="btn btn-danger btn-xs btn-block" value="Delete">
+					    						</form>
+											</c:if>
+										</div>
+									</div>	
 								</c:if>
-							</c:if>
+								<br><br>
+							</div>
+						
 						</c:forEach>
 					</div>
 				</div>
