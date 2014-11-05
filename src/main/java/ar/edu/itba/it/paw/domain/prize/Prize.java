@@ -36,6 +36,11 @@ public class Prize extends PersistentEntity{
 	public boolean isPrize() {
 		return prize;
 	}
+
+	public void setMovie(Movie movie) {
+		this.movie = movie;
+		
+	}
 	
 	
 }

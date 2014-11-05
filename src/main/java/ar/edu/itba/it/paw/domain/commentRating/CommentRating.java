@@ -38,4 +38,17 @@ public class CommentRating extends PersistentEntity{
 		return user;
 	}
 	
+	public int getRating(){
+		return rating;
+	}
+
+	public void setUser(User user) {
+		this.user = user;		
+	}
+
+	public void setComment(Comment comment) {
+		this.comment = comment;
+		
+	}
+	
 }

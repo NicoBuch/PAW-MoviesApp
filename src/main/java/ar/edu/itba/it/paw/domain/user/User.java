@@ -2,6 +2,7 @@ package ar.edu.itba.it.paw.domain.user;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.SortedSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,6 +11,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 
 import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.comment.Comment;
@@ -36,7 +40,8 @@ public class User extends PersistentEntity {
 	private List<User> usersOfInterest;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Comment> comments;
+	@Sort(type = SortType.NATURAL)
+	private SortedSet<Comment> comments;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<CommentRating> commentRatings;
@@ -128,6 +133,14 @@ public class User extends PersistentEntity {
 	public void setUsersOfInterest(List<User> usersOfInterest) {
 		this.usersOfInterest = usersOfInterest;
 	}
+	
+	 public void setComments(SortedSet<Comment> comments) {
+		 this.comments = comments;
+	}
+	 public void addComment(Comment comment) {
+	  comment.setUser(this);
+	  this.comments.add(comment);
+	 }
 
 	@Override
 	public boolean equals(Object obj) {
@@ -145,7 +158,7 @@ public class User extends PersistentEntity {
 		return secretAnswer.equals(answer);
 	}
 
-	public List<Comment> getComments() {
+	public SortedSet<Comment> getComments() {
 		return comments;
 	}
 
@@ -189,8 +202,9 @@ public class User extends PersistentEntity {
 		return true;
 	}
 
-	public void rate(Comment comment, int rating) {
-		commentRatings.add(new CommentRating(this, comment, rating));
+	public void rate(CommentRating commentRating) {
+		commentRatings.add(commentRating);
+		commentRating.setUser(this);
 	}
 
 	public void addUserOfInterest(User user_of_interest) {
@@ -200,5 +214,11 @@ public class User extends PersistentEntity {
 	public void removeUserOfInterest(User user_of_interest) {
 		usersOfInterest.remove(user_of_interest);
 
+	}
+
+	public void report(Report report) {
+		reports.add(report);
+		report.setUser(this);
+		
 	}
 }

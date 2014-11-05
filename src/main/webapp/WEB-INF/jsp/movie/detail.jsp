@@ -169,14 +169,14 @@
 		</c:if>
 
 		<!-- Comments Table -->
-		<c:if test="${!empty comments}">
+		<c:if test="${!empty movie.comments}">
 
 				<div class="panel panel-default">
 				  <div class="panel-heading">
 				    <h3 class="panel-title">Comments</h3>
 				  </div>
 				  <div class="panel-body">
-					    <c:forEach var="aComment" items="${comments}">
+					    <c:forEach var="aComment" items="${movie.comments}">
 							<p class="col-md-8">
 								<span class="glyphicon glyphicon-chevron-right"></span> ${aComment.user.firstName} ${aComment.user.lastName} (${aComment.user.email}) said: <br>
 								<label><b>Rating:</b></label> ${aComment.rating}
@@ -186,6 +186,7 @@
 								</c:choose>
 								<br/>
 								<i>"${aComment.body}"</i>
+								<p>This Comment has ${aComment.avgCommentRatings} average rating.
 							</p>
 							<c:if test= "${user.admin}">
 								<form action="../comments/delete", method="POST" class="col-md-4">

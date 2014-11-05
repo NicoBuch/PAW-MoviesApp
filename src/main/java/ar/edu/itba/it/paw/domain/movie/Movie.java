@@ -3,11 +3,15 @@ package ar.edu.itba.it.paw.domain.movie;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 
 import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.comment.Comment;
@@ -34,9 +38,9 @@ public class Movie extends PersistentEntity {
 	private Date creationDate;
 	private byte[] picture;
 
-	
 	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL)
-	private List<Comment> comments;
+	@Sort(type = SortType.NATURAL)
+	private SortedSet<Comment> comments;
 
 	public Movie(){
 	}
@@ -118,9 +122,18 @@ public class Movie extends PersistentEntity {
 		return releaseDate.after(new Date(System.currentTimeMillis() - 604800000));
 	}
 
-	public List<Comment> getComments(){
+	public SortedSet<Comment> getComments(){
 		return comments;
 	}
+	
+	 public void setComments(SortedSet<Comment> comments) {
+		 this.comments = comments;
+	}
+	 public void addComment(Comment comment) {
+	  comment.setMovie(this);
+	  this.comments.add(comment);
+	 }
+
 
 	public int getCommentCount(){
 		return comments.size();
@@ -210,6 +223,15 @@ public class Movie extends PersistentEntity {
 			}
 		}
 		return list;
+	}
+
+	public void addPrize(Prize prize) {
+		prices.add(prize);
+		prize.setMovie(this);		
+	}
+
+	public void removePrice(Prize prize) {
+		this.prices.remove(prize);		
 	}
 
 

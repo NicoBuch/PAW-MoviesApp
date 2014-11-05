@@ -25,16 +25,4 @@ public class HibernatePrizeRepo extends AbstractHibernateRepo implements PrizeRe
 		}
 	}
 
-	@Override
-	public void delete(Prize prize) {
-		super.delete(prize);
-		
-	}
-	
-	@Override
-	public void save(Prize prize) {
-		super.save(prize);
-		
-	}
-
 }

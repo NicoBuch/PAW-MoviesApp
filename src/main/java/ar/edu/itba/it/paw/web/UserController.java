@@ -96,15 +96,13 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView sign_out(HttpServletRequest req,
+	public String sign_out(HttpServletRequest req,
 			HttpServletResponse resp) throws IOException {
 		HttpSession session = req.getSession();
 		if (session != null) {
 			session.invalidate();
 		}
-		ModelAndView mav = new ModelAndView();
-		resp.sendRedirect("../movie/index");
-		return mav;
+		return "redirect:../movie/index";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
