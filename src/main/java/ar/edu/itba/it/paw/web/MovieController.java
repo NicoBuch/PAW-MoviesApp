@@ -23,6 +23,7 @@ import ar.edu.itba.it.paw.domain.genre.GenreRepo;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.movie.MovieRepo;
 import ar.edu.itba.it.paw.domain.prize.Prize;
+import ar.edu.itba.it.paw.domain.user.NoAdminException;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.web.command.MovieForm;
 import ar.edu.itba.it.paw.web.validator.MovieFormValidator;
@@ -100,7 +101,7 @@ public class MovieController {
 	public ModelAndView create(HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
-			throw new Exception();
+			throw new NoAdminException();
 		}
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(new MovieForm());
@@ -115,7 +116,7 @@ public class MovieController {
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
-			throw new Exception();
+			throw new NoAdminException();
 		}
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(new MovieForm(movie));
@@ -129,7 +130,7 @@ public class MovieController {
 		User user = (User) req.getAttribute("user");
 
 		if (user == null || !user.isAdmin()) {
-			throw new Exception();
+			throw new NoAdminException();
 		}
 		validator.validate(movieForm, errors);
 
@@ -153,7 +154,7 @@ public class MovieController {
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
-			throw new Exception();
+			throw new NoAdminException();
 		}
 		movies.delete(movie);
 		return set_empty_list();
@@ -167,7 +168,7 @@ public class MovieController {
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
-			throw new Exception();
+			throw new NoAdminException();
 		}
 		Prize newPrize = new Prize(movie, name, prize);
 		movie.addPrize(newPrize);
@@ -180,7 +181,7 @@ public class MovieController {
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
-			throw new Exception();
+			throw new NoAdminException();
 		}
 		Movie movie = prize.getMovie();
 		movie.removePrice(prize);
@@ -194,9 +195,21 @@ public class MovieController {
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
-			throw new Exception();
+			throw new NoAdminException();
 		}
 		movie.setPicture(pic.getBytes());
+		return set_empty_list();
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView deletePicture(
+			@RequestParam(value = "movieId", required = true) Movie movie,
+			HttpServletRequest req) throws Exception {
+		User user = (User) req.getAttribute("user");
+		if (user == null || !user.isAdmin()) {
+			throw new NoAdminException();
+		}
+		movie.deletePicture();
 		return set_empty_list();
 	}
 

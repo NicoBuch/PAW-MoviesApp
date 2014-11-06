@@ -19,11 +19,11 @@
 				<c:forEach var="aGenre" items="${movie.genres}">
 					- ${aGenre.name} -
 				</c:forEach>
-				<br><br>			
+				<br><br>
 				<label><b>Release Date</b></label><br>${movie.releaseDate}<br>
 				<br>
 				<label><b>Duration</b></label><br>${movie.minutes} minutes.<br>
-				<br>		
+				<br>
 				<label><b>Prizes</b></label><br>
 				<c:choose>
 					<c:when test="${!empty movie.prices}">
@@ -72,9 +72,8 @@
 				<c:otherwise>
 					<img src="/MoviesApp/bin/movie/showPicture?movieId=${movie.id}" class="img-responsive" />
 				  	<c:if test="${user.admin}">
-						<form action="setPicture" method="POST" enctype="multipart/form-data">
+						<form action="deletePicture" method="POST" enctype="multipart/form-data">
 							<input type="hidden" name="movieId" value="${movie.id}" required>
-		  					<input type="hidden" value="null" name="pic" required>
 							<input type="submit" class="btn btn-danger btn-sm" value="Delete">
 						</form>
 					</c:if>
@@ -96,7 +95,7 @@
 	</div>
 
 
-	
+
 	<div class="col-md-10 col-md-offset-1">
 		<c:if test= "${ user.admin }">
 
@@ -106,7 +105,7 @@
 				<form action="addPrize" method="POST">
 				  	<input type="hidden" name="movieId" value="${movie.id}" required>
 				  	<div class='col-md-12'>
-				  		<input type="text" class="form-control" name="name" placeholder="Prize or Nomination name..."required>		
+				  		<input type="text" class="form-control" name="name" placeholder="Prize or Nomination name..."required>
 				   	</div>
 				   	<div class='col-md-6'>
 				  		<label><input type="checkbox" class="pull-left" name="prize">Awarded</label>
@@ -125,7 +124,7 @@
 			  		<div class='col-md-5 pull-right'>
 						<input type="submit" class="btn btn-default btn-block" value="Upload">
 					</div>
-				</form>				
+				</form>
 			</div>
 
 		</c:if>
