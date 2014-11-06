@@ -142,4 +142,9 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 		reports.clear();		
 	}
 
+	public void removeReport(Report r) {
+		this.reports.remove(r);
+		
+	}
+
 }

@@ -1,7 +1,7 @@
 package ar.edu.itba.it.paw.web;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -220,22 +220,23 @@ public class MovieController {
 	public void showPicture(
 			@RequestParam(value = "movieId", required = true) Movie movie,
 			HttpServletResponse resp) throws IOException {
-		OutputStream os = null;
+		BufferedOutputStream output = null;
 		try {
+			byte[] picture = movie.getPicture();
 			resp.reset();
 			resp.setBufferSize(DEFAULT_BUFFER_SIZE);
 			resp.setContentType("image/jpeg");
-			resp.setContentLength(movie.getPicture().length);
-			os = resp.getOutputStream();
-			os.write(movie.getPicture());
+			resp.setHeader("Content-Length", String.valueOf(picture.length));
+			output = new BufferedOutputStream(resp.getOutputStream(),
+					DEFAULT_BUFFER_SIZE);
+			output.write(picture, 0, picture.length);
 		} catch (IOException e) {
 			throw e;
 		} finally {
-			os.flush();
+			output.close();
 		}
 	}
-
+	
 }
 
 // [ANDY] Como muestro la foto una vez que la tengo guardada?
-// [Pendiente: ver porque no anda bien el checkbox (quedan todos seleccionados)]

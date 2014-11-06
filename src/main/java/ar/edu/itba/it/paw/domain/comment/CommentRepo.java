@@ -9,4 +9,5 @@ public interface CommentRepo{
 	public void delete(Comment comment);
 	public Comment get(int id) throws NoIdException;
 	public List<Report> getByReports();
+	public void cleanReports(Comment comment);
 }

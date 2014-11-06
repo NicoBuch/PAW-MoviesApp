@@ -49,7 +49,7 @@ public class CommentsController {
 		if (user == null || !user.isAdmin()) {
 			throw new NoAdminException();
 		}
-		comment.cleanReports();
+		comments.cleanReports(comment);
 		return "redirect:./list";
 	}
 
