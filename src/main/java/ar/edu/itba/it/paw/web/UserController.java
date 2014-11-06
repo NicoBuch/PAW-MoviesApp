@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.user.EmailNotFound;
-import ar.edu.itba.it.paw.domain.user.LoginFailedException;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.domain.user.UserRepo;
 import ar.edu.itba.it.paw.web.command.SignUpForm;

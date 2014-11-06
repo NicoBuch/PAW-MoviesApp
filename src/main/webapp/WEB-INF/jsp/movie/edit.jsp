@@ -70,7 +70,7 @@
                 <div class="col-xs-4">
                   <form:select class="form-control" path="releaseYear">
                     <form:option value='0' disabled='disabled' selected='selected'>Year</form:option>
-                    <c:forEach var="i" begin="1930" end="2014">
+                    <c:forEach var="i" begin="1930" end="2017">
                        <form:option value='${i}'>${i}</form:option>
                        </c:forEach>
                   </form:select>
@@ -109,7 +109,7 @@
 
           <div class="col-md-8 col-md-offset-2">
             <button class="btn btn-primary btn-block" type="submit">Save</button>
-            <a class="btn btn-default btn-block" href="../movie/index">Cancel</a>
+            <a class="btn btn-default btn-block" href="../movie/list">Cancel</a>
           </div>
 
         </fieldset>

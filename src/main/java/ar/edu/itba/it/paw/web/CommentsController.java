@@ -15,6 +15,7 @@ import ar.edu.itba.it.paw.domain.comment.CommentRepo;
 import ar.edu.itba.it.paw.domain.commentRating.CommentRating;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.report.Report;
+import ar.edu.itba.it.paw.domain.user.NoAdminException;
 import ar.edu.itba.it.paw.domain.user.NoMoreThanOneCommentPerUserPerMovieException;
 import ar.edu.itba.it.paw.domain.user.User;
 
@@ -34,7 +35,7 @@ public class CommentsController {
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
-			throw new Exception();
+			throw new NoAdminException();
 		}
 		Movie movie = comment.getMovie();
 		comments.delete(comment);
@@ -46,14 +47,14 @@ public class CommentsController {
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
-			throw new Exception();
+			throw new NoAdminException();
 		}
 		comment.cleanReports();
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("comments/list");
 		return mav;
 	}
-	
+
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView create(
@@ -79,7 +80,7 @@ public class CommentsController {
 		}
 		return set_detail(movie, false);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView rate(
 			@RequestParam(value = "commentId", required = true) Comment comment,
@@ -94,7 +95,7 @@ public class CommentsController {
 		comment.rate(commentRating);
 		return set_detail(comment.getMovie(), user.canComment(comment.getMovie()));
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView report(
 			@RequestParam( value = "commentId", required = true) Comment comment,
@@ -108,7 +109,7 @@ public class CommentsController {
 		comment.addReport(report);
 		return set_detail(comment.getMovie(), user.canComment(comment.getMovie()));
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView list(
 			HttpServletRequest req) throws Exception{
@@ -121,18 +122,18 @@ public class CommentsController {
 		mav.addObject("comments", reports);
 		return mav;
 	}
-	
+
 	private ModelAndView set_detail(Movie movie, boolean canComment){
 		ModelAndView mav = new ModelAndView();
 		return set_detail(mav, movie, canComment);
 	}
-	
+
 	private ModelAndView set_detail(ModelAndView mav, Movie movie, boolean canComment){
 		mav.addObject("movie", movie);
 		mav.addObject("canComment", canComment);
 		mav.setViewName("movie/detail");
 		return mav;
 	}
-	
+
 
 }
