@@ -243,7 +243,9 @@
 
 
 										</c:if>
-
+									<c:if test="${(user == aComment.user)}">
+										<c:set var="canReport" value="${false}"/>>
+									</c:if>
 									</div>
 									<div class="col-md-3 pull-right">
 										<div class="col-md-6">
