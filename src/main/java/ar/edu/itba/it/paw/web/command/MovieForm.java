@@ -1,8 +1,8 @@
 package ar.edu.itba.it.paw.web.command;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import ar.edu.itba.it.paw.domain.genre.Genre;
 import ar.edu.itba.it.paw.domain.movie.Movie;
@@ -16,7 +16,7 @@ public class MovieForm {
 	private String director;
 	private int minutes;
 	private String description;
-	private List<Genre> genres = new ArrayList<Genre>();
+	private Set<Genre> genres = new HashSet<Genre>();
 	private int id;
 
 	public MovieForm(){
@@ -32,15 +32,8 @@ public class MovieForm {
 		this.director = movie.getDirector();
 		this.minutes = movie.getMinutes();
 		this.description = movie.getDescription();
+		this.genres = movie.getGenres();
 		this.id = movie.getId();
-		for(Genre g : movie.getGenres()){
-			this.genres.add(g);
-		}
-//		List<Genre> genresList = movie.getGenres();
-//		this.genres = new Genre[genresList.size()];
-//		for(int i = 0; i< genresList.size(); i++){
-//			this.genres[i] = genresList.get(i);
-//		}
 	}
 
 	public boolean isNew(){
@@ -115,17 +108,15 @@ public class MovieForm {
 		return Date.valueOf(releaseDate);
 	}
 
-	public List<Genre> getGenres(){
+	public Set<Genre> getGenres(){
 		return genres;
 	}
-	public void setGenres(List<Genre> genres){
+	public void setGenres(Set<Genre> genres){
 		this.genres = genres;
 	}
 
 	public Movie build() {
-//		List<Genre> list = new ArrayList<Genre>(Arrays.asList(genres));
-		Movie movie = new Movie(title, getReleaseDate(), director, genres, minutes, description);
-		return movie;
+		return new Movie(title, getReleaseDate(), director, genres, minutes, description);
 	}
 
 	public void update(Movie movie) {
@@ -133,7 +124,6 @@ public class MovieForm {
 		movie.setDescription(description);
 		movie.setDirector(director);
 		movie.setReleaseDate(getReleaseDate());
-//		movie.setGenres(new ArrayList<Genre>(Arrays.asList(genres)));
 		movie.setGenres(genres);
 		movie.setMinutes(minutes);
 	}

@@ -3,7 +3,9 @@ package ar.edu.itba.it.paw.domain.movie;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -22,16 +24,17 @@ import ar.edu.itba.it.paw.domain.prize.Prize;
 public class Movie extends PersistentEntity {
 
 	private static final int DESCRIPTION_LENGTH = 300;
+	private static final long ONE_WEEK_IN_MILLIS = 604800000;
 	
 	private String title;
 	private Date releaseDate;
 	private String director;
 
 	@ManyToMany
-	private List<Genre> genres;
+	private Set<Genre> genres;
 	
 	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL)
-	private List<Prize> prices;
+	private List<Prize> prices = new ArrayList<Prize>();
 	
 	private int minutes;
 	private String description;
@@ -40,30 +43,30 @@ public class Movie extends PersistentEntity {
 
 	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL)
 	@Sort(type = SortType.NATURAL)
-	private SortedSet<Comment> comments;
+	private SortedSet<Comment> comments = new TreeSet<Comment>();
 
 	public Movie(){
 	}
 
 	public Movie(String movieName, Date releaseDate,
-			String directorName, List<Genre> genres, int minutes, String description,
+			String directorName, Set<Genre> genres, int minutes, String description,
 			Date creationDate) {
 		setFields(movieName, directorName, minutes, genres, description,
 				releaseDate, creationDate);
 	}
 
 	public Movie(String movieName, Date releaseDate, String directorName,
-			List<Genre> genres, int minutes, String description) {
+			Set<Genre> genres, int minutes, String description) {
 		super();
 		setFields(movieName, directorName, minutes, genres, description,
 				releaseDate, new Date(System.currentTimeMillis()));
 	}
 
 	private void setFields(String movieName, String directorName, int minutes,
-			List<Genre> genres, String description, Date releaseDate,
+			Set<Genre> genres, String description, Date releaseDate,
 			Date creationDate) {
-		if (movieName.length() > 255 || directorName.length() > 255
-				|| releaseDate == null || genres == null ||genres.isEmpty() || description == null) {
+		if (movieName.length() > 255 || directorName.length() > 255 || movieName.isEmpty() || directorName.isEmpty()
+				|| releaseDate == null || genres == null || genres.isEmpty() || description.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
 		this.title = movieName;
@@ -75,7 +78,7 @@ public class Movie extends PersistentEntity {
 		this.creationDate = creationDate;
 	}
 
-	public List<Genre> getGenres() {
+	public Set<Genre> getGenres() {
 		return genres;
 	}
 
@@ -117,9 +120,8 @@ public class Movie extends PersistentEntity {
 		return description;
 	}
 	
-	// Y ese numero que carajo es??? VARIABLE ESTATICA!!!!
 	public boolean isNew() {
-		return releaseDate.after(new Date(System.currentTimeMillis() - 604800000));
+		return releaseDate.after(new Date(System.currentTimeMillis() - ONE_WEEK_IN_MILLIS));
 	}
 
 	public SortedSet<Comment> getComments(){
@@ -185,26 +187,35 @@ public class Movie extends PersistentEntity {
 		
 	}
 
-	public void setGenres(List<Genre> genres){
+	public void setGenres(Set<Genre> genres){
 		if(genres != null && !genres.isEmpty()){
-			for(Genre g : genres){
-				if(!this.genres.contains(g)){
-					this.genres.add(g);
+			for(Genre g : this.genres){
+				if(!genres.contains(g)){
+					this.removeGenre(g);
+					g.removeMovie(this);
 				}
 			}
-			for(int i=0; i< this.genres.size();i++){
-				Genre g = this.genres.get(i);
-				if(!genres.contains(g)){
-					this.genres.remove(g);
+			for(Genre g : genres){
+				if(!this.genres.contains(g)){
+					this.addGenre(g);
+					g.addMovie(this);
 				}
 			}
 		}
 		else{
 			throw new IllegalArgumentException();
-		}
-			
+		}	
 	}
+
 	
+	public void addGenre(Genre g) {
+		this.genres.add(g);		
+	}
+
+	public void removeGenre(Genre g) {
+		this.genres.remove(g);
+	}
+
 	public List<Prize> getPrices(){
 		List<Prize> list= new ArrayList<Prize>();
 		for(Prize p : prices){
@@ -231,7 +242,11 @@ public class Movie extends PersistentEntity {
 	}
 
 	public void removePrice(Prize prize) {
-		this.prices.remove(prize);		
+		this.prices.remove(prize);
+	}
+
+	public void deletePicture() {
+		picture = null;		
 	}
 
 

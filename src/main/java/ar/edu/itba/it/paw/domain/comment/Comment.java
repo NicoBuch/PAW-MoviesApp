@@ -1,7 +1,6 @@
 package ar.edu.itba.it.paw.domain.comment;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -48,9 +47,7 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 		setFields(body,rating,movie,user);
 		
 	}
-	public void clean(){
-		reports = new ArrayList<Report>();
-	}
+
 	private void setFields(String body, Date creationDate, int rating, Movie movie, User user){
 		this.creationDate = creationDate;
 		setFields(body, rating, movie, user);
@@ -143,6 +140,5 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 	public void cleanReports() {
 		reports.clear();		
 	}
-	
 
 }

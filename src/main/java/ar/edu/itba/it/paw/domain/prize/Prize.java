@@ -20,6 +20,9 @@ public class Prize extends PersistentEntity{
 	}
 	
 	public Prize(Movie movie, String name, boolean prize){
+		if(movie == null || name == null || name.isEmpty() || name.length() > 255){
+			throw new IllegalArgumentException();
+		}
 		this.movie = movie;
 		this.name = name;
 		this.prize = prize;
