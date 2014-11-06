@@ -17,7 +17,7 @@
 				<br>
 				<label><b>Genres</b></label><br>
 				<c:forEach var="aGenre" items="${movie.genres}">
-					- ${aGenre.name} -
+					${aGenre.name} -
 				</c:forEach>
 				<br><br>			
 				<label><b>Release Date</b></label><br>${movie.releaseDate}<br>
@@ -28,15 +28,15 @@
 				<c:choose>
 					<c:when test="${!empty movie.prices}">
 						<c:forEach var="aPrice" items="${movie.prices}">
-							<div>
-								${aPrice.name}
-								<c:if test="${user.admin}">
-									<form action="../movie/deletePrize", method="POST" class="col-md-4">
-										<input  type="hidden" name="prizeId" value="${aPrize.id}"/>
-						    			<input type="submit" value="Delete">
-					  				</form>
-					  			</c:if>
-				  			</div>
+							<div class=" col-md-6 col-md-offset-5">	
+									${aPrice.name}
+									<c:if test="${user.admin}">
+										<form action="../movie/deletePrize", method="POST" class="pull-right">
+											<input  type="hidden" name="prizeId" value="${aPrize.id}"/>
+											<input type="submit" class="btn btn-danger btn-xs" value="Delete">
+						  				</form>
+						  			</c:if>
+							</div>
 						</c:forEach>
 					</c:when>
 					<c:otherwise>
@@ -44,20 +44,26 @@
 					</c:otherwise>
 				</c:choose>
 				<br><br>
-				<label><b>Nominations</b></label><br>
+				
 				<c:choose>
 					<c:when test="${!empty movie.nominations}">
+						<div class="col-md-offset-5">
+							<label><b>Nominations</b></label><br>
+						</div>
 						<c:forEach var="aNomination" items="${movie.nominations}">
-							${aNomination.name}
-							<c:if test="${user.admin}">
-								<form action="../movie/deletePrize", method="POST" class="col-md-4">
-									<input  type="hidden" name="prizeId" value="${aNomination.id}"/>
-					    			<input type="submit" value="Delete">
-				  				</form>
-				  			</c:if>
+							<div class=" col-md-6 col-md-offset-5">
+								${aNomination.name}
+								<c:if test="${user.admin}">
+									<form action="../movie/deletePrize", method="POST" class="pull-right">
+										<input  type="hidden" name="prizeId" value="${aNomination.id}"/>
+						    			<input type="submit" class="btn btn-danger btn-xs" value="Delete">
+					  				</form>
+					  			</c:if>
+					  		</div>
 						</c:forEach>
 					</c:when>
 					<c:otherwise>
+						<label><b>Nominations</b></label><br>
 						None
 					</c:otherwise>
 				</c:choose>

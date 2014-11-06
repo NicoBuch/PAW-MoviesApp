@@ -17,13 +17,13 @@
 			<c:when test="${isInterest}">
 				<form action="removeUserOfInterest", method="POST">
 	    		<input  type="hidden" name="userOfInterest" value="${aUser.id}"/>
-	    		<input type="submit" value="Remove from Users of Interest">
+	    		<input type="submit" class="btn btn-sm btn-danger pull-right" value="Unfollow">
 				</form>
 			</c:when>
 			<c:otherwise>
 				<form action="addUserOfInterest", method="POST">
 	    		<input  type="hidden" name="userOfInterest" value="${aUser.id}"/>
-	    		<input type="submit" value="Add to Users of Interest">
+	    		<input type="submit" class="btn btn-sm btn-success pull-right" value="Follow">
 				</form>
 			</c:otherwise>
 		</c:choose>
