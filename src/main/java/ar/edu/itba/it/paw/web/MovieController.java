@@ -23,6 +23,7 @@ import ar.edu.itba.it.paw.domain.genre.GenreRepo;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.movie.MovieRepo;
 import ar.edu.itba.it.paw.domain.prize.Prize;
+import ar.edu.itba.it.paw.domain.prize.PrizeRepo;
 import ar.edu.itba.it.paw.domain.user.NoAdminException;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.web.command.MovieForm;
@@ -32,6 +33,7 @@ import ar.edu.itba.it.paw.web.validator.MovieFormValidator;
 public class MovieController {
 	private MovieRepo movies;
 	private GenreRepo genres;
+	private PrizeRepo prices;
 	private MovieFormValidator validator;
 	private final int TOP_RANKED_CANT = 5;
 	private final int MOST_RECENT_CANT = 5;
@@ -39,10 +41,11 @@ public class MovieController {
 
 	@Autowired
 	public MovieController(MovieRepo movies, GenreRepo genres,
-			MovieFormValidator validator) {
+			MovieFormValidator validator, PrizeRepo prices) {
 		this.movies = movies;
 		this.genres = genres;
 		this.validator = validator;
+		this.prices = prices;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -145,11 +148,11 @@ public class MovieController {
 			Movie oldMovie = movies.get(movieForm.getId());
 			movieForm.update(oldMovie);
 		}
-		return set_empty_list();
+		return new ModelAndView("redirect:./list");
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView delete(
+	public String delete(
 			@RequestParam(value = "id", required = true) Movie movie,
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
@@ -157,11 +160,11 @@ public class MovieController {
 			throw new NoAdminException();
 		}
 		movies.delete(movie);
-		return set_empty_list();
+		return "redirect:./list";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView addPrize(
+	public String addPrize(
 			@RequestParam(value = "movieId", required = true) Movie movie,
 			@RequestParam(value = "name", required = true) String name,
 			@RequestParam(value = "prize", required = false) boolean prize,
@@ -172,24 +175,24 @@ public class MovieController {
 		}
 		Prize newPrize = new Prize(movie, name, prize);
 		movie.addPrize(newPrize);
-		return set_empty_list();
+		return "redirect:./detail?id=" + movie.getId();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView deletePrize(
+	public String deletePrize(
 			@RequestParam(value = "prizeId", required = false) Prize prize,
+			@RequestParam(value = "movieId", required = false) Movie movie,
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
 			throw new NoAdminException();
 		}
-		Movie movie = prize.getMovie();
-		movie.removePrice(prize);
-		return set_empty_list();
+		prices.delete(prize);
+		return "redirect:./detail?id=" + movie.getId();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView setPicture(
+	public String setPicture(
 			@RequestParam(value = "movieId", required = true) Movie movie,
 			@RequestParam(value = "pic", required = true) MultipartFile pic,
 			HttpServletRequest req) throws Exception {
@@ -198,11 +201,11 @@ public class MovieController {
 			throw new NoAdminException();
 		}
 		movie.setPicture(pic.getBytes());
-		return set_empty_list();
+		return "redirect:./list";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView deletePicture(
+	public String deletePicture(
 			@RequestParam(value = "movieId", required = true) Movie movie,
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
@@ -210,7 +213,7 @@ public class MovieController {
 			throw new NoAdminException();
 		}
 		movie.deletePicture();
-		return set_empty_list();
+		return "redirect:./list";
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -230,14 +233,6 @@ public class MovieController {
 		} finally {
 			os.flush();
 		}
-	}
-
-	private ModelAndView set_empty_list() {
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("movies", movies.getAll());
-		mav.addObject("genres", genres.getAll());
-		mav.setViewName("movie/list");
-		return mav;
 	}
 
 }

@@ -1,5 +1,6 @@
 package ar.edu.itba.it.paw.domain.genre;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -12,7 +13,7 @@ import ar.edu.itba.it.paw.domain.movie.Movie;
 public class Genre extends PersistentEntity{
 
 	@ManyToMany(mappedBy="genres")
-	private Set<Movie> movies;
+	private Set<Movie> movies = new HashSet<Movie>();
 
 	private String name;
 
@@ -36,12 +37,10 @@ public class Genre extends PersistentEntity{
 
 	public void removeMovie(Movie movie) {
 		this.movies.remove(movie);
-		movie.getGenres().remove(this);
 	}
 
 	public void addMovie(Movie movie) {
 		this.movies.add(movie);
-		movie.getGenres().add(this);
 	}
 
 	@Override

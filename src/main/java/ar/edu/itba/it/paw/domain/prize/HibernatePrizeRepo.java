@@ -24,5 +24,10 @@ public class HibernatePrizeRepo extends AbstractHibernateRepo implements PrizeRe
 			throw new NoIdException();
 		}
 	}
+	
+	@Override
+	public void delete(Prize prize) {
+		super.delete(prize);
+	}
 
 }

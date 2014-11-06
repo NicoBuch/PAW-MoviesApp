@@ -5,7 +5,7 @@
 	<h2>Recovery
 	<br>
 	<small>Follow the steps to reset your password</small>
-	</h2>	
+	</h2>
 </div>
 
 <div class="col-md-10 col-md-offset-1">
@@ -18,8 +18,8 @@
 	</c:if>
 
 	<c:if test="${empty email}">
-		
-		<form name="recoveryForm" method='post'>
+
+		<form name="recoveryForm" method='post' action="../user/recovery" >
 			<div class="col-md-8 col-md-offset-2" id="feedbackPanel" />
 				<div class="col-xs-12">
 					<div class="form-group">
@@ -27,7 +27,7 @@
 						<input class="form-control" autofocus name='email' type='email' placeholder='user@example.com'/>
 					</div>
 				</div>
-			
+
 				<div class="col-md-6 col-md-offset-6 ">
 					<button class="btn btn-primary btn-block" type="submit">Next Step<span class="pull-right glyphicon glyphicon-chevron-right"></span></button>
 				</div>
@@ -45,9 +45,9 @@
 	</c:if>
 
 	<c:if test="${!empty question}">
-		
-		<form name="answerForm" method='post'>
-			
+
+		<form name="answerForm" method='post' action="../user/recovery">
+
 			<div class="col-md-8 col-md-offset-2" id="feedbackPanel" />
 
 				<div class="col-xs-12">
@@ -63,24 +63,24 @@
 						<input class="form-control" autofocus name='answer' type='answer'/>
 					</div>
 				</div>
-					
+
 				<div class="col-xs-12">
 					<div class="form-group">
 						<label class="control-label">New Password</label>
 						<input class="form-control" name='newPassword' type='password'/>
 					</div>
 				</div>
-					
+
 				<div class="col-xs-12">
 					<div class="form-group">
 						<label class="control-label">Confirm Password</label>
 						<input class="form-control" name='newPasswordConfirmation' type='password'/>
 					</div>
 				</div>
-			
+
 
 				<input name='email' type="hidden" value="${email}"/>
-				
+
 				<div class="col-md-6 col-md-offset-6 ">
 					<button class="btn btn-success btn-block" type="submit">Reset Password<span class="pull-right glyphicon glyphicon-ok"></span></button>
 				</div>

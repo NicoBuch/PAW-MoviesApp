@@ -15,13 +15,13 @@
 		</c:forEach>
 		<c:choose>
 			<c:when test="${isInterest}">
-				<form action="removeUserOfInterest", method="POST">
+				<form action="../user/removeUserOfInterest", method="POST">
 	    		<input  type="hidden" name="userOfInterest" value="${aUser.id}"/>
 	    		<input type="submit" class="btn btn-sm btn-danger pull-right" value="Unfollow">
 				</form>
 			</c:when>
 			<c:otherwise>
-				<form action="addUserOfInterest", method="POST">
+				<form action="../user/addUserOfInterest", method="POST">
 	    		<input  type="hidden" name="userOfInterest" value="${aUser.id}"/>
 	    		<input type="submit" class="btn btn-sm btn-success pull-right" value="Follow">
 				</form>

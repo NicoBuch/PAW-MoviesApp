@@ -28,11 +28,12 @@
 				<c:choose>
 					<c:when test="${!empty movie.prices}">
 						<c:forEach var="aPrice" items="${movie.prices}">
-							<div class=" col-md-6 col-md-offset-5">	
+							<div class=" col-md-6 col-md-offset-5">
 									${aPrice.name}
 									<c:if test="${user.admin}">
 										<form action="../movie/deletePrize", method="POST" class="pull-right">
 											<input  type="hidden" name="prizeId" value="${aPrize.id}"/>
+											<input  type="hidden" name="movieId" value="${movie.id}"/>
 											<input type="submit" class="btn btn-danger btn-xs" value="Delete">
 						  				</form>
 						  			</c:if>
@@ -44,7 +45,7 @@
 					</c:otherwise>
 				</c:choose>
 				<br><br>
-				
+
 				<c:choose>
 					<c:when test="${!empty movie.nominations}">
 						<div class="col-md-offset-5">
@@ -55,6 +56,7 @@
 								${aNomination.name}
 								<c:if test="${user.admin}">
 									<form action="../movie/deletePrize", method="POST" class="pull-right">
+										<input  type="hidden" name="movieId" value="${movie.id}"/>
 										<input  type="hidden" name="prizeId" value="${aNomination.id}"/>
 						    			<input type="submit" class="btn btn-danger btn-xs" value="Delete">
 					  				</form>
@@ -78,7 +80,7 @@
 				<c:otherwise>
 					<img src="/MoviesApp/bin/movie/showPicture?movieId=${movie.id}" class="img-responsive" />
 				  	<c:if test="${user.admin}">
-						<form action="deletePicture" method="POST" enctype="multipart/form-data">
+						<form action="../movie/deletePicture" method="POST" enctype="multipart/form-data">
 							<input type="hidden" name="movieId" value="${movie.id}" required>
 							<input type="submit" class="btn btn-danger btn-sm" value="Delete">
 						</form>
@@ -108,7 +110,7 @@
 			<h3><strong>Admin Settings</strong></h3>
 			<div class="col-md-5">
 				<h4><strong>Prizes and Nominations</strong></h4>
-				<form action="addPrize" method="POST">
+				<form action="../movie/addPrize" method="POST">
 				  	<input type="hidden" name="movieId" value="${movie.id}" required>
 				  	<div class='col-md-12'>
 				  		<input type="text" class="form-control" name="name" placeholder="Prize or Nomination name..."required>
@@ -124,7 +126,7 @@
 
 			<div class="col-md-5 pull-right">
 				<h4><strong>Picture</strong></h4>
-				<form action="setPicture" method="POST" enctype="multipart/form-data">
+				<form action="../movie/setPicture" method="POST" enctype="multipart/form-data">
 			  		<input type="hidden" name="movieId" value="${movie.id}" required>
 			  		<input type="file" name="pic" required>
 			  		<div class='col-md-5 pull-right'>
@@ -192,7 +194,7 @@
 				  </div>
 				  <div class="panel-body">
 					    <c:forEach var="aComment" items="${movie.comments}">
-							<div class="col-md-12"> 
+							<div class="col-md-12">
 								<p>
 									<span class="glyphicon glyphicon-chevron-right"></span> ${aComment.user.firstName} ${aComment.user.lastName} (${aComment.user.email}) said: <br>
 									<label><b>Rating:</b></label> ${aComment.rating}
@@ -205,7 +207,7 @@
 									<p class="pull-right">This comment has ${aComment.avgCommentRatings} average rating.</p>
 								</p>
 							</div>
-							
+
 							<div class="col-md-12">
 								<c:if test="${! empty user }">
 									<!-- User Settings -->
@@ -228,7 +230,7 @@
 											</c:if>
 
 											<c:if test="${ canRate }">
-												<form action="../comments/rate", method="POST" class="form-inline"> 
+												<form action="../comments/rate", method="POST" class="form-inline">
 									    			<input  type="hidden" name="commentId" value="${aComment.id}"/>
 									    			<select class="form-control input-sm" name='rating'>
 														<c:forEach var="i" begin="0" end="5">
@@ -239,9 +241,9 @@
 						    					</form>
 						    				</c:if>
 
-											
+
 										</c:if>
-								
+
 									</div>
 									<div class="col-md-3 pull-right">
 										<div class="col-md-6">
@@ -260,11 +262,11 @@
 					    						</form>
 											</c:if>
 										</div>
-									</div>	
+									</div>
 								</c:if>
 								<br><br>
 							</div>
-						
+
 						</c:forEach>
 					</div>
 				</div>
