@@ -58,7 +58,7 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView sign_up(SignUpForm signUpForm, Errors errors) {
+	public ModelAndView sign_up(SignUpForm signUpForm, Errors errors, HttpServletRequest req) {
 		ModelAndView mav = new ModelAndView();
 
 		signUpValidator.validate(signUpForm, errors);
@@ -72,9 +72,10 @@ public class UserController {
 		if (errors.hasErrors()) {
 			return null;
 		}
-
-		users.save(signUpForm.build());
-		mav.setViewName("movie/index");
+		User user = signUpForm.build();
+		users.save(user);
+		req.getSession().setAttribute("user_id", user.getId());
+		mav.setViewName("redirect:../movie/index");
 		return mav;
 	}
 
@@ -91,7 +92,11 @@ public class UserController {
 		if (logUser == null) {
 			throw new Exception();
 		}
-		return set_users_list();
+		ModelAndView mav = new ModelAndView();
+		List<User> listUsers = users.getAll();
+		mav.addObject("users", listUsers);
+		mav.setViewName("user/list");
+		return mav;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -166,7 +171,7 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView addUserOfInterest(
+	public String addUserOfInterest(
 			@RequestParam(value = "userOfInterest", required = true) User userOfInterest,
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
@@ -174,11 +179,11 @@ public class UserController {
 			throw new Exception();
 		}
 		user.addUserOfInterest(userOfInterest);
-		return set_users_list();
+		return "redirect:./list";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView removeUserOfInterest(
+	public String removeUserOfInterest(
 			@RequestParam(value = "userOfInterest", required = true) User userOfInterest,
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
@@ -186,17 +191,8 @@ public class UserController {
 			throw new Exception();
 		}
 		user.removeUserOfInterest(userOfInterest);
-		return set_users_list();
+		return "redirect:./list";
 
 	}
-
-	private ModelAndView set_users_list(){
-		ModelAndView mav = new ModelAndView();
-		List<User> listUsers = users.getAll();
-		mav.addObject("users", listUsers);
-		mav.setViewName("user/list");
-		return mav;
-	}
-
 
 }

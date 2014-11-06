@@ -1,13 +1,13 @@
 <%@ include file="../header.jsp" %>
-	
+
 
 	<div class="page-header">
 		<h2>Login
 			<br>
 			<small>Please complete these fields to sign in</small>
-		</h2>	
+		</h2>
 	</div>
-	
+
 
 	<div class="col-md-10 col-md-offset-1">
 
@@ -24,9 +24,9 @@
 	  			<strong>Success!</strong> ${prevSuccess}
 			</div>
 		</c:if>
-		
-		
-		<form name="loginForm" method='post' novalidate>
+
+
+		<form name="loginForm" method='post' action="../user/sign_in" novalidate>
 			<div class="col-md-8 col-md-offset-2" id="feedbackPanel" />
 				<div class="col-xs-12">
 					<div class="form-group">
@@ -41,15 +41,15 @@
 						<input class="form-control" name='password' type='password' placeholder='Insert password' required>
 					</div>
 				</div>
-				
+
 				<div class="col-md-6 col-md-offset-6 ">
 							<button class="btn btn-primary btn-block" type="submit">Log in</button>
 							Can't remember your password? <a href="recovery" class="float-right"><strong>Recover it!</strong></a>
 
-				</div>			
-				
+				</div>
+
 			</div>
-			
+
 		</form>
 	</div>
 

@@ -50,4 +50,14 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 		return list;
 	}
 
+	@Override
+	public void cleanReports(Comment comment) {
+		List<Report> reports = comment.getReports();
+		while(reports.size() > 0){
+			Report report = reports.get(0);
+			reports.remove(0);
+			super.delete(report);
+		}
+	}
+
 }

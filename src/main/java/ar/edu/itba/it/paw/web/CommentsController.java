@@ -30,7 +30,7 @@ public class CommentsController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView delete(
+	public String delete(
 			@RequestParam(value = "commentId", required = true) Comment comment,
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
@@ -39,20 +39,18 @@ public class CommentsController {
 		}
 		Movie movie = comment.getMovie();
 		comments.delete(comment);
-		return set_detail(movie, user.canComment(movie));
+		return "redirect:../movie/detail?id=" + movie.getId();
 	}
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView clean(
+	public String clean(
 			@RequestParam(value = "commentId", required = true) Comment comment,
 			HttpServletRequest req) throws Exception {
 		User user = (User) req.getAttribute("user");
 		if (user == null || !user.isAdmin()) {
 			throw new NoAdminException();
 		}
-		comment.cleanReports();
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("comments/list");
-		return mav;
+		comments.cleanReports(comment);
+		return "redirect:./list";
 	}
 
 
@@ -65,7 +63,7 @@ public class CommentsController {
 			NoMoreThanOneCommentPerUserPerMovieException,
 			CantCommentBeforeMoviesReleaseDateException {
 		if(body.isEmpty()){
-			ModelAndView mav = new ModelAndView();
+			ModelAndView mav = new ModelAndView("/movie/detail");
 			mav.addObject("emptyComment", true);
 			return set_detail(mav, movie, true);
 		}
@@ -78,11 +76,11 @@ public class CommentsController {
 			movie.addComment(comment);
 			user.addComment(comment);
 		}
-		return set_detail(movie, false);
+		return new ModelAndView("redirect:../movie/detail?id=" + movie.getId());
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView rate(
+	public String rate(
 			@RequestParam(value = "commentId", required = true) Comment comment,
 			@RequestParam(value = "rating", required = true) int rating,
 			HttpServletRequest req) throws Exception{
@@ -93,11 +91,11 @@ public class CommentsController {
 		CommentRating commentRating = new CommentRating(user, comment, rating);
 		user.rate(commentRating);
 		comment.rate(commentRating);
-		return set_detail(comment.getMovie(), user.canComment(comment.getMovie()));
+		return "redirect:../movie/detail?id=" + comment.getMovie().getId();
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView report(
+	public String report(
 			@RequestParam( value = "commentId", required = true) Comment comment,
 			HttpServletRequest req) throws Exception{
 		User user = (User) req.getAttribute("user");
@@ -107,7 +105,7 @@ public class CommentsController {
 		Report report = new Report(user, comment);
 		user.report(report);
 		comment.addReport(report);
-		return set_detail(comment.getMovie(), user.canComment(comment.getMovie()));
+		return "redirect:../movie/detail?id=" + comment.getMovie().getId();
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -123,15 +121,9 @@ public class CommentsController {
 		return mav;
 	}
 
-	private ModelAndView set_detail(Movie movie, boolean canComment){
-		ModelAndView mav = new ModelAndView();
-		return set_detail(mav, movie, canComment);
-	}
-
 	private ModelAndView set_detail(ModelAndView mav, Movie movie, boolean canComment){
 		mav.addObject("movie", movie);
 		mav.addObject("canComment", canComment);
-		mav.setViewName("movie/detail");
 		return mav;
 	}
 

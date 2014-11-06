@@ -186,21 +186,21 @@ public class Movie extends PersistentEntity {
 		this.minutes = minutes;
 		
 	}
-
+	
 	public void setGenres(Set<Genre> genres){
 		if(genres != null && !genres.isEmpty()){
 			for(Genre g : this.genres){
-				if(!genres.contains(g)){
-					this.removeGenre(g);
+				if(!genres.contains(g)){	
 					g.removeMovie(this);
 				}
 			}
+			this.genres.clear();
 			for(Genre g : genres){
 				if(!this.genres.contains(g)){
-					this.addGenre(g);
 					g.addMovie(this);
 				}
 			}
+			this.genres.addAll(genres);
 		}
 		else{
 			throw new IllegalArgumentException();
@@ -241,7 +241,7 @@ public class Movie extends PersistentEntity {
 		prize.setMovie(this);		
 	}
 
-	public void removePrice(Prize prize) {
+	public void removePrize(Prize prize) {
 		this.prices.remove(prize);
 	}
 
