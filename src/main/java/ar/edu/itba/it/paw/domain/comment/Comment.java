@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.domain.comment;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -24,7 +25,7 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 	
 	
 	@OneToMany(mappedBy="comment", cascade=CascadeType.ALL)
-	private List<CommentRating> commentRatings;
+	private List<CommentRating> commentRatings = new ArrayList<CommentRating>();
 	
 	@ManyToOne
 	private Movie movie;
@@ -54,7 +55,7 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 	}
 	
 	private void setFields(String body, int rating, Movie movie, User user){
-		if((rating > 5 || rating < 0) || movie == null || user == null || body.isEmpty()){
+		if((rating > 5 || rating < 0) || movie == null || user == null || body == null || body.isEmpty()){
 			throw new IllegalArgumentException();
 		}
 		this.body = body;
