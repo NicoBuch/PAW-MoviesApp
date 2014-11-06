@@ -1,8 +1,11 @@
 package ar.edu.itba.it.paw.domain.user;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -25,6 +28,9 @@ import ar.edu.itba.it.paw.domain.report.Report;
 @Table(name = "Users")
 public class User extends PersistentEntity {
 
+	private static Pattern rfc2822 = Pattern
+			.compile("^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$");
+
 	private String email;
 	private String password;
 	private String firstName;
@@ -41,19 +47,20 @@ public class User extends PersistentEntity {
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	@Sort(type = SortType.NATURAL)
-	private SortedSet<Comment> comments;
+	private SortedSet<Comment> comments = new TreeSet<Comment>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<CommentRating> commentRatings;
+	private List<CommentRating> commentRatings = new ArrayList<CommentRating>();
 
-	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
-	private List<Report> reports;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Report> reports = new ArrayList<Report>();
 
-	public User(){
+	public User() {
 	}
 
-	public User(String email, String password, String firstName, String lastName, Date birthDate,
-			String secretQuestion, String secretAnswer,boolean vip) {
+	public User(String email, String password, String firstName,
+			String lastName, Date birthDate, String secretQuestion,
+			String secretAnswer, boolean vip) {
 		super();
 		setFields(email, password, firstName, lastName, birthDate,
 				secretQuestion, secretAnswer, vip);
@@ -62,9 +69,10 @@ public class User extends PersistentEntity {
 	private void setFields(String email, String password, String firstName,
 			String lastName, Date birthDate, String secretQuestion,
 			String secretAnswer, boolean vip) {
-		if (firstName.length() > 255 || lastName.length() > 255
-				|| email.length() > 255 || password.length() > 255
-				|| (secretQuestion != null && secretQuestion.length() > 255)
+		if ((firstName != null && firstName.length() > 255) || (lastName != null && lastName.length() > 255) || email == null
+				|| !rfc2822.matcher(email).matches() || email.length() > 255 
+				|| password == null || password.length() > 255
+				|| (secretQuestion != null && (secretQuestion.length() > 255 || !secretQuestion.endsWith("?")))
 				|| (secretAnswer != null && secretAnswer.length() > 255)) {
 			throw new IllegalArgumentException();
 		}
@@ -133,14 +141,15 @@ public class User extends PersistentEntity {
 	public void setUsersOfInterest(List<User> usersOfInterest) {
 		this.usersOfInterest = usersOfInterest;
 	}
-	
-	 public void setComments(SortedSet<Comment> comments) {
-		 this.comments = comments;
+
+	public void setComments(SortedSet<Comment> comments) {
+		this.comments = comments;
 	}
-	 public void addComment(Comment comment) {
-	  comment.setUser(this);
-	  this.comments.add(comment);
-	 }
+
+	public void addComment(Comment comment) {
+		comment.setUser(this);
+		this.comments.add(comment);
+	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -162,7 +171,7 @@ public class User extends PersistentEntity {
 		return comments;
 	}
 
-	public List<Report> getReports(){
+	public List<Report> getReports() {
 		return reports;
 	}
 
@@ -193,9 +202,9 @@ public class User extends PersistentEntity {
 		return true;
 	}
 
-	public boolean canReport(Comment comment){
-		for(Report report : reports){
-			if(report.getComment().equals(comment)){
+	public boolean canReport(Comment comment) {
+		for (Report report : reports) {
+			if (report.getComment().equals(comment)) {
 				return false;
 			}
 		}
@@ -219,6 +228,6 @@ public class User extends PersistentEntity {
 	public void report(Report report) {
 		reports.add(report);
 		report.setUser(this);
-		
+
 	}
 }
