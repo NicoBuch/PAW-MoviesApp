@@ -230,4 +230,8 @@ public class User extends PersistentEntity {
 		report.setUser(this);
 
 	}
+
+	public boolean checkPassword(String password2) {
+		return password.equals(password2);
+	}
 }

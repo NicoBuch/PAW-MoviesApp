@@ -8,14 +8,14 @@
          http://www.springframework.org/schema/context/spring-context-3.0.xsd
          http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
-	<context:annotation-config/>
-	
+	<!-- <context:annotation-config/> -->
+
 	<bean id="properties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="ignoreResourceNotFound" value="true" />
 		<property name="locations">
 			<list>
 	            <value>classpath:hibernate.properties</value>
-        	</list>
+      </list>
 		</property>
 	</bean>
 
@@ -25,7 +25,7 @@
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
 	</bean>
-	
+
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="hibernateProperties">
@@ -34,8 +34,8 @@
 				hibernate.hbm2ddl.auto=${hibernate.hbm2ddl.auto}
 				hibernate.show_sql=${hibernate.show_sql}
 				hibernate.current_session_context_class=thread
-            	hibernate.max_fetch_depth=2
-           		hibernate.jdbc.batch_size=30  
+        hibernate.max_fetch_depth=2
+     		hibernate.jdbc.batch_size=30
 			</value>
 		</property>
 
@@ -44,5 +44,5 @@
 		</property>
 
 	</bean>
-	
+
 </beans>
