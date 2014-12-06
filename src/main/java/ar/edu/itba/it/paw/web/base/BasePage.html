@@ -49,7 +49,7 @@
                 <!-- <c:otherwise> -->
                   <!-- User is logged in -->
                   <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><wicket:id="usersName">User's Name<span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" wicket:id="usersName">User's Name<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                       <li><a wicket:id="myProfileLink"><wicket:message key="myProfileLink">My Profile</wicket:message></a></li>
                       <li><a wicket:id="resetPasswordLink"><wicket:message key="resetPassword">Reset password</wicket:message></a></li>
@@ -57,8 +57,8 @@
                       <li><a wicket:id="signOutLink"><wicket:message key="logout">Logout</wicket:message></a></li>
                     </ul>
                   </li>
-              </c:otherwise>
-            </c:choose>
+         <!--      </c:otherwise>
+            </c:choose> -->
             </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
@@ -68,6 +68,7 @@
 
     <wicket:child />
 
+    </div>
 
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
