@@ -1,16 +1,19 @@
 package ar.edu.itba.it.paw.web;
 
 import org.apache.wicket.Session;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
 
+import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.user.EmailNotFound;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.domain.user.UserRepo;
 
+@SuppressWarnings("serial")
 public class MoviesWicketSession extends WebSession {
 
-  private String email;
+  IModel<User> userModel = new EntityModel<User>(User.class); 
 
   public static MoviesWicketSession get() {
     return (MoviesWicketSession) Session.get();
@@ -21,24 +24,38 @@ public class MoviesWicketSession extends WebSession {
   }
 
   public String getEmail() {
-    return email;
+	User user = userModel.getObject();
+	if(user != null){
+		return user.getEmail();
+	}
+	return null;
   }
 
   public boolean signIn(String email, String password, UserRepo users) throws EmailNotFound {
     User user = users.getByEmail(email);
     if (user != null && user.checkPassword(password)) {
-      this.email = email;
-      return true;
+    	userModel.setObject(user);
+    	return true;
     }
     return false;
   }
 
   public boolean isSignedIn() {
-    return email != null;
+    return userModel.getObject() != null;
   }
 
   public void signOut() {
-        invalidate();
-        clear();
+	  userModel.detach();
+	  invalidate();
+	  clear();
   }
+  
+  public boolean isAdmin(){
+	  return userModel.getObject().isAdmin();
+  }
+  
+  public boolean isVip(){
+	  return userModel.getObject().isVip();
+  }
+  
 }
