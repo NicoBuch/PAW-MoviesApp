@@ -27,6 +27,11 @@ public class LoggedLink<T> extends Link<T>{
 	public LoggedLink(String id,boolean needUser, boolean needAdmin, boolean needVip,Class<? extends Page> Pageclazz,
 			Map<String,T> parameters, IModel<T> model) {
 		super(id,model);
+		this.parameters = parameters;
+		this.needUser = needUser;
+		this.needAdmin = needAdmin;
+		this.needVip = needVip;
+		this.Pageclazz = Pageclazz;
 
 }
 	

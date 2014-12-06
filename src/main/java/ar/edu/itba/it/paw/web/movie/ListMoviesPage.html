@@ -1,7 +1,6 @@
 <html>
 	<body>
 		<wicket:extend>
-
 			<div class="page-header">
 					<h2><wicket:message key="pageName"/>
 						<br>
@@ -70,7 +69,7 @@
 						    	</td>
 						    	<td wicket:id="releaseDate"></td>
 						    	<td wicket:id="director"></td>
-						    	<c:if test="${user.admin}">
+						    	<!-- <c:if test="${user.admin}"> -->
 						    	<td width="10%">
 							    	<a type="submit" class="btn btn-default btn-xs btn-block" wicket:id="editMovieLink">
 							    		<wicket:message="editMovieName"/>

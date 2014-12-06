@@ -41,7 +41,6 @@ public class ListMoviesPage extends BasePage{
 		this(null,null);
 	}
 	public ListMoviesPage(final String genre, final String director){
-		try{
 		Form<ListMoviesPage> form = new Form<ListMoviesPage>("filterByDirectorForm",
 															new CompoundPropertyModel<ListMoviesPage>(this)) {
 			@Override
@@ -56,6 +55,8 @@ public class ListMoviesPage extends BasePage{
 //		 
 		form.add(new TextField<String>("director"));
 		form.add(new Button("filterByDirector", new ResourceModel("filterByDirector")));
+		add(form);
+		add(new LoggedLink<Void>("addMovieLink", true, true, false, AddMoviePage.class, null));
 		add(new RefreshingView<Movie>("movie") {
 			@Override
 			protected Iterator<IModel<Movie>> getItemModels() {
@@ -83,7 +84,7 @@ public class ListMoviesPage extends BasePage{
 				item.add(new Label(("title"), new PropertyModel<String>(item.getModel(), "title")));
 				item.add(new Label(("director"), new PropertyModel<String>(item.getModel(), "director")));
 				item.add(new Label(("releaseDate"), new PropertyModel<Date>(item.getModel(), "releaseDate")));
-				item.add(new LoggedLink<Movie>("edit", true, true, false , EditPage.class, params));
+				item.add(new LoggedLink<Movie>("editMovieLink", true, true, false , EditPage.class, params));
 				item.add(new DeleteLink<Movie>("deleteMovieLink", true, true, false, item.getModel()) {
 					@Override
 					public void onClick() {
@@ -93,9 +94,6 @@ public class ListMoviesPage extends BasePage{
 			}
 
 		});
-		}catch(Exception e){
-			System.out.println(e);
-		}
 	}
 
 }
