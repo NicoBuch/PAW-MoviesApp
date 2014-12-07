@@ -15,7 +15,7 @@ public class LoggedLink<T> extends Link<T>{
 	Class<? extends Page>Pageclazz;
 	boolean needUser, needAdmin, needVip;
 	Map<String,T> parameters;
-	public LoggedLink(String id,boolean needUser, boolean needAdmin, boolean needVip,Class<? extends Page> Pageclazz,
+	public LoggedLink(String id,boolean needUser, boolean needAdmin, boolean needVip, Class<? extends Page> Pageclazz,
 						Map<String,T> parameters) {
 		super(id);
 		this.parameters = parameters;
@@ -58,7 +58,7 @@ public class LoggedLink<T> extends Link<T>{
 			}
 			Set<Entry<String,T>> params = parameters.entrySet();
 			for(Entry<String,T> entry : params){
-				pageParameters.add(entry.getKey(), entry.getKey());
+				pageParameters.add(entry.getKey(), entry.getValue());
 			}
 			setResponsePage(Pageclazz, pageParameters);
 	}
