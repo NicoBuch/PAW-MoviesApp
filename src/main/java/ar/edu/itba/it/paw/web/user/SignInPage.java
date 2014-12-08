@@ -40,11 +40,11 @@ public class SignInPage extends BasePage{
 						error(getString("invalidCredentials"));
 					}
 				} catch (EmailNotFound e) {
-					error(getString("invalidCredentials"));
+					error(getString("invalidEmail"));
 				}
 			}
 		};
-		
+
 		form.add(new TextField<String>("email").setRequired(true));
 		form.add(new PasswordTextField("password"));
 		form.add(new Button("login", new ResourceModel("login")));

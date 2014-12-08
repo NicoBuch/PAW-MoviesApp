@@ -15,6 +15,7 @@ import ar.edu.itba.it.paw.web.comment.ReportedCommentsList;
 import ar.edu.itba.it.paw.web.movie.ListMoviesPage;
 import ar.edu.itba.it.paw.web.user.ListUsersPage;
 import ar.edu.itba.it.paw.web.user.SignInPage;
+import ar.edu.itba.it.paw.web.user.SignUpPage;
 
 @SuppressWarnings("serial")
 public class BasePage extends WebPage {
