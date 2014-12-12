@@ -26,6 +26,9 @@ public class Genre extends PersistentEntity{
 		}
 		this.name = name.toLowerCase();
 	}
+	public String toString(){
+		return getName();
+	}
 
 	public String getName(){
 		return name.toUpperCase();
