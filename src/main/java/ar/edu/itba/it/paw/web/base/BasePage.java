@@ -1,16 +1,18 @@
 package ar.edu.itba.it.paw.web.base;
 
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.EntityResolver;
-import ar.edu.itba.it.paw.domain.user.EmailNotFound;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.domain.user.UserRepo;
+import ar.edu.itba.it.paw.web.BaseLink;
 import ar.edu.itba.it.paw.web.ConditionalLabel;
+import ar.edu.itba.it.paw.web.HomePage;
 import ar.edu.itba.it.paw.web.LoggedLink;
 import ar.edu.itba.it.paw.web.MoviesWicketSession;
+import ar.edu.itba.it.paw.web.movie.ListMoviesPage;
+import ar.edu.itba.it.paw.web.user.SignInPage;
 
 @SuppressWarnings("serial")
 public class BasePage extends WebPage {
@@ -23,26 +25,16 @@ public class BasePage extends WebPage {
 		if(wicketSession.getEmail() != null){
 			loggedIn = true;
 		}
-		add(new Link<Void>("homeLink"){
-			@Override
-			public void onClick(){
-				setResponsePage(BasePage.class); //cambiar por la pagina de perfil
-			}
-		});
-		add(new Link<Void>("moviesListLink"){
-			@Override
-			public void onClick(){
-				setResponsePage(BasePage.class); //cambiar por la pagina de peliculas
-			}
-		});
-		add (new LoggedLink("signInLink", false, false ,false , BasePage.class));
-		add (new LoggedLink("signOutLink", true, false ,false , BasePage.class));
-		add (new LoggedLink("signUpLink", false, false, false, BasePage.class));
-		add (new LoggedLink("myProfileLink", true, false , false, BasePage.class));
-		add (new LoggedLink("resetPasswordLink", true, false, false, BasePage.class));
-		add (new LoggedLink("usersListLink", true, false, false, BasePage.class));
-		add (new LoggedLink("reportsListLink", true, true, false, BasePage.class));
+		add ( new BaseLink<Void>("homeLink", HomePage.class));
+		add ( new BaseLink<Void>("moviesListLink", ListMoviesPage.class));
+
+		add (new LoggedLink<Object>("signInLink", false, false ,false , SignInPage.class, null));
+		add (new LoggedLink<Object>("signOutLink", true, false ,false , BasePage.class, null));
+		add (new LoggedLink<Object>("signUpLink", false, false, false, BasePage.class, null));
+		add (new LoggedLink<Object>("myProfileLink", true, false , false, BasePage.class, null));
+		add (new LoggedLink<Object>("resetPasswordLink", true, false, false, BasePage.class, null));
+		add (new LoggedLink<Object>("usersListLink", true, false, false, BasePage.class, null));
+		add (new LoggedLink<Object>("reportsListLink", true, true, false, BasePage.class, null));
 		add(new ConditionalLabel("usersName", wicketSession.getEmail(), loggedIn));
-	
 		}
 }

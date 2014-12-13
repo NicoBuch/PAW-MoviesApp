@@ -8,4 +8,6 @@ public interface GenreRepo {
 	public List<Genre> getAll();
 	
 	public Genre get(int genreId) throws NoIdException;
+
+	public Genre getByName(String genre);
 }

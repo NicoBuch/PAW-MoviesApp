@@ -1,7 +1,6 @@
 <html>
 	<body>
 		<wicket:extend>
-
 			<div class="page-header">
 					<h2><wicket:message key="pageName"/>
 						<br>
@@ -12,8 +11,8 @@
 
 				<!-- <c:if test= "${user.admin}"> -->
 				<div class="col-md-2 col-md-offset-5">
-			    	<a class="btn btn-success btn-block" wicket:id="addMovieLink"><wicket:message="addMovieName"></a>
-				</div>
+			    	<a class="btn btn-success btn-block" wicket:id="addMovieLink"><wicket:message key="addMovieLink"/></a>
+				<div>
 				<!-- </c:if> -->
 
 				<!-- <c:choose> -->
@@ -22,21 +21,11 @@
 							<!-- Filter by genre Form -->
 							<div class="pull-right">
 								<form class="form-inline" wicket:id="filterByGenreForm">
-									<label class="label-control"><wicket:message key="genreSelectTitle"/></label>
+									<label class="label-control"> <wicket:message key="genreSelectTitle"/></label>
 
-									<select class="form-control input-sm" wicket:id="selectGenre">
-								        <option value='empty' ><wicket:message key="genreSelect"/></option>
-								        <wicket:container wicket:id="optionsGenre">
-								            <option wicket:id="option">Option Label</option>
-								        </wicket:container>
+									<select class="form-control input-sm" wicket:id="genre">
+								        <option value='empty' >Select</option>
 			    					</select>
-									
-									<!-- <select class="form-control input-sm" name='genre'>
-										<option value='empty' ><wicket:message key="genreSelect"></option>
-										<c:forEach var="aGenre" items="${genres}">
-										   <option value='${aGenre.id}'>${aGenre.name}</option>
-									     </c:forEach>
-									</select> -->
 
 									<button class="btn btn-primary btn-sm" type="submit" wicket:id="filterByGenre">
 										<wicket:message key="filterButtonName"/>
@@ -75,15 +64,15 @@
 						    	</td>
 						    	<td wicket:id="releaseDate"></td>
 						    	<td wicket:id="director"></td>
-						    	<c:if test="${user.admin}">
+						    	<!-- <c:if test="${user.admin}"> -->
 						    	<td width="10%">
 							    	<a type="submit" class="btn btn-default btn-xs btn-block" wicket:id="editMovieLink">
-							    		<wicket:message="editMovieName"/>
+							    		<wicket:message key="editMovieLink"/>
 							    	</a>
 						    	</td>
 						    	<td width="10%">
 							    	<a type="submit" class="btn btn-danger btn-xs btn-block" wicket:id="deleteMovieLink">
-							    		<wicket:message="deleteMovieName"/>
+							    		<wicket:message key="deleteMovieLink"/>
 							    	</a>
 							    </td>
 							</tr>
