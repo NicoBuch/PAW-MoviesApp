@@ -23,7 +23,9 @@ import ar.edu.itba.it.paw.domain.movie.MovieRepo;
 import ar.edu.itba.it.paw.web.secured.AdminPage;
 
 @SuppressWarnings("serial")
+
 public class AddMoviePage extends AdminPage{
+
 	@SpringBean private MovieRepo movies;
 
 	private transient String title;
