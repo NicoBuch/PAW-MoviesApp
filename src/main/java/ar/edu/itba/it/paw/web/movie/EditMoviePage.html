@@ -11,7 +11,15 @@
 
         <div class="col-md-10 col-md-offset-1" >
 
+          <div wicket:id="feedback" class="formErrors"/>
           <form wicket:id='editMovieForm' novalidate='novalidate'>
+          
+            <div wicket:id="EditMovie" />
+
+            <div class="col-md-8 col-md-offset-2">
+              <button class="btn btn-primary btn-block" type="submit" wicket:id="editMovie"><wicket:message key="movieSaveButtonName"/></button>
+              <a class="btn btn-default btn-block" wicket:id="movieCancelLink"><wicket:message key="movieCancelLinkName"/></a>
+            </div>
 
           </form>
           
