@@ -234,4 +234,8 @@ public class User extends PersistentEntity {
 	public boolean checkPassword(String password2) {
 		return password.equals(password2);
 	}
+
+	public String getFullName() {
+		return firstName + " " + lastName;
+	}
 }

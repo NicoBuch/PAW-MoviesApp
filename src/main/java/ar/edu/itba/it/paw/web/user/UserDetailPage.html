@@ -1,0 +1,50 @@
+<html>
+  <body>
+    <wicket:extend>
+
+      <div class="page-header">
+        <h2 wicket:id="fullName"/>
+          <br>
+          <small><wicket:message key="pageDesc1">These are the movies </wicket:message><small wicket:id="firstName"/><wicket:message key="pageDesc2">has commented</wicket:message></small>
+        </h2>
+      </div>
+
+      <div>
+<!--         <c:forEach var="interestUser" items="${user.usersOfInterest}">
+          <c:if test="${interestUser.id == aUser.id}">
+            <c:set var="isInterest" value="${true}"/>
+          </c:if>
+        </c:forEach>
+        <c:choose>
+          <c:when test="${isInterest}"> -->
+            <form wicket:id="removeUserOfInterest">
+              <input type="submit" class="btn btn-sm btn-danger pull-right"><wicket:message key="unfollow">Unfollow</wicket:message></input>
+            </form>
+<!--           </c:when>
+          <c:otherwise> -->
+            <form wicket:id="addUserOfInterest">
+              <input type="submit" class="btn btn-sm btn-success pull-right"><wicket:message key="follow">Follow</wicket:message></input>
+            </form>
+            </form>
+<!--           </c:otherwise>
+        </c:choose> -->
+      </div>
+
+      <table class="table table-striped">
+        <thead>
+            <tr>
+                    <th><wicket:message key="movie">Movie</wicket:message></th>
+                    <th><wicket:message key="commentDate">Comment Date</wicket:message></th>
+          </tr>
+         </thead>
+        <!-- <c:forEach var="aComment" items="${comments}"> -->
+            <tr wicket:id="comment">
+              <td><a wicket:id="movieInfoLink"><p wicket:id="movieName"/></a></td>
+              <td wicket:id="creationDate"/>
+            </tr>
+<!--            </c:forEach> -->
+      </table>
+
+    </wicket:extend>
+  </body>
+</html>

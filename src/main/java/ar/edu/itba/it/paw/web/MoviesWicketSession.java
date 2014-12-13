@@ -58,4 +58,8 @@ public class MoviesWicketSession extends WebSession {
 	  return userModel.getObject().isVip();
   }
   
+  public User getUser(){
+	  return userModel.getObject();
+  }
+  
 }
