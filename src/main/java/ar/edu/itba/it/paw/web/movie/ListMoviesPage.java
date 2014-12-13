@@ -86,12 +86,12 @@ public class ListMoviesPage extends BasePage{
 
 			@Override
 			protected void populateItem(Item<Movie> item) {
-				Map<String, Movie> params = new HashMap<String, Movie>();
-				params.put("movieModel", item.getModelObject());
+				Map<String, Integer> params = new HashMap<String, Integer>();
+				params.put("movieId", item.getModelObject().getId());
 				item.add(new Label(("title"), new PropertyModel<String>(item.getModel(), "title")));
 				item.add(new Label(("director"), new PropertyModel<String>(item.getModel(), "director")));
 				item.add(new Label(("releaseDate"), new PropertyModel<Date>(item.getModel(), "releaseDate")));
-				item.add(new LoggedLink<Movie>("editMovieLink", true, true, false , EditPage.class, params));
+				item.add(new LoggedLink<Integer>("editMovieLink", true, true, false , EditMoviePage.class, params));
 				item.add(new DeleteLink<Movie>("deleteMovieLink", true, true, false, item.getModel()) {
 					@Override
 					public void onClick() {

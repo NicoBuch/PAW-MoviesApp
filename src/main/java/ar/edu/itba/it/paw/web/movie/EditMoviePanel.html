@@ -42,7 +42,7 @@
               <div class="form-group">
                 <label class="control-label"><wicket:message key="movieReleaseDateName"/></label>
                 <!-- <span class="help-block"><form:errors class="text-danger" path="releaseDay"/></span> -->
-                <input class="form-control" wicket:id="birthday" required='required'>
+                <input class="form-control" wicket:id="releaseDate" required='required'>
               </div>
             <br><br>
             </div>
@@ -63,7 +63,7 @@
               <div class="form-group">
                 <label class="control-label"><wicket:message key="movieDescName"/></label>
                 <!-- <span class="help-block"><form:errors class="text-danger" path="description"/></span> -->
-                <textarea class="form-control" wicket:id="description" rows="6" cols="60" required='required'/>
+                <input class="form-control" wicket:id="description" rows="6" cols="60" required='required'/>
               </div>
             </div>
 
@@ -72,12 +72,10 @@
                 <label class="control-label"><wicket:message key="movieGenresName"/></label>
                 <!-- <span class="help-block"><form:errors class="text-danger" path="genres"/></span> -->
                 <!-- <form:checkboxes element="div" path="genres" items="${genresList}" itemValue="id" itemLabel="name" /> -->
-                <span wicket:id="genres"></span>
+                <select wicket:id="genres"></select>
               </div>
             </div>
-            
           </fieldset>
-        </div>
       </wicket:panel>
   </body>
 </html>
