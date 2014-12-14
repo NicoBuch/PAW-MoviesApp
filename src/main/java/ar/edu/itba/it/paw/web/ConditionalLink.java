@@ -2,9 +2,6 @@ package ar.edu.itba.it.paw.web;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.IModel;
-
-import ar.edu.itba.it.paw.domain.user.User;
 
 @SuppressWarnings("serial")
 public class ConditionalLink extends Link<Object>{

@@ -22,19 +22,25 @@
          </thead>
 <!--         <c:forEach var="aComment" items="${comments}"> -->
             <tr wicket:id="report">
-              <td><a wicket:id="movieDetailLink"><p wicket:id="body"></a></td>
+              <td><a wicket:id="movieDetailLink"><p wicket:id="body"/></a></td>
               <td wicket:id="creationDate"/>
 
               <td width="10%">
                 <form wicket:id="cleanReport">
                 <!-- <input  type="hidden" name="commentId" value="${aComment.id}"/> -->
-                <input type="submit" class="btn btn-default btn-xs btn-block"><wicket:message key="clean">Clean</wicket:message></input>
+                  <button class="btn btn-default btn-xs btn-block" type="submit" wicket:id="clean">
+                    <wicket:message key="clean">Clean</wicket:message>
+                  </button>
+                <!-- <input type="submit" class="btn btn-default btn-xs btn-block"><wicket:message key="clean">Clean</wicket:message></input> -->
                 </form>
               </td>
               <td width="10%">
                 <form wicket:id="deleteComment">
                 <!-- <input  type="hidden" name="commentId" value="${aComment.id}"/> -->
-                  <input type="submit" class="btn btn-danger btn-xs btn-block"><wicket:message key="delete">Delete</wicket:message></input>
+                  <button class="btn btn-danger btn-xs btn-block" type="submit" wicket:id="delete">
+                    <wicket:message key="delete">Delete</wicket:message>
+                  </button>
+                  <!-- <input type="submit" class="btn btn-danger btn-xs btn-block"></input> -->
                 </form>
             </td>
 
