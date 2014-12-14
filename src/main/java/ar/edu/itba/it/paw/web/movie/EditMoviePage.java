@@ -13,13 +13,14 @@ import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.NoIdException;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.movie.MovieRepo;
-import ar.edu.itba.it.paw.web.base.BasePage;
+import ar.edu.itba.it.paw.web.secured.AdminPage;
 
 @SuppressWarnings("serial")
-public class EditMoviePage extends BasePage{
+public class EditMoviePage extends AdminPage{
 	@SpringBean
 	static MovieRepo movies;
 	public EditMoviePage(PageParameters params) throws StringValueConversionException, NoIdException{
+		super();
 		Movie movie = movies.get(params.get("movieId").toInteger());
 		add(new FeedbackPanel("feedback"));
 		Form<Movie> form = new Form<Movie>("editMovieForm", new CompoundPropertyModel<Movie>(
@@ -37,6 +38,7 @@ public class EditMoviePage extends BasePage{
 				setResponsePage(ListMoviesPage.class);
 			}
 		});
+		form.setMultiPart(true);
 		add(form);
 	}
 }

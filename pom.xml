@@ -126,6 +126,21 @@
 			<version>3.12.1.GA</version>
 		</dependency>
 		<dependency>
+    		<groupId>de.agilecoders.wicket</groupId>
+    		<artifactId>wicket-bootstrap-core</artifactId>
+    		<version>0.9.7</version>
+		</dependency>
+		<dependency>
+    		<groupId>de.agilecoders.wicket</groupId>
+    		<artifactId>wicket-bootstrap-extensions</artifactId>
+    		<version>0.9.7</version>
+		</dependency>
+		<dependency>
+    		<groupId>de.agilecoders.wicket</groupId>
+    		<artifactId>wicket-bootstrap-themes</artifactId>
+    		<version>0.9.7</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-spring</artifactId>
 			<version>1.5.6</version>
