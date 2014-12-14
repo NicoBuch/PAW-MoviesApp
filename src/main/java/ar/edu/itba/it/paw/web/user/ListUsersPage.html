@@ -20,7 +20,7 @@
         </thead>
         <!-- <c:forEach var="aUser" items="${users}"> -->
         <tr wicket:id="user">
-          <td><a wicket:id="emailLink"/></td>
+          <td><a wicket:id="emailLink"><wicket:container wicket:id="email"/></a></td>
           <td wicket:id="firstName"/>
           <td wicket:id="lastName"/>
         </tr>

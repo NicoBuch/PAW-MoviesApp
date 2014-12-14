@@ -3,10 +3,9 @@
     <wicket:extend>
 
       <div class="page-header">
-        <h2 wicket:id="fullName">
-          <br>
-          <small><wicket:message key="pageDesc1">These are the movies </wicket:message><small wicket:id="firstName"/><wicket:message key="pageDesc2">has commented</wicket:message></small>
-        </h2>
+        <h2 wicket:id="fullName"/>
+          <h2><small wicket:id="firstName"/></h2>
+        <!-- </h2> -->
       </div>
 
       <div>
@@ -18,12 +17,17 @@
         <c:choose>
           <c:when test="${isInterest}"> -->
             <form wicket:id="removeUserOfInterest">
-              <input type="submit" class="btn btn-sm btn-danger pull-right"><wicket:message key="unfollow">Unfollow</wicket:message></input>
+              <button class="btn btn-sm btn-danger pull-right" type="submit" wicket:id="unfollow">
+                <wicket:message key="unfollow"/>
+              </button>
+              <!-- <input type="submit" class="btn btn-sm btn-danger pull-right"><wicket:message key="unfollow">Unfollow</wicket:message></input> -->
             </form>
 <!--           </c:when>
           <c:otherwise> -->
             <form wicket:id="addUserOfInterest">
-              <input type="submit" class="btn btn-sm btn-success pull-right"><wicket:message key="follow">Follow</wicket:message></input>
+              <button class="btn btn-sm btn-success pull-right" type="submit" wicket:id="follow">
+                <wicket:message key="follow"/>
+              </button>
             </form>
 <!--           </c:otherwise>
         </c:choose> -->
