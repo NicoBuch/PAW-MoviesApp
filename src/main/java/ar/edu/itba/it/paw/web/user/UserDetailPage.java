@@ -79,7 +79,7 @@ public class UserDetailPage extends BasePage{
 				Map<String, Comment> params = new HashMap<String, Comment>();
 				params.put("commentModel", item.getModelObject());
 				item.add(new Label(("creationDate"), new PropertyModel<String>(item.getModel(), "creationDate")));
-				item.add(new BaseLink<Void>("movieInfoLink", UserDetailPage.class).add(new Label("movieName", new PropertyModel<String>(item.getModelObject(), "title"))));
+				item.add(new BaseLink<Void>("movieInfoLink", UserDetailPage.class).add(new Label("movieName", new PropertyModel<String>(item.getModelObject().getMovie(), "title"))));
 			}
 
 		});

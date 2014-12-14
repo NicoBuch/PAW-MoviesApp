@@ -31,7 +31,7 @@ public class ListUsersPage extends BasePage{
 			redirectToInterceptPage(new SignInPage());
 			
 		}
-		add(new RefreshingView<User>("users") {
+		add(new RefreshingView<User>("user") {
 			@Override
 			protected Iterator<IModel<User>> getItemModels() {
 				List<IModel<User>> result = new ArrayList<IModel<User>>();

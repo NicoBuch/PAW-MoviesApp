@@ -3,7 +3,7 @@
     <wicket:extend>
 
       <div class="page-header">
-        <h2 wicket:id="fullName"/>
+        <h2 wicket:id="fullName">
           <br>
           <small><wicket:message key="pageDesc1">These are the movies </wicket:message><small wicket:id="firstName"/><wicket:message key="pageDesc2">has commented</wicket:message></small>
         </h2>
@@ -25,7 +25,6 @@
             <form wicket:id="addUserOfInterest">
               <input type="submit" class="btn btn-sm btn-success pull-right"><wicket:message key="follow">Follow</wicket:message></input>
             </form>
-            </form>
 <!--           </c:otherwise>
         </c:choose> -->
       </div>
@@ -33,8 +32,8 @@
       <table class="table table-striped">
         <thead>
             <tr>
-                    <th><wicket:message key="movie">Movie</wicket:message></th>
-                    <th><wicket:message key="commentDate">Comment Date</wicket:message></th>
+              <th><wicket:message key="movie">Movie</wicket:message></th>
+              <th><wicket:message key="commentDate">Comment Date</wicket:message></th>
           </tr>
          </thead>
         <!-- <c:forEach var="aComment" items="${comments}"> -->
