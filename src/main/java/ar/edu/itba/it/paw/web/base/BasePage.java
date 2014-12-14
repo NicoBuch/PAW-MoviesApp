@@ -11,6 +11,7 @@ import ar.edu.itba.it.paw.web.ConditionalLabel;
 import ar.edu.itba.it.paw.web.HomePage;
 import ar.edu.itba.it.paw.web.LoggedLink;
 import ar.edu.itba.it.paw.web.MoviesWicketSession;
+import ar.edu.itba.it.paw.web.comment.ReportedCommentsList;
 import ar.edu.itba.it.paw.web.movie.ListMoviesPage;
 import ar.edu.itba.it.paw.web.user.SignInPage;
 
@@ -34,7 +35,7 @@ public class BasePage extends WebPage {
 		add (new LoggedLink<Object>("myProfileLink", true, false , false, BasePage.class, null));
 		add (new LoggedLink<Object>("resetPasswordLink", true, false, false, BasePage.class, null));
 		add (new LoggedLink<Object>("usersListLink", true, false, false, BasePage.class, null));
-		add (new LoggedLink<Object>("reportsListLink", true, true, false, BasePage.class, null));
+		add (new LoggedLink<Object>("reportsListLink", true, true, false, ReportedCommentsList.class, null));
 		add(new ConditionalLabel("usersName", wicketSession.getEmail(), loggedIn));
 		}
 }
