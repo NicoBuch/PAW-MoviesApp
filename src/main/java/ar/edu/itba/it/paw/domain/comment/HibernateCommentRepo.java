@@ -37,7 +37,7 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Report> getByReports() {
+	public List<Comment> getByReports() {
 		Session session = getSession();
 
 		Query query = session
@@ -46,7 +46,7 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 					  + "group by c "
 					  + "order by count(reports) desc");
 
-		List<Report> list = query.list();
+		List<Comment> list = query.list();
 		return list;
 	}
 
