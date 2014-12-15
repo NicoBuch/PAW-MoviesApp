@@ -45,11 +45,13 @@ public class EditMoviePanel extends Panel {
 		add(titleText);
 		
 		TextField<String> directorText = new TextField<String>("director");
-		titleText.setRequired(true);
-		titleText.add(StringValidator.maximumLength(MAX_DIRECTOR_LENGHT));
+		directorText.setRequired(true);
+		directorText.add(StringValidator.maximumLength(MAX_DIRECTOR_LENGHT));
 		add(directorText);
 		
-		add(new DateTextField("releaseDate"));
+		DateTextField dtf = new DateTextField("releaseDate");
+		dtf.setRequired(true);
+		add(dtf);
 //		add(new Label("movieReleaseDateName"));
 		
 		TextField<Integer> durationText = new NumberTextField<Integer>("minutes");
