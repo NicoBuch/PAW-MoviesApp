@@ -1,8 +1,10 @@
 package ar.edu.itba.it.paw.web.movie;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.extensions.markup.html.form.DateTextField;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -30,7 +32,7 @@ public class EditMoviePanel extends Panel {
 	@SpringBean GenreRepo genres;
 	
 	FileUploadField fileUpload;
-	
+	protected FormComponent<Integer> releaseDayField;
 	public EditMoviePanel(String id, IModel<?> model) {
 		super(id, model);
 
@@ -49,10 +51,22 @@ public class EditMoviePanel extends Panel {
 		directorText.add(StringValidator.maximumLength(MAX_DIRECTOR_LENGHT));
 		add(directorText);
 		
-		DateTextField dtf = new DateTextField("releaseDate");
-		dtf.setRequired(true);
-		add(dtf);
-//		add(new Label("movieReleaseDateName"));
+		List<Integer> days = new ArrayList<Integer>();
+		for(int i = 1; i<= 31; i++){
+			days.add(i);
+		}
+		releaseDayField = new DropDownChoice<Integer>("releaseDay", days).setRequired(true);
+		add(releaseDayField);
+		List<Integer> months = new ArrayList<Integer>();
+		for(int i = 1; i<= 12; i++){
+			months.add(i);
+		}
+		add(new DropDownChoice<Integer>("releaseMonth", months).setRequired(true));
+		List<Integer> years = new ArrayList<Integer>();
+		for(int i = 1950; i<= 2014; i++){
+			years.add(i);
+		}
+		add(new DropDownChoice<Integer>("releaseYear", years).setRequired(true));
 		
 		TextField<Integer> durationText = new NumberTextField<Integer>("minutes");
 		durationText.add(new MinimumValidator<Integer>(0));
