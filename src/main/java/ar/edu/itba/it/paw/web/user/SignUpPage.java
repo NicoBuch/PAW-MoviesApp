@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -24,6 +25,7 @@ import org.apache.wicket.util.value.ValueMap;
 import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
 
+import ar.edu.itba.it.paw.domain.user.EmailNotFound;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.domain.user.UserRepo;
 import ar.edu.itba.it.paw.web.BaseLink;
@@ -97,9 +99,9 @@ public class SignUpPage extends BasePage{
 			addPasswordField("confirmPassword", confirmPasswordField);
 			addTextField("secretAnswer", true, secretAnswerField);
 			addTextField("secretQuestion", true, secretQuestionField);
-			captchaImageResource = new CaptchaImageResource(new PropertyModel<String>(this,"imagePass"));
-			Image imageCaptcha = new Image("captchaImage", captchaImageResource);
-			add(imageCaptcha);
+			captchaImageResource = new CaptchaImageResource(imagePass);
+			add(new NonCachingImage("captchaImage", captchaImageResource));
+
             add(captchaTextField = new RequiredTextField<String>("captcha", new PropertyModel<String>(properties,
                 "captcha"))
             {
@@ -127,7 +129,7 @@ public class SignUpPage extends BasePage{
 					if (email == null) {
 						emailField.error((IValidationError) new ValidationError().addMessageKey("Required"));
 					}
-					else if(!rfc2822.matcher(email).matches()){
+					if(!rfc2822.matcher(email).matches()){
 						emailField.error((IValidationError) new ValidationError().addMessageKey("invalidEmail"));
 					}
 					if (password == null) {
@@ -157,7 +159,7 @@ public class SignUpPage extends BasePage{
 							resetValues();
 							setResponsePage(new HomePage());
 						} catch ( Exception e) {
-							error("invalidRegistration");
+							error("Invalid Registration");
 						}
 					}
 				}
