@@ -257,6 +257,14 @@ public class Movie extends PersistentEntity {
 	public void deletePicture() {
 		picture = null;		
 	}
+	
+	public double getAvgRating(){
+		double rating = 0;
+		for(Comment c : comments){
+			rating+=c.getRating();
+		}
+		return rating/comments.size();
+	}
 
 	public int getVisits() {
 		return visits;

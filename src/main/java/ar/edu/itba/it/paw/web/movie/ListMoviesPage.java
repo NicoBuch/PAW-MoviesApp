@@ -55,7 +55,7 @@ public class ListMoviesPage extends BasePage{
 				return;
 			}
 		};
-		
+
 		DropDownChoice<Genre> dpc = new DropDownChoice<Genre>("genre", genres.getAll());
 		formGenre.add(dpc);
 		formGenre.add(new Button("filterByGenre", new ResourceModel("filterByGenre")));
@@ -88,7 +88,8 @@ public class ListMoviesPage extends BasePage{
 			protected void populateItem(Item<Movie> item) {
 				Map<String, Integer> params = new HashMap<String, Integer>();
 				params.put("movieId", item.getModelObject().getId());
-				item.add(new Label(("title"), new PropertyModel<String>(item.getModel(), "title")));
+				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
+				item.add(moviePanel);
 				item.add(new Label(("director"), new PropertyModel<String>(item.getModel(), "director")));
 				item.add(new Label(("releaseDate"), new PropertyModel<Date>(item.getModel(), "releaseDate")));
 				item.add(new LoggedLink<Integer>("editMovieLink", true, true, false , EditMoviePage.class, params));
