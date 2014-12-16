@@ -3,11 +3,13 @@ package ar.edu.itba.it.paw.web.movie;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -31,7 +33,8 @@ public class EditMoviePanel extends Panel {
 	@SpringBean MovieRepo movies;
 	@SpringBean GenreRepo genres;
 	
-	FileUploadField fileUpload;
+	FileUploadField picture;
+	
 	protected FormComponent<Integer> releaseDayField;
 	public EditMoviePanel(String id, IModel<?> model) {
 		super(id, model);
@@ -75,15 +78,23 @@ public class EditMoviePanel extends Panel {
 		add(durationText);
 		
 		add(new TextField<String>("description"));
-		
-		ListMultipleChoice<Genre> lmc = new ListMultipleChoice<Genre>("genres",new LoadableDetachableModel<List<Genre>>(){
+		IModel<List<Genre>> genreModel = new LoadableDetachableModel<List<Genre>>(){
 			@Override
 			protected List<Genre> load() {
 				return genres.getAll();
 			}
-		}, genres.getAll());
+		};
+		ChoiceRenderer<Genre> choiceGenre = new ChoiceRenderer<Genre>("name");
+		ListMultipleChoice<Genre> lmc = new ListMultipleChoice<Genre>("genres", genreModel);
+		lmc.setChoiceRenderer(choiceGenre);
 		add(lmc);
-		add(fileUpload = new FileUploadField("picture"));
+		add(picture = new FileUploadField("picture", new LoadableDetachableModel<List<FileUpload>>() {
+
+			@Override
+			protected List<FileUpload> load() {
+				return null;
+			}
+		}));
 		
 	}
 

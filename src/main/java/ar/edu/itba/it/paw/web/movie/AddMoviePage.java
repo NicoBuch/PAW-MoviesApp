@@ -1,11 +1,14 @@
 package ar.edu.itba.it.paw.web.movie;
 
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
@@ -27,27 +30,29 @@ public class AddMoviePage extends AdminPage{
 	private transient Integer releaseDay;
 	private transient Integer releaseMonth;
 	private transient Integer releaseYear;
-	private transient Set<Genre> genres;
+	private transient List<Genre> genres;
 	private transient int minutes;
 	private transient String description;
 	private transient EditMoviePanel panel;
-	private transient FileUpload picture;
 	
 	public AddMoviePage(){
 		add(new FeedbackPanel("feedback"));
 		Form<AddMoviePage> form = new Form<AddMoviePage>("editMovieForm", new CompoundPropertyModel<AddMoviePage>(this));
+		form.setMultiPart(true);
 		form.add(panel = new EditMoviePanel("editMovie"));
 		form.add(new Button("editMovieButton", new ResourceModel("editMovieButton")) {
 			@Override
 			public void onSubmit(){
 //				final FileUpload picture = panel.fileUpload.getFileUpload();
-				byte[] moviePicture = picture.getBytes();
+				List<FileUpload> file = panel.picture.getFileUploads();
+				byte[] moviePicture = file.get(0).getBytes();
 				String releaseDateString = releaseYear + "-" + releaseMonth + "-" + releaseDay;
 				Date releaseDate = Date.valueOf(releaseDateString);
 				if(releaseDate.after(new Date(System.currentTimeMillis()))){
 					panel.releaseDayField.error((IValidationError) new ValidationError().addMessageKey("invalidDate"));
 				}
-				Movie movie = new Movie(title, releaseDate, director, genres, minutes, description);
+				Set<Genre> genr = new HashSet<Genre>(genres);
+				Movie movie = new Movie(title, releaseDate, director, genr, minutes, description);
 				movie.setPicture(moviePicture);
 				movies.save(movie);
 				setResponsePage(ListMoviesPage.class);
@@ -59,7 +64,6 @@ public class AddMoviePage extends AdminPage{
 				setResponsePage(ListMoviesPage.class);
 			}
 		});
-		form.setMultiPart(true);
 		add(form);
 	}
 	
