@@ -45,7 +45,8 @@ public class Movie extends PersistentEntity {
 	@Sort(type = SortType.NATURAL)
 	private SortedSet<Comment> comments = new TreeSet<Comment>();
 
-	public Movie(){
+	@SuppressWarnings("unused")
+	private Movie(){
 	}
 
 	public Movie(String movieName, Date releaseDate,
@@ -128,12 +129,12 @@ public class Movie extends PersistentEntity {
 		return comments;
 	}
 	
-	 public void setComments(SortedSet<Comment> comments) {
-		 this.comments = comments;
-	}
 	 public void addComment(Comment comment) {
-	  comment.setMovie(this);
-	  this.comments.add(comment);
+		 if(comments.contains(comment)){
+			 return;
+		 }
+		 comments.add(comment);
+		 comment.getUser().addComment(comment);
 	 }
 
 
@@ -209,11 +210,17 @@ public class Movie extends PersistentEntity {
 
 	
 	public void addGenre(Genre g) {
-		this.genres.add(g);		
+		if(!genres.add(g)){
+			return;
+		}
+		g.addMovie(this);
 	}
 
 	public void removeGenre(Genre g) {
-		this.genres.remove(g);
+		if(!genres.remove(g)){
+			return;
+		}
+		g.removeMovie(this);
 	}
 
 	public List<Prize> getPrices(){
@@ -237,8 +244,9 @@ public class Movie extends PersistentEntity {
 	}
 
 	public void addPrize(Prize prize) {
-		prices.add(prize);
-		prize.setMovie(this);		
+		if(!prices.contains(prize)){
+			prices.add(prize);
+		}	
 	}
 
 	public void removePrize(Prize prize) {

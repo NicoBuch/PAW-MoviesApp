@@ -55,7 +55,8 @@ public class User extends PersistentEntity {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Report> reports = new ArrayList<Report>();
 
-	public User() {
+	@SuppressWarnings("unused")
+	private User() {
 	}
 
 	public User(String email, String password, String firstName,
@@ -138,17 +139,11 @@ public class User extends PersistentEntity {
 		return usersOfInterest;
 	}
 
-	public void setUsersOfInterest(List<User> usersOfInterest) {
-		this.usersOfInterest = usersOfInterest;
-	}
-
-	public void setComments(SortedSet<Comment> comments) {
-		this.comments = comments;
-	}
-
 	public void addComment(Comment comment) {
-		comment.setUser(this);
-		this.comments.add(comment);
+		if(!comments.add(comment)){
+			return;
+		}
+		comment.getMovie().addComment(comment);
 	}
 
 	@Override
@@ -212,8 +207,10 @@ public class User extends PersistentEntity {
 	}
 
 	public void rate(CommentRating commentRating) {
-		commentRatings.add(commentRating);
-		commentRating.setUser(this);
+		if(!commentRatings.contains(commentRating)){
+			commentRatings.add(commentRating);
+		}
+		commentRating.getComment().rate(commentRating);
 	}
 
 	public void addUserOfInterest(User user_of_interest) {
@@ -227,8 +224,6 @@ public class User extends PersistentEntity {
 
 	public void report(Report report) {
 		reports.add(report);
-		report.setUser(this);
-
 	}
 
 	public boolean checkPassword(String password2) {

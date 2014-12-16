@@ -18,7 +18,8 @@ public class CommentRating extends PersistentEntity{
 	
 	int rating;
 	
-	public CommentRating(){
+	@SuppressWarnings("unused")
+	private CommentRating(){
 	}
 	
 	public CommentRating(User user, Comment comment, int rating){
@@ -42,13 +43,4 @@ public class CommentRating extends PersistentEntity{
 		return rating;
 	}
 
-	public void setUser(User user) {
-		this.user = user;		
-	}
-
-	public void setComment(Comment comment) {
-		this.comment = comment;
-		
-	}
-	
 }

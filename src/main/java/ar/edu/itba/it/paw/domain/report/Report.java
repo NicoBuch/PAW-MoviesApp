@@ -1,7 +1,6 @@
 package ar.edu.itba.it.paw.domain.report;
 
 import javax.persistence.ManyToOne;
-
 import javax.persistence.Entity;
 
 import ar.edu.itba.it.paw.domain.PersistentEntity;
@@ -17,7 +16,8 @@ public class Report extends PersistentEntity{
 	@ManyToOne
 	private Comment comment;
 	
-	public Report(){
+	@SuppressWarnings("unused")
+	private Report(){
 	}
 	
 	public Report(User user, Comment comment){
@@ -36,13 +36,4 @@ public class Report extends PersistentEntity{
 		return user;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
-		
-	}
-
-	public void setComment(Comment comment) {
-		this.comment = comment;
-		
-	}
 }
