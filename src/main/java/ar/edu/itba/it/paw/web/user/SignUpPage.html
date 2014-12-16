@@ -122,6 +122,15 @@
             </div>
           </div>
 
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label class="control-label" ><wicket:message key="captcha">Capcha</wicket:message></label>
+              <img wicket:id="captchaImage"/>
+              <!-- <span class="help-block"><errors class="text-danger" wicket:id="secretAnswer"/></span> -->
+              <input class="form-control" type="text" wicket:id="captcha" />
+            </div>
+          </div>
+
 
           <div class="col-md-8 col-md-offset-2">
             <button wicket:id="signUp" class="btn btn-primary btn-block" type="submit"><wicket:message key="signUp">Sign Up!</wicket:message></button>
