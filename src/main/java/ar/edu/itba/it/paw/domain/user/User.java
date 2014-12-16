@@ -40,6 +40,7 @@ public class User extends PersistentEntity {
 	private String secretAnswer;
 	private boolean vip;
 	private boolean admin;
+	private boolean blocked;
 
 	@ManyToMany
 	@JoinTable(name = "users_of_interest", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "user_of_interest_id") })
@@ -171,7 +172,7 @@ public class User extends PersistentEntity {
 	}
 
 	public boolean canComment(Movie movie) {
-		if ((movie.alreadyReleased() || isVip()) && !(alreadyCommented(movie))) {
+		if (!blocked && (movie.alreadyReleased() || isVip()) && !(alreadyCommented(movie))) {
 			return true;
 		} else {
 			return false;
@@ -232,5 +233,12 @@ public class User extends PersistentEntity {
 
 	public String getFullName() {
 		return firstName + " " + lastName;
+	}
+	public boolean isBlocked() {
+		return blocked;
+	}
+
+	public void setBlocked(boolean blocked) {
+		this.blocked = blocked;
 	}
 }

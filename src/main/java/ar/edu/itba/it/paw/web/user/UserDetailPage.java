@@ -12,6 +12,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -31,22 +32,31 @@ import ar.edu.itba.it.paw.web.movie.RankedMoviePanel;
 public class UserDetailPage extends BasePage{
 	@SpringBean UserRepo users;
 	private transient MoviesWicketSession session = MoviesWicketSession.get();
-	private transient int id;
 
-	public UserDetailPage(int id) throws NoIdException {
-		this.id = id;
-		User user = users.get(id);
-		add(new Label("fullName", user.getFullName()));
-		add(new Label("firstName", String.format(getString("pageDesc"), user.getFirstName())));
-//		add(new Label("firstName", user.getFirstName()));
-//		if(session.isSignedIn() && session.getUser().getUsersOfInterest().contains(user)){
-//			isInterest = true;
-//		}
+	public UserDetailPage(final int id) throws NoIdException {
+		final IModel<User> user = new LoadableDetachableModel<User>() {
+			@Override
+			protected User load() {
+				try {
+					return users.get(id);
+				} catch (NoIdException e) {
+					// TODO Auto-generated catch block manejar exepcion
+					e.printStackTrace();
+					return null;
+				}
+			}
+			@Override
+			public void detach() {
+				setObject(null);
+			}
+		};
+		add(new Label("fullName", user.getObject().getFullName()));
+		add(new Label("firstName", String.format(getString("pageDesc"), user.getObject().getFirstName())));
 		Form<UserDetailPage> unfollowform = new Form<UserDetailPage>("removeUserOfInterest", new CompoundPropertyModel<UserDetailPage>(this)) {
 			@Override
 			protected void onSubmit() {
 				try {
-					users.get(session.getUserId()).removeUserOfInterest(users.get(UserDetailPage.this.id));
+					users.get(session.getUserId()).removeUserOfInterest(user.getObject());
 				} catch (NoIdException e) {
 					// TODO Auto-generated catch block manejar excepcion
 					e.printStackTrace();
@@ -55,7 +65,7 @@ public class UserDetailPage extends BasePage{
 			@Override
 			public boolean isVisible() {
 				try {
-					return session.isSignedIn() && users.get(session.getUserId()).getUsersOfInterest().contains(users.get(UserDetailPage.this.id));
+					return session.isSignedIn() && users.get(session.getUserId()).getUsersOfInterest().contains(user.getObject());
 				} catch (NoIdException e) {
 					// TODO Auto-generated catch block manejar excepcion
 					e.printStackTrace();
@@ -69,7 +79,7 @@ public class UserDetailPage extends BasePage{
 			@Override
 			protected void onSubmit() {
 				try {
-					users.get(session.getUserId()).addUserOfInterest(users.get(UserDetailPage.this.id));
+					users.get(session.getUserId()).addUserOfInterest(user.getObject());
 				} catch (NoIdException e) {
 					// TODO Auto-generated catch block manejar excepcion
 					e.printStackTrace();
@@ -78,7 +88,7 @@ public class UserDetailPage extends BasePage{
 			@Override
 			public boolean isVisible() {
 				try {
-					return session.isSignedIn() && !users.get(session.getUserId()).getUsersOfInterest().contains(users.get(UserDetailPage.this.id));
+					return session.isSignedIn() && !users.get(session.getUserId()).getUsersOfInterest().contains(user.getObject());
 				} catch (NoIdException e) {
 					// TODO Auto-generated catch block manejar excepcion
 					e.printStackTrace();
@@ -89,17 +99,59 @@ public class UserDetailPage extends BasePage{
 		followform.add(new Button("follow", new ResourceModel("follow")));
 		add(followform);
 
-		add(new RefreshingView<Comment>("comment") {
+		Form<UserDetailPage> blockForm = new Form<UserDetailPage>("blockUser", new CompoundPropertyModel<UserDetailPage>(this)) {
 			@Override
-			protected Iterator<IModel<Comment>> getItemModels() {
-				List<IModel<Comment>> result = new ArrayList<IModel<Comment>>();
-				SortedSet<Comment> comments = null;
+			protected void onSubmit() {
 				try {
-					comments = users.get(UserDetailPage.this.id).getComments();
+					users.get(id).setBlocked(true);
 				} catch (NoIdException e) {
 					// TODO Auto-generated catch block manejar excepcion
 					e.printStackTrace();
 				}
+			}
+			@Override
+			public boolean isVisible() {
+				try {
+					return session.isAdmin() && !users.get(id).isBlocked();
+				} catch (NoIdException e) {
+					// TODO Auto-generated catch block manejar excepcion
+					e.printStackTrace();
+					return false;
+				}
+			}
+		};
+		blockForm.add(new Button("block"));
+		add(blockForm);
+
+		Form<UserDetailPage> unblockForm = new Form<UserDetailPage>("unblockUser", new CompoundPropertyModel<UserDetailPage>(this)) {
+			@Override
+			protected void onSubmit() {
+				try {
+					users.get(id).setBlocked(false);
+				} catch (NoIdException e) {
+					// TODO Auto-generated catch block manejar excepcion
+					e.printStackTrace();
+				}
+			}
+			@Override
+			public boolean isVisible() {
+				try {
+					return session.isAdmin() && users.get(id).isBlocked();
+				} catch (NoIdException e) {
+					// TODO Auto-generated catch block manejar excepcion
+					e.printStackTrace();
+					return false;
+				}
+			}
+		};
+		unblockForm.add(new Button("unblock"));
+		add(unblockForm);
+
+		add(new RefreshingView<Comment>("comment") {
+			@Override
+			protected Iterator<IModel<Comment>> getItemModels() {
+				List<IModel<Comment>> result = new ArrayList<IModel<Comment>>();
+				SortedSet<Comment> comments = user.getObject().getComments();
 				for (Comment comment : comments) {
 					result.add(new EntityModel<Comment>(Comment.class, comment));
 				}
