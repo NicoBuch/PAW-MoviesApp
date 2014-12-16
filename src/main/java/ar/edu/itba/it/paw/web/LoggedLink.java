@@ -11,7 +11,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 @SuppressWarnings("serial")
 public class LoggedLink<T> extends Link<T>{
-	public static final MoviesWicketSession wicketSession = MoviesWicketSession.get();
+	public  MoviesWicketSession wicketSession = MoviesWicketSession.get();
 	Class<? extends Page>Pageclazz;
 	boolean needUser, needAdmin, needVip;
 	Map<String,T> parameters;

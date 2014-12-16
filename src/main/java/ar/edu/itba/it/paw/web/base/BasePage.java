@@ -31,7 +31,13 @@ public class BasePage extends WebPage {
 		add ( new BaseLink<Void>("moviesListLink", ListMoviesPage.class));
 
 		add (new LoggedLink<Object>("signInLink", false, false ,false , SignInPage.class, null));
-		add (new LoggedLink<Object>("signOutLink", true, false ,false , BasePage.class, null));
+		add (new LoggedLink<Object>("signOutLink", true, false ,false , BasePage.class, null){
+			@Override
+			public void onClick() {
+				wicketSession.signOut();
+				setResponsePage(getApplication().getHomePage());
+			}
+		});
 		add (new LoggedLink<Object>("signUpLink", false, false, false, BasePage.class, null));
 		add (new LoggedLink<Object>("myProfileLink", true, false , false, BasePage.class, null));
 		add (new LoggedLink<Object>("resetPasswordLink", true, false, false, BasePage.class, null));
