@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ar.edu.itba.it.paw.web.common.HibernateRequestCycleListener;
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.BootstrapSettings;
 
 @Component
 public class MoviesWicketApp extends WebApplication {
@@ -38,6 +40,7 @@ public class MoviesWicketApp extends WebApplication {
     super.init();
     getComponentInstantiationListeners().add(new SpringComponentInjector(this));
     getRequestCycleListeners().add(new HibernateRequestCycleListener(sessionFactory));
+//    Bootstrap.install(this);
   }
 
   @Override
