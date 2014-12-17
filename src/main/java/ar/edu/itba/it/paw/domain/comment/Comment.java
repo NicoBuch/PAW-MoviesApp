@@ -36,7 +36,8 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 	@OneToMany(mappedBy="comment" ,  cascade=CascadeType.ALL )
 	private List<Report> reports;
 	
-	public Comment(){
+	@SuppressWarnings("unused")
+	private Comment(){
 	}
 
 	public Comment( String body, Date creationDate, int rating, Movie movie, User user) {
@@ -76,14 +77,8 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 	public Movie getMovie() {
 		return movie;
 	}
-	public void setMovie(Movie movie){
-		this.movie = movie;
-	}
 	public User getUser() {
 		return user;
-	}
-	public void setUser(User u){
-		this.user = u;
 	}
 	public List<Report> getReports(){
 		return reports;
@@ -128,14 +123,15 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 	}
 
 	public void rate(CommentRating commentRating) {
-		commentRatings.add(commentRating);
-		commentRating.setComment(this);
+		if(!commentRatings.contains(commentRating)){
+			commentRatings.add(commentRating);
+		}
+		commentRating.getUser().rate(commentRating);
+		
 	}
 
 	public void addReport(Report report) {
 		reports.add(report);
-		report.setComment(this);
-		
 	}
 
 	public void cleanReports() {

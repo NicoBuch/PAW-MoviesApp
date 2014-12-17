@@ -1,19 +1,12 @@
 package ar.edu.itba.it.paw.web.movie;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import javax.security.auth.Subject;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
+
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.omg.CORBA.portable.ApplicationException;
 
 import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.genre.Genre;

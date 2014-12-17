@@ -3,13 +3,10 @@ package ar.edu.itba.it.paw.web.converter;
 import java.util.Locale;
 
 import org.apache.wicket.util.convert.IConverter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import ar.edu.itba.it.paw.domain.NoIdException;
 import ar.edu.itba.it.paw.domain.genre.Genre;
-import ar.edu.itba.it.paw.domain.genre.GenreRepo;
+@SuppressWarnings("serial")
 @Component
 public class GenreConverter implements IConverter<Genre>{
 

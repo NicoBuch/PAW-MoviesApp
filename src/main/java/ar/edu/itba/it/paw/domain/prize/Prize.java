@@ -10,13 +10,14 @@ import ar.edu.itba.it.paw.domain.movie.Movie;
 public class Prize extends PersistentEntity{
 	
 	@ManyToOne
-	Movie movie;
-	String name;
+	private Movie movie;
+	private String name;
 	
 	// True if it is a price, false if it is a nomination 
-	boolean prize;
+	private boolean prize;
 	
-	public Prize(){
+	@SuppressWarnings("unused")
+	private Prize(){
 	}
 	
 	public Prize(Movie movie, String name, boolean prize){
@@ -39,11 +40,5 @@ public class Prize extends PersistentEntity{
 	public boolean isPrize() {
 		return prize;
 	}
-
-	public void setMovie(Movie movie) {
-		this.movie = movie;
-		
-	}
-	
 	
 }

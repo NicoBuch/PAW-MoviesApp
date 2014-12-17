@@ -1,14 +1,25 @@
 package ar.edu.itba.it.paw.domain;
 
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import ar.edu.itba.it.paw.domain.genre.Genre;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.user.User;
 
 public class UserTest {
+	
+	Movie randomMovie;
+	Set<Genre> genres = new HashSet<Genre>();
+	
+	public UserTest() {
+		genres.add(new Genre("andy"));
+		randomMovie = new Movie("title", new Date(System.currentTimeMillis()), "director",genres, 15, "caca");
+	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void tooLongFirstNameTest() {
@@ -65,6 +76,7 @@ public class UserTest {
 				"hola@otmail.com",
 				"password",
 				"firstName",
+				
 				"lasName",
 				new Date(System.currentTimeMillis()),
 				"holaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholaholahola?",
@@ -95,7 +107,7 @@ public class UserTest {
 		User user = new User("hola@otmail.com", "password", "firstName",
 				"lasName", new Date(System.currentTimeMillis()), "hola?",
 				"hola", false);
-		Movie movie = new Movie();
+		Movie movie = randomMovie;
 		movie.setReleaseDate(new Date(System.currentTimeMillis() + 1000000));
 		Assert.assertFalse(user.canComment(movie));
 		movie.setReleaseDate(new Date(System.currentTimeMillis() - 100000));
