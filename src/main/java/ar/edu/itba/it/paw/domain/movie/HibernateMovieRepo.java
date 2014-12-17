@@ -88,4 +88,15 @@ public class HibernateMovieRepo extends AbstractHibernateRepo implements
 		super.delete(movie);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Movie> getByVisits(int limit) {
+		Session session = getSession();
+
+		Query query = session.createQuery(
+				"from Movie order by visits desc").setMaxResults(limit);
+		List<Movie> list = query.list();
+		return list;
+	}
+
 }

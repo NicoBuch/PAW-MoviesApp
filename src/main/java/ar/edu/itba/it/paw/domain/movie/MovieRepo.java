@@ -27,4 +27,6 @@ public interface MovieRepo {
 	
 	public void delete(Movie movie);
 
+	public List<Movie> getByVisits(int limit);
+
 }

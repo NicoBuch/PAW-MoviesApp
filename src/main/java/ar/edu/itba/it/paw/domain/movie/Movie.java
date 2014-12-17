@@ -40,6 +40,7 @@ public class Movie extends PersistentEntity {
 	private String description;
 	private Date creationDate;
 	private byte[] picture;
+	private int visits;
 
 	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL)
 	@Sort(type = SortType.NATURAL)
@@ -255,6 +256,14 @@ public class Movie extends PersistentEntity {
 
 	public void deletePicture() {
 		picture = null;		
+	}
+
+	public int getVisits() {
+		return visits;
+	}
+
+	public void visit() {
+		this.visits++;
 	}
 
 
