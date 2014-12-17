@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -20,6 +21,7 @@ import org.apache.wicket.request.resource.ByteArrayResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValueConversionException;
 
+import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.NoIdException;
 import ar.edu.itba.it.paw.domain.comment.CommentRepo;
 import ar.edu.itba.it.paw.domain.genre.Genre;
@@ -41,12 +43,13 @@ public class ViewMoviePage  extends BasePage {
 	@SpringBean static PrizeRepo prizes;
 	private transient boolean prize;
 	private transient String name;
+	EntityModel<Movie> movieModel;
 	PageParameters params;
 	
 	
 	public ViewMoviePage(PageParameters params)  throws StringValueConversionException, NoIdException{
 		this.params = params;
-		final Movie movie = movies.get(params.get("movieId").toInteger());
+		final EntityModel<Movie> movie = new EntityModel<Movie>(Movie.class,movies.get(params.get("movieId").toInteger()));
 		add(new Label(("title"), new PropertyModel<String>(movie, "title")));
 		add(new Label(("director"), new PropertyModel<String>(movie, "director")));
 		add(new Label(("releaseDate"), new PropertyModel<String>(movie, "releaseDate")));
@@ -54,13 +57,21 @@ public class ViewMoviePage  extends BasePage {
 		add(new Label(("description"), new PropertyModel<String>(movie, "description")));
 		
 		RepeatingView genreList = new RepeatingView("genreList");
-		 for (Genre g : movie.getGenres()) {
+		 for (Genre g : movie.getObject().getGenres()) {
 			genreList.add(new Label(genreList.newChildId(),g.getName()));
 		}
 		add(genreList);
 		
 		
-		add(new ListView<Prize>("prizeList", movie.getPrices()) {
+		add(new ListView<List<Prices>>("prizeList", new LoadableDetachableModel<List<Prices>>( movie.getObject().getPrices()) {
+
+			@Override
+			protected List<Prices> load() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};) 
+		{
 			
 			@Override
 			protected void populateItem(ListItem<Prize> item) {
@@ -68,14 +79,14 @@ public class ViewMoviePage  extends BasePage {
 			   item.add(new DeleteLink<Prize>("deletePrizeLink",true, true, false, item.getModel()) {
 					@Override
 					public void onClick() {
-						movie.removePrize(getModelObject());
+						movie.getObject().removePrize(getModelObject());
 					}
 				});
 			}
 			
 		});
 		
-		add(new ListView<Prize>("nominationList", movie.getNominations()) {
+		add(new ListView<Prize>("nominationList", movie.getObject().getNominations()) {
 			
 			@Override
 			protected void populateItem(ListItem<Prize> item) {
@@ -83,27 +94,26 @@ public class ViewMoviePage  extends BasePage {
 			   item.add(new DeleteLink<Prize>("deleteNominationLink", true, true, false, item.getModel()) {
 					@Override
 					public void onClick() {
-						movie.removePrize(getModelObject());
+						movie.getObject().removePrize(getModelObject());
 					}
 				});
 			}
 			
 		});
 		
-		add(new Image("moviePicture", new ByteArrayResource("JPEG", movie.getPicture())));
+		add(new Image("moviePicture", new ByteArrayResource("JPEG", movie.getObject().getPicture())));
 		add(new DeleteLink<Movie>("deletePictureLink", true, true, false, null) {
 			@Override
 			public void onClick() {
-				movie.deletePicture();			
+				movie.getObject().deletePicture();			
 			}
 		});
 		ConditionalForm<ViewMoviePage> adminPrizesForm = new ConditionalForm<ViewMoviePage>("adminPrizesForm",new CompoundPropertyModel<ViewMoviePage>(this),true,true,false){
 			@Override
 			protected void onSubmit() {
 				if(name != null){
-					Prize pri = new Prize(movie, name, prize);
-					movie.addPrize(pri);
-					
+					Prize pri = new Prize(movie.getObject(), name, prize);
+					movie.getObject().addPrize(pri);
 				}
 				setResponsePage(ViewMoviePage.class,ViewMoviePage.this.params);
 			}
@@ -139,20 +149,6 @@ public class ViewMoviePage  extends BasePage {
 		Form<ViewMoviePage> commentMovieForm = new Form<ViewMoviePage>("commentMovieForm", new CompoundPropertyModel<ViewMoviePage>(this));
 		
 	}
-		
-		
-		
-		 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 }
 	
 	
