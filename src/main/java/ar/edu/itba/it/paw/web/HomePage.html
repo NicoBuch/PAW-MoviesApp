@@ -39,18 +39,12 @@
 
         <div class="col-md-6 pull-right">
          <legend><h3><wicket:message key="mostRanked">Most Ranked Movies</wicket:message></h3></legend>
-         <!-- <c:choose> -->
-            <!-- <c:when test="${!empty ranked}"> -->
-              <div wicket:id="rankedMovies" class="list-group">
-               <!-- <c:forEach var="aMovie" items="${ranked}"> -->
-                <a class="list-group-item" wicket:id="movieDetailLink"><b wicket:id="title"/></a>
-                <!-- </c:forEach> -->
-              </div>
-            <!-- </c:when> -->
-            <!-- <c:otherwise> -->
-              <p wicket:id="noRankedMovies"><wicket:message key="noRankedMovies">No ranked movies to show</wicket:message></p>
-<!--             </c:otherwise>
-          </c:choose> -->
+            <div wicket:id="rankedMovies" class="list-group">
+              <a class="list-group-item" wicket:id="movieDetailLink"><b wicket:id="title"/></a>
+            </div>
+            <p wicket:id="noRankedMovies">
+              <wicket:message key="noRankedMovies">No ranked movies to show</wicket:message>
+            </p>
         </div>
 
         <div class="col-md-6 pull-left">
@@ -72,8 +66,22 @@
           </c:choose> -->
         </div>
 
+
+
+
+
+        <div class="col-md-6 pull-right">
+          <legend><h3><wicket:message key="visitedMovies">Most Visited Movies</wicket:message></h3></legend>
+          <div wicket:id="visitedMovies" class="list-group">
+              <a class="list-group-item" wicket:id="movieDetailLink"><b wicket:id="title"/></a>
+          </div>
+          <p wicket:id="noVisitedMovies">
+              <wicket:message key="noVisitedMovies">No movies to show</wicket:message>
+          </p>
+        </div>
+
         <!-- <c:if test="${! empty user }"> -->
-          <div wicket:id="usersOfInterestDiv" class="col-md-6 pull-right">
+          <div wicket:id="usersOfInterestDiv" class="col-md-offset-0">
             <legend><h3><wicket:message key="usersOfInterest">Users Of Interest</wicket:message></h3></legend>
             <!-- <c:choose> -->
             <!-- <c:when test="${!empty user.usersOfInterest}"> -->

@@ -3,17 +3,12 @@ package ar.edu.itba.it.paw.web;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PropertyListView;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
@@ -34,6 +29,7 @@ public class HomePage extends BasePage{
 	@SpringBean UserRepo users;
 	private final int TOP_RANKED_CANT = 5;
 	private final int MOST_RECENT_CANT = 5;
+	private final int MOST_VISITED_CANT = 5;
 	private transient Date now;
 	private transient Date aWeekBefore;
 	
@@ -59,10 +55,6 @@ public class HomePage extends BasePage{
 					return null;
 				}
 			}
-			@Override
-			public void detach() {
-				setObject(null);
-			}
 		};
 		
 		IModel<List<Movie>> ranked = new LoadableDetachableModel<List<Movie>>() {
@@ -70,19 +62,18 @@ public class HomePage extends BasePage{
 			protected List<Movie> load() {
 				return movies.getByRating(TOP_RANKED_CANT);
 			}
-			@Override
-			public void detach() {
-				setObject(null);
-			}
 		}; 
+		
+		IModel<List<Movie>> visited = new LoadableDetachableModel<List<Movie>>() {
+			@Override
+			protected List<Movie> load() {
+				return movies.getByVisits(MOST_VISITED_CANT);
+			}
+		};
 		IModel<List<Movie>> recents = new LoadableDetachableModel<List<Movie>>() {
 			@Override
 			protected List<Movie> load() {
 				return movies.getByCreationDate(MOST_RECENT_CANT);
-			}
-			@Override
-			public void detach() {
-				setObject(null);
 			}
 		};
 
@@ -91,10 +82,6 @@ public class HomePage extends BasePage{
 			@Override
 			protected List<Movie> load() {
 				return movies.getByReleaseDate(aWeekBefore, now);				
-			}
-			@Override
-			public void detach() {
-				setObject(null);
 			}
 			
 		};
@@ -124,6 +111,14 @@ public class HomePage extends BasePage{
 			}
 		}.setVisible(!recents.getObject().isEmpty()));
 		add(new WebMarkupContainer("noRecents").setVisible(recents.getObject().isEmpty()));
+		
+		add(new PropertyListView<Movie>("visitedMovies", visited){
+			@Override
+			protected void populateItem(ListItem<Movie> item) {
+				item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(new Label("title", new PropertyModel<String>(item.getModel(), "title"))));
+			}
+		}.setVisible(!visited.getObject().isEmpty()));
+		add(new WebMarkupContainer("noVisitedMovies").setVisible(visited.getObject().isEmpty()));
 		
 		add(new WebMarkupContainer("usersOfInterestDiv").add(new PropertyListView<User>("usersOfInterest", usersOfInterest){
 			@Override
