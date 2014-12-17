@@ -7,6 +7,7 @@ import java.util.Set;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
@@ -67,10 +68,11 @@ public class EditMoviePage extends AdminPage{
 				setResponsePage(ListMoviesPage.class);
 			}
 		});
-		form.add(new Button("movieCancelButton", new ResourceModel("editMovie")) {
+		form.add(new Link<EditMoviePage>("movieCancelButton") {
 			@Override
-			public void onSubmit() {
+			public void onClick() {
 				setResponsePage(ListMoviesPage.class);
+				
 			}
 		});
 		form.setMultiPart(true);
