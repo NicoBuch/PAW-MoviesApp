@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -49,7 +50,7 @@ public class ViewMoviePage  extends BasePage {
 	private transient String name;
 	EntityModel<Movie> movieModel;
 	PageParameters params;
-	
+	FileUploadField pictureToUpload;
 	
 	public ViewMoviePage(PageParameters params)  throws StringValueConversionException, NoIdException{
 		this.params = params;
@@ -114,7 +115,8 @@ public class ViewMoviePage  extends BasePage {
 				movie.getObject().deletePicture();			
 			}
 		});
-		ConditionalForm<ViewMoviePage> adminPrizesForm = new ConditionalForm<ViewMoviePage>("adminPrizesForm",new CompoundPropertyModel<ViewMoviePage>(this),true,true,false){
+		ConditionalForm<ViewMoviePage> adminPrizesForm = new ConditionalForm<ViewMoviePage>("adminPrizesForm",new CompoundPropertyModel<ViewMoviePage>(this),
+																							true,true,false){
 			@Override
 			protected void onSubmit() {
 				if(name != null){
@@ -130,14 +132,24 @@ public class ViewMoviePage  extends BasePage {
 		add(adminPrizesForm);
 		
 		
-		Form<ViewMoviePage> setPicutreForm = new Form<ViewMoviePage>("setPicutreForm", new CompoundPropertyModel<ViewMoviePage>(this)){
+		Form<ViewMoviePage> setPicutreForm = new ConditionalForm<ViewMoviePage>("setPicutreForm", new CompoundPropertyModel<ViewMoviePage>(this),
+																				true, true ,false){
 			@Override
 			protected void onSubmit() {
+				List<FileUpload> file = pictureToUpload.getFileUploads();
+				byte[] moviePicture = file.get(0).getBytes();
+				movie.getObject().setPicture(moviePicture);
 				onSubmit();
 			}
 		};
 		setPicutreForm.add(new Button("uploadPicture", new ResourceModel("uploadPicture")));
-		setPicutreForm.add(new FileUploadField("pic"));
+		add(pictureToUpload = new FileUploadField("pic", new LoadableDetachableModel<List<FileUpload>>() {
+
+			@Override
+			protected List<FileUpload> load() {
+				return null;
+			}
+		}));
 		add(setPicutreForm);
 		
 		
