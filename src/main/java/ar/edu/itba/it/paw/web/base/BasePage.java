@@ -24,10 +24,10 @@ import ar.edu.itba.it.paw.web.user.UserDetailPage;
 public class BasePage extends WebPage {
 	@SpringBean private UserRepo users;
 	@SpringBean private EntityResolver entityResolver;
+	MoviesWicketSession wicketSession = MoviesWicketSession.get();
 	User user;
 	public BasePage() {
 		boolean loggedIn = false;
-		MoviesWicketSession wicketSession = MoviesWicketSession.get();
 		if(wicketSession.getEmail() != null){
 			loggedIn = true;
 		}

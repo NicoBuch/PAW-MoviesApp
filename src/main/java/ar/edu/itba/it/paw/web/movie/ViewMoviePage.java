@@ -27,22 +27,26 @@ import ar.edu.itba.it.paw.domain.genre.GenreRepo;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.movie.MovieRepo;
 import ar.edu.itba.it.paw.domain.prize.Prize;
+import ar.edu.itba.it.paw.domain.prize.PrizeRepo;
+import ar.edu.itba.it.paw.web.ConditionalForm;
 import ar.edu.itba.it.paw.web.DeleteLink;
 import ar.edu.itba.it.paw.web.base.BasePage;
 
 @SuppressWarnings("serial")
-public class ViewMoviePage extends BasePage {
+public class ViewMoviePage  extends BasePage {
 	
 	@SpringBean static MovieRepo movies;
 	@SpringBean static CommentRepo comments;
 	@SpringBean static GenreRepo genres;
+	@SpringBean static PrizeRepo prizes;
+	private transient boolean prize;
+	private transient String name;
+	PageParameters params;
 	
 	
-	public ViewMoviePage(PageParameters params) throws StringValueConversionException, NoIdException{
-		
+	public ViewMoviePage(PageParameters params)  throws StringValueConversionException, NoIdException{
+		this.params = params;
 		final Movie movie = movies.get(params.get("movieId").toInteger());
-		
-				
 		add(new Label(("title"), new PropertyModel<String>(movie, "title")));
 		add(new Label(("director"), new PropertyModel<String>(movie, "director")));
 		add(new Label(("releaseDate"), new PropertyModel<String>(movie, "releaseDate")));
@@ -93,13 +97,15 @@ public class ViewMoviePage extends BasePage {
 				movie.deletePicture();			
 			}
 		});
-		
-		Form<ViewMoviePage> adminPrizesForm = new Form<ViewMoviePage>("adminPrizesForm", new CompoundPropertyModel<ViewMoviePage>(this)){
+		ConditionalForm<ViewMoviePage> adminPrizesForm = new ConditionalForm<ViewMoviePage>("adminPrizesForm",new CompoundPropertyModel<ViewMoviePage>(this),true,true,false){
 			@Override
 			protected void onSubmit() {
-				// TODO 
-				
-				super.onSubmit();
+				if(name != null){
+					Prize pri = new Prize(movie, name, prize);
+					movie.addPrize(pri);
+					
+				}
+				setResponsePage(ViewMoviePage.class,ViewMoviePage.this.params);
 			}
 		};
 		adminPrizesForm.add(new Button("addMovieAward", new ResourceModel("addMovieAward")));
@@ -111,8 +117,7 @@ public class ViewMoviePage extends BasePage {
 		Form<ViewMoviePage> setPicutreForm = new Form<ViewMoviePage>("setPicutreForm", new CompoundPropertyModel<ViewMoviePage>(this)){
 			@Override
 			protected void onSubmit() {
-				// TODO 
-				super.onSubmit();
+				onSubmit();
 			}
 		};
 		setPicutreForm.add(new Button("uploadPicture", new ResourceModel("uploadPicture")));

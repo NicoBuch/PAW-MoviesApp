@@ -1,5 +1,9 @@
 package ar.edu.itba.it.paw.web;
 
+import java.util.Map;
+
+
+
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
@@ -7,9 +11,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 @SuppressWarnings("serial")
 public class LoggedLink<T> extends Link<T>{
-	public  MoviesWicketSession wicketSession = MoviesWicketSession.get();
-	Class<? extends Page>Pageclazz;
+	private MoviesWicketSession wicketSession = MoviesWicketSession.get();
 	boolean needUser, needAdmin, needVip;
+	Class pageClazz;
 	PageParameters parameters;
 	public LoggedLink(String id,boolean needUser, boolean needAdmin, boolean needVip, Class<? extends Page> Pageclazz,
 						PageParameters parameters) {
@@ -18,7 +22,7 @@ public class LoggedLink<T> extends Link<T>{
 		this.needUser = needUser;
 		this.needAdmin = needAdmin;
 		this.needVip = needVip;
-		this.Pageclazz = Pageclazz;
+		this.pageClazz = Pageclazz;
 	}
 	public LoggedLink(String id,boolean needUser, boolean needAdmin, boolean needVip,Class<? extends Page> Pageclazz,
 			PageParameters parameters, IModel<T> model) {
@@ -27,8 +31,7 @@ public class LoggedLink<T> extends Link<T>{
 		this.needUser = needUser;
 		this.needAdmin = needAdmin;
 		this.needVip = needVip;
-		this.Pageclazz = Pageclazz;
-
+		this.pageClazz = Pageclazz;
 }
 	
 	@Override
@@ -48,10 +51,10 @@ public class LoggedLink<T> extends Link<T>{
 	@Override
 	public void onClick() {
 			if(parameters == null){
-				setResponsePage(Pageclazz);
+				setResponsePage(pageClazz);
 				return;
 			}
-			setResponsePage(Pageclazz, parameters);
+			setResponsePage(pageClazz, parameters);
 	}
 
 }

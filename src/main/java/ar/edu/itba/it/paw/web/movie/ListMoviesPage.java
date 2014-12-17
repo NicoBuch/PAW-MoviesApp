@@ -24,6 +24,7 @@ import ar.edu.itba.it.paw.domain.genre.Genre;
 import ar.edu.itba.it.paw.domain.genre.GenreRepo;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.movie.MovieRepo;
+import ar.edu.itba.it.paw.web.BaseLink;
 import ar.edu.itba.it.paw.web.DeleteLink;
 import ar.edu.itba.it.paw.web.LoggedLink;
 import ar.edu.itba.it.paw.web.base.BasePage;
@@ -89,6 +90,7 @@ public class ListMoviesPage extends BasePage{
 				params.add("movieId", item.getModelObject().getId());
 				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
 				item.add(moviePanel);
+				item.add(new BaseLink<Integer>("movieDetailLink", ViewMoviePage.class,params).add(new Label("title", new PropertyModel<String>(item.getModel(), "title"))));
 				item.add(new Label(("director"), new PropertyModel<String>(item.getModel(), "director")));
 				item.add(new Label(("releaseDate"), new PropertyModel<Date>(item.getModel(), "releaseDate")));
 				item.add(new LoggedLink<Integer>("editMovieLink", true, true, false , EditMoviePage.class, params));
