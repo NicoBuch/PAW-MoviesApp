@@ -1,6 +1,9 @@
 package ar.edu.itba.it.paw.web.movie;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -13,6 +16,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
@@ -62,17 +66,14 @@ public class ViewMoviePage  extends BasePage {
 		}
 		add(genreList);
 		
-		
-		add(new ListView<List<Prices>>("prizeList", new LoadableDetachableModel<List<Prices>>( movie.getObject().getPrices()) {
-
+		IModel<List<Prize>> prizeModel = new LoadableDetachableModel<List<Prize>>(){
 			@Override
-			protected List<Prices> load() {
-				// TODO Auto-generated method stub
-				return null;
+			protected List<Prize> load() {
+				return new ArrayList<Prize>(movie.getObject().getPrices()) ;
 			}
-		};) 
-		{
-			
+		};
+		add(new ListView<Prize>("prizeList", prizeModel)
+		{	
 			@Override
 			protected void populateItem(ListItem<Prize> item) {
 			   item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
@@ -85,8 +86,13 @@ public class ViewMoviePage  extends BasePage {
 			}
 			
 		});
-		
-		add(new ListView<Prize>("nominationList", movie.getObject().getNominations()) {
+		IModel<List<Prize>> nominationsModel = new LoadableDetachableModel<List<Prize>>(){
+			@Override
+			protected List<Prize> load() {
+				return new ArrayList<Prize>(movie.getObject().getNominations()) ;
+			}
+		};
+		add(new ListView<Prize>("nominationList", nominationsModel) {
 			
 			@Override
 			protected void populateItem(ListItem<Prize> item) {
