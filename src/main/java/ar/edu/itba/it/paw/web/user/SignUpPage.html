@@ -1,0 +1,147 @@
+<html>
+  <body>
+    <wicket:extend>
+
+
+  <div class="page-header">
+    <h2><wicket:message key="pageName">Register</wicket:message>
+      <br>
+      <small><wicket:message key="pageDesc">Please complete these fields to sign up</wicket:message></small>
+    </h2>
+  </div>
+
+  <div class="col-md-10 col-md-offset-1">
+
+    <div wicket:id="feedback" class="alert alert-warning alert-dismissible" role="alert"/>
+<!--     <c:if test="${!empty errors}">
+      <c:forEach var="error" items="${errors}">
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <strong>Login Error!</strong> ${error.message}
+        </div>
+      </c:forEach>
+    </c:if> -->
+
+
+    <form wicket:id="signUpForm" novalidate>
+
+
+      <!-- <div class="col-md-8 col-md-offset-2" id="feedback" /> -->
+
+        <fieldset>
+
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label class="control-label" ><wicket:message key="firstName">First Name</wicket:message></label>
+              <!-- <span class="help-block"><errors class="text-danger" wicket:id="firstName"/></span> -->
+              <input class="form-control" wicket:id="firstName" autofocus="autofocus" />
+            </div>
+          </div>
+
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label class="control-label" ><wicket:message key="lastName">Last Name</wicket:message></label>
+              <!-- <span class="help-block"><errors class="text-danger" wicket:id="lastName"/></span> -->
+              <input class="form-control" wicket:id="lastName"/>
+            </div>
+          </div>
+
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label class="control-label" ><wicket:message key="email">Email</wicket:message></label>
+              <!-- <span class="help-block"><errors class="text-danger" wicket:id="email"/></span> -->
+              <input class="form-control" wicket:id="email" />
+            </div>
+          </div>
+
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label class="control-label"><wicket:message key="birthDate">Birth Date</wicket:message></label>
+              <!-- <span class="help-block"><errors class="text-danger" wicket:id="birthDay"/></span> -->
+              <div class=" col-md-offset-0">
+                <div class="col-xs-4">
+                  <select class="form-control" wicket:id="birthDay">
+                    <!-- <option value="0" disabled="disabled" selected="selected">Day</option> -->
+    <!--                 <c:forEach var="i" begin="1" end="31">
+                       <option value="${i}">${i}</option>
+                       </c:forEach> -->
+                  </select>
+                </div>
+
+                <div class="col-xs-4">
+                  <select class="form-control" wicket:id="birthMonth">
+   <!--                  <option value="0" disabled="disabled" selected="selected">Month</option>
+                    <c:forEach var="i" begin="1" end="12">
+                       <option value="${i}">${i}</option>
+                       </c:forEach> -->
+                  </select>
+                </div>
+
+                <div class="col-xs-4">
+                  <select class="form-control" wicket:id="birthYear">
+<!--                     <option value="0" disabled="disabled" selected="selected">Year</option>
+                    <c:forEach var="i" begin="1930" end="2014">
+                       <option value="${i}">${i}</option>
+                       </c:forEach> -->
+                  </select>
+                </div>
+              </div>
+            </div>
+            <br><br>
+          </div>
+
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label class="control-label" ><wicket:message key="password">Password</wicket:message></label>
+<!--               <span class="help-block"><errors class="text-danger" wicket:id="password"/></span>
+ -->              <input class="form-control" type="password" wicket:id="password" />
+            </div>
+          </div>
+
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label class="control-label" ><wicket:message key="confirmPassword">Confirm your Password</wicket:message></label>
+              <!-- <span class="help-block"><errors class="text-danger" wicket:id="confirmPassword"/></span> -->
+              <input class="form-control" type="password" wicket:id="confirmPassword" />
+            </div>
+          </div>
+
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label class="control-label" ><wicket:message key="secretQuestion">Secret Question</wicket:message></label>
+              <!-- <span class="help-block"><errors class="text-danger" wicket:id="secretQuestion"/></span> -->
+              <input class="form-control" type="text" wicket:id="secretQuestion"  />
+            </div>
+          </div>
+
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label class="control-label" ><wicket:message key="secretAnswer">Secret Answer</wicket:message></label>
+              <!-- <span class="help-block"><errors class="text-danger" wicket:id="secretAnswer"/></span> -->
+              <input class="form-control" type="text" wicket:id="secretAnswer" />
+            </div>
+          </div>
+
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label class="control-label" ><wicket:message key="captcha">Capcha</wicket:message></label>
+              <img wicket:id="captchaImage"/>
+              <!-- <span class="help-block"><errors class="text-danger" wicket:id="secretAnswer"/></span> -->
+              <input class="form-control" type="text" wicket:id="captcha" />
+            </div>
+          </div>
+
+
+          <div class="col-md-8 col-md-offset-2">
+            <button wicket:id="signUp" class="btn btn-primary btn-block" type="submit"><wicket:message key="signUp">Sign Up!</wicket:message></button>
+            <a class="btn btn-default btn-block" wicket:id="cancelLink"><wicket:message key="cancel">Cancel</wicket:message></a>
+          </div>
+
+        </fieldset>
+    </form>
+
+  </div>
+
+    </wicket:extend>
+  </body>
+</html>
