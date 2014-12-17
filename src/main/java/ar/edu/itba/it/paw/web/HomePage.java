@@ -22,6 +22,7 @@ import ar.edu.itba.it.paw.domain.movie.MovieRepo;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.domain.user.UserRepo;
 import ar.edu.itba.it.paw.web.base.BasePage;
+import ar.edu.itba.it.paw.web.movie.RankedMoviePanel;
 
 @SuppressWarnings("serial")
 public class HomePage extends BasePage{
@@ -32,14 +33,14 @@ public class HomePage extends BasePage{
 	private final int MOST_VISITED_CANT = 5;
 	private transient Date now;
 	private transient Date aWeekBefore;
-	
+
 	public HomePage(){
 		now = new Date(System.currentTimeMillis());
 		Calendar c = Calendar.getInstance();
 		c.setTime(now);
 		c.add(Calendar.DATE, -6);
 		aWeekBefore = new Date(c.getTimeInMillis());
-		
+
 		IModel<List<User>> usersOfInterest = new LoadableDetachableModel<List<User>>() {
 			@Override
 			protected List<User> load() {
@@ -56,14 +57,14 @@ public class HomePage extends BasePage{
 				}
 			}
 		};
-		
+
 		IModel<List<Movie>> ranked = new LoadableDetachableModel<List<Movie>>() {
 			@Override
 			protected List<Movie> load() {
 				return movies.getByRating(TOP_RANKED_CANT);
 			}
-		}; 
-		
+		};
+
 		IModel<List<Movie>> visited = new LoadableDetachableModel<List<Movie>>() {
 			@Override
 			protected List<Movie> load() {
@@ -81,45 +82,48 @@ public class HomePage extends BasePage{
 
 			@Override
 			protected List<Movie> load() {
-				return movies.getByReleaseDate(aWeekBefore, now);				
+				return movies.getByReleaseDate(aWeekBefore, now);
 			}
-			
 		};
 		add(new PropertyListView<Movie>("releases", releases){
 			@Override
 			protected void populateItem(ListItem<Movie> item) {
-				item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(new Label("title", new PropertyModel<String>(item.getModel(), "title"))).add(new Label("shortDescription", new PropertyModel<String>(item.getModel(), "shortDescription"))));
+				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
+				item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(moviePanel).add(new Label("shortDescription", new PropertyModel<String>(item.getModel(), "shortDescription"))));
 			}
 		}.setVisible(!releases.getObject().isEmpty()));
 		add(new WebMarkupContainer("noReleases").setVisible(releases.getObject().isEmpty()));
-		
+
 		add(new PropertyListView<Movie>("rankedMovies", ranked){
 			@Override
 			protected void populateItem(ListItem<Movie> item) {
-				item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(new Label("title", new PropertyModel<String>(item.getModel(), "title"))));
+				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
+				item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(moviePanel));
 			}
 		}.setVisible(!ranked.getObject().isEmpty()));
 		add(new WebMarkupContainer("noRankedMovies").setVisible(ranked.getObject().isEmpty()));
-		
+
 		add(new PropertyListView<Movie>("recentMovies", recents){
 			@Override
 			protected void populateItem(ListItem<Movie> item) {
-				item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(new Label("title", new PropertyModel<String>(item.getModel(), "title")))
+				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
+				item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(moviePanel)
 				.add(new Label("uploadDate", String.format(getString("uploadDate"), item.getModelObject().getCreationDate())))
 				.add(new Label("commentsCount", String.format(getString("commentsCount"), item.getModelObject().getCommentCount()))));
-				
+
 			}
 		}.setVisible(!recents.getObject().isEmpty()));
 		add(new WebMarkupContainer("noRecents").setVisible(recents.getObject().isEmpty()));
-		
+
 		add(new PropertyListView<Movie>("visitedMovies", visited){
 			@Override
 			protected void populateItem(ListItem<Movie> item) {
-				item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(new Label("title", new PropertyModel<String>(item.getModel(), "title"))));
+				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
+				item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(moviePanel));
 			}
 		}.setVisible(!visited.getObject().isEmpty()));
 		add(new WebMarkupContainer("noVisitedMovies").setVisible(visited.getObject().isEmpty()));
-		
+
 		add(new WebMarkupContainer("usersOfInterestDiv").add(new PropertyListView<User>("usersOfInterest", usersOfInterest){
 			@Override
 			protected void populateItem(ListItem<User> item) {
@@ -128,16 +132,17 @@ public class HomePage extends BasePage{
 
 					@Override
 					protected void populateItem(ListItem<Comment> item) {
+						RankedMoviePanel moviePanel = new RankedMoviePanel("title", new EntityModel<Movie>(Movie.class, item.getModelObject().getMovie()));
 						item.add(new Label("body", new PropertyModel<String>(item.getModel(), "body")));
-						item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(new Label("title", new PropertyModel<String>(new EntityModel<Movie>(Movie.class, item.getModelObject().getMovie()), "title"))));
+						item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(moviePanel));
 						item.setVisible(item.getModelObject().getCreationDate().after(aWeekBefore));
 					}
 				});
-				item.add(new WebMarkupContainer("noComments").setVisible(item.getModelObject().getUsersOfInterest().isEmpty()));				
+				item.add(new WebMarkupContainer("noComments").setVisible(item.getModelObject().getUsersOfInterest().isEmpty()));
 			}
 		}.setVisible(!usersOfInterest.getObject().isEmpty()))
 			.add(new WebMarkupContainer("noUsers").setVisible(usersOfInterest.getObject().isEmpty()))
 		.setVisible(MoviesWicketSession.get().isSignedIn()));
-			
+
 	}
 }
