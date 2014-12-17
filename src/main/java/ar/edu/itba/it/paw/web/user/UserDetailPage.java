@@ -12,7 +12,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -34,29 +33,14 @@ public class UserDetailPage extends BasePage{
 	private transient MoviesWicketSession session = MoviesWicketSession.get();
 
 	public UserDetailPage(final int id) throws NoIdException {
-		final IModel<User> user = new LoadableDetachableModel<User>() {
-			@Override
-			protected User load() {
-				try {
-					return users.get(id);
-				} catch (NoIdException e) {
-					// TODO Auto-generated catch block manejar exepcion
-					e.printStackTrace();
-					return null;
-				}
-			}
-			@Override
-			public void detach() {
-				setObject(null);
-			}
-		};
+		final IModel<User> user = new EntityModel<User>(User.class, id);
 		add(new Label("fullName", user.getObject().getFullName()));
 		add(new Label("firstName", String.format(getString("pageDesc"), user.getObject().getFirstName())));
 		Form<UserDetailPage> unfollowform = new Form<UserDetailPage>("removeUserOfInterest", new CompoundPropertyModel<UserDetailPage>(this)) {
 			@Override
 			protected void onSubmit() {
 				try {
-					users.get(session.getUserId()).removeUserOfInterest(user.getObject());
+					users.get(session.getUserModel().getObject().getId()).removeUserOfInterest(user.getObject());
 				} catch (NoIdException e) {
 					// TODO Auto-generated catch block manejar excepcion
 					e.printStackTrace();
@@ -65,7 +49,7 @@ public class UserDetailPage extends BasePage{
 			@Override
 			public boolean isVisible() {
 				try {
-					return session.isSignedIn() && users.get(session.getUserId()).getUsersOfInterest().contains(user.getObject());
+					return session.isSignedIn() && users.get(session.getUserModel().getObject().getId()).getUsersOfInterest().contains(user.getObject());
 				} catch (NoIdException e) {
 					// TODO Auto-generated catch block manejar excepcion
 					e.printStackTrace();
@@ -79,7 +63,7 @@ public class UserDetailPage extends BasePage{
 			@Override
 			protected void onSubmit() {
 				try {
-					users.get(session.getUserId()).addUserOfInterest(user.getObject());
+					users.get(session.getUserModel().getObject().getId()).addUserOfInterest(user.getObject());
 				} catch (NoIdException e) {
 					// TODO Auto-generated catch block manejar excepcion
 					e.printStackTrace();
@@ -88,7 +72,7 @@ public class UserDetailPage extends BasePage{
 			@Override
 			public boolean isVisible() {
 				try {
-					return session.isSignedIn() && !users.get(session.getUserId()).getUsersOfInterest().contains(user.getObject());
+					return session.isSignedIn() && !users.get(session.getUserModel().getObject().getId()).getUsersOfInterest().contains(user.getObject());
 				} catch (NoIdException e) {
 					// TODO Auto-generated catch block manejar excepcion
 					e.printStackTrace();
@@ -104,6 +88,7 @@ public class UserDetailPage extends BasePage{
 			protected void onSubmit() {
 				try {
 					users.get(id).setBlocked(true);
+					user.getObject().setBlocked(true);
 				} catch (NoIdException e) {
 					// TODO Auto-generated catch block manejar excepcion
 					e.printStackTrace();
@@ -111,13 +96,7 @@ public class UserDetailPage extends BasePage{
 			}
 			@Override
 			public boolean isVisible() {
-				try {
-					return session.isAdmin() && !users.get(id).isBlocked();
-				} catch (NoIdException e) {
-					// TODO Auto-generated catch block manejar excepcion
-					e.printStackTrace();
-					return false;
-				}
+				return session.isAdmin() && !user.getObject().isBlocked();
 			}
 		};
 		blockForm.add(new Button("block"));
@@ -128,6 +107,7 @@ public class UserDetailPage extends BasePage{
 			protected void onSubmit() {
 				try {
 					users.get(id).setBlocked(false);
+					user.getObject().setBlocked(false);
 				} catch (NoIdException e) {
 					// TODO Auto-generated catch block manejar excepcion
 					e.printStackTrace();
@@ -135,13 +115,7 @@ public class UserDetailPage extends BasePage{
 			}
 			@Override
 			public boolean isVisible() {
-				try {
-					return session.isAdmin() && users.get(id).isBlocked();
-				} catch (NoIdException e) {
-					// TODO Auto-generated catch block manejar excepcion
-					e.printStackTrace();
-					return false;
-				}
+				return session.isAdmin() && user.getObject().isBlocked();
 			}
 		};
 		unblockForm.add(new Button("unblock"));
