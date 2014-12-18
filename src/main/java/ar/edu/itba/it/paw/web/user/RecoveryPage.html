@@ -1,0 +1,97 @@
+<html>
+  <body>
+    <wicket:extend>
+
+
+      <div class="page-header">
+        <h2><wicket:message key="pageName">Recovery</wicket:message>
+        <br>
+        <small><wicket:message key="pageDesc">Follow the steps to reset your password</wicket:message></small>
+        </h2>
+      </div>
+
+      <div class="col-md-10 col-md-offset-1">
+
+      <div wicket:id="feedback" class="alert alert-warning alert-dismissible" role="alert"/>
+
+<!--         <c:if test="${!empty errorMessage}">
+          <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <strong>Login Error!</strong> ${errorMessage}
+          </div>
+        </c:if> -->
+
+        <!-- <c:if test="${empty email}"> -->
+
+          <form wicket:id="recoveryForm" >
+            <!-- <div class="col-md-8 col-md-offset-2" wicket:id="feedbackPanel" /> -->
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label class="control-label"><wicket:message key="email">Email</wicket:message></label>
+                  <input wicket:id="email" type="email" class="form-control" autofocus placeholder='user@example.com'/>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-md-offset-6 ">
+                <button wicket:id="nextStepButton" class="btn btn-primary btn-block" type="submit"><wicket:message key="nextStep">Next Step</wicket:message><span class="pull-right glyphicon glyphicon-chevron-right"></span></button>
+              </div>
+          </form>
+
+        <!-- </c:if> -->
+
+        <!-- <c:if test="${!empty email}"> -->
+
+          <div wicket:id="emailDiv">
+              <h4><wicket:message key="reseting">Reseting password for: </wicket:message><span wicket:id="email"class="label label-primary"/></h4>
+              <br><br>
+          </div>
+        <!-- </c:if> -->
+
+        <!-- <c:if test="${!empty question}"> -->
+
+          <form wicket:id="answerForm">
+
+            <!-- <div class="col-md-8 col-md-offset-2" wicket:id="feedbackPanel" /> -->
+
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label class="control-label"><wicket:message key="question">Question</wicket:message></label>
+                  <h4><span class="label label-info" wicket:id="question"></span></h4>
+                </div>
+              </div>
+
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label class="control-label"><wicket:message key="answer">Answer</wicket:message></label>
+                  <input class="form-control" autofocus wicket:id='answer'/>
+                </div>
+              </div>
+
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label class="control-label"><wicket:message key="newPassword">New Password</wicket:message></label>
+                  <input class="form-control" wicket:id='newPassword' type='password'/>
+                </div>
+              </div>
+
+              <div class="col-xs-12">
+                <div class="form-group">
+                  <label class="control-label"><wicket:message key="confirmation">Confirm Password</wicket:message></label>
+                  <input class="form-control" wicket:id='newPasswordConfirmation' type='password'/>
+                </div>
+              </div>
+
+
+              <!-- <input name='email' type="hidden" value="${email}"/> -->
+
+              <div class="col-md-6 col-md-offset-6 ">
+                <button wicket:id="resetButton" class="btn btn-success btn-block" type="submit"><wicket:message key="reset">Reset Password</wicket:message><span class="pull-right glyphicon glyphicon-ok"></span></button>
+              </div>
+            </form>
+        <!-- </c:if> -->
+      </div>
+
+
+    </wicket:extend>
+  </body>
+</html>
