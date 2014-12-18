@@ -20,13 +20,25 @@
               <button class="btn btn-sm btn-danger pull-right" type="submit" wicket:id="unfollow">
                 <wicket:message key="unfollow"/>
               </button>
-              <!-- <input type="submit" class="btn btn-sm btn-danger pull-right"><wicket:message key="unfollow">Unfollow</wicket:message></input> -->
             </form>
+              <!-- <input type="submit" class="btn btn-sm btn-danger pull-right"><wicket:message key="unfollow">Unfollow</wicket:message></input> -->
 <!--           </c:when>
           <c:otherwise> -->
             <form wicket:id="addUserOfInterest">
               <button class="btn btn-sm btn-success pull-right" type="submit" wicket:id="follow">
                 <wicket:message key="follow"/>
+              </button>
+            </form>
+
+            <form wicket:id="blockUser">
+              <button class="btn btn-sm btn-danger pull-left" type="submit" wicket:id="block">
+                <wicket:message key="block"/>
+              </button>
+            </form>
+
+            <form wicket:id="unblockUser">
+              <button class="btn btn-sm btn-success pull-left" type="submit" wicket:id="unblock">
+                <wicket:message key="unblock"/>
               </button>
             </form>
 <!--           </c:otherwise>

@@ -3,12 +3,15 @@ package ar.edu.itba.it.paw.web;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PropertyListView;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
@@ -49,7 +52,7 @@ public class HomePage extends BasePage{
 					return new ArrayList<User>();
 				}
 				try {
-					return users.get(session.getUserId()).getUsersOfInterest();
+					return users.get(session.getUserModel().getObject().getId()).getUsersOfInterest();
 				} catch (NoIdException e) {
 					// TODO Auto-generated catch block manejar excepcion
 					e.printStackTrace();
@@ -126,16 +129,25 @@ public class HomePage extends BasePage{
 
 		add(new WebMarkupContainer("usersOfInterestDiv").add(new PropertyListView<User>("usersOfInterest", usersOfInterest){
 			@Override
-			protected void populateItem(ListItem<User> item) {
+			protected void populateItem(final ListItem<User> item) {
 				item.add(new BaseLink<Void>("userDetailLink", HomePage.class).add(new Label("email", new PropertyModel<String>(item.getModel(), "email"))));
-				item.add(new PropertyListView<Comment>("comments", new PropertyModel<List<Comment>>(item.getModel(), "usersOfInterest")){
+				item.add(new RefreshingView<Comment>("comments"){
 
 					@Override
-					protected void populateItem(ListItem<Comment> item) {
+					protected void populateItem(Item<Comment> item) {
 						RankedMoviePanel moviePanel = new RankedMoviePanel("title", new EntityModel<Movie>(Movie.class, item.getModelObject().getMovie()));
 						item.add(new Label("body", new PropertyModel<String>(item.getModel(), "body")));
 						item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(moviePanel));
 						item.setVisible(item.getModelObject().getCreationDate().after(aWeekBefore));
+					}
+
+					@Override
+					protected Iterator<IModel<Comment>> getItemModels() {
+						List<IModel<Comment>> result = new ArrayList<IModel<Comment>>();
+						for (Comment comment : item.getModelObject().getComments()) {
+							result.add(new EntityModel<>(Comment.class, comment));
+						}
+						return result.iterator();
 					}
 				});
 				item.add(new WebMarkupContainer("noComments").setVisible(item.getModelObject().getUsersOfInterest().isEmpty()));

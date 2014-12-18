@@ -15,7 +15,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
-import ar.edu.itba.it.paw.domain.NoIdException;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.domain.user.UserRepo;
 import ar.edu.itba.it.paw.web.MoviesWicketSession;
@@ -54,12 +53,7 @@ public class ListUsersPage extends BasePage{
 					@Override
 					public void onClick() {
 						
-						try {
-							setResponsePage(new UserDetailPage(this.getModelObject().getId()));
-						} catch (NoIdException e) {
-							// TODO Auto-generated catch block manejar excepcion
-							e.printStackTrace();
-						} 
+						setResponsePage(new UserDetailPage(this.getModelObject().getId())); 
 					}
 				}.add(new Label(("email"), new PropertyModel<String>(item.getModel(), "email"))));
 						
