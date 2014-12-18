@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.web.base;
 
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.EntityResolver;
@@ -43,7 +44,7 @@ public class BasePage extends WebPage {
 		});
 		add (new LoggedLink<Object>("signUpLink", false, false, false, SignUpPage.class, null));
 		add (new LoggedLink<Object>("myProfileLink", true, false , false, UserDetailPage.class, null));
-		add (new LoggedLink<Object>("resetPasswordLink", true, false, false, RecoveryPage.class, null));
+		add (new LoggedLink<Object>("resetPasswordLink", true, false, false, RecoveryPage.class, new PageParameters()));
 		add (new LoggedLink<Object>("usersListLink", true, false, false, ListUsersPage.class, null));
 		add (new LoggedLink<Object>("reportsListLink", true, true, false, ReportedCommentsList.class, null));
 		add(new ConditionalLabel("usersName", wicketSession.getEmail(), loggedIn));

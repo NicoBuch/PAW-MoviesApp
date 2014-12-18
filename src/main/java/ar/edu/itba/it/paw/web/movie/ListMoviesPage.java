@@ -2,10 +2,8 @@ package ar.edu.itba.it.paw.web.movie;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -18,6 +16,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
@@ -86,8 +85,8 @@ public class ListMoviesPage extends BasePage{
 
 			@Override
 			protected void populateItem(Item<Movie> item) {
-				Map<String, Integer> params = new HashMap<String, Integer>();
-				params.put("movieId", item.getModelObject().getId());
+				PageParameters params = new PageParameters();
+				params.add("movieId", item.getModelObject().getId());
 				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
 				item.add(moviePanel);
 				item.add(new Label(("director"), new PropertyModel<String>(item.getModel(), "director")));
