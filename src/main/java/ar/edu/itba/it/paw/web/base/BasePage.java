@@ -14,8 +14,10 @@ import ar.edu.itba.it.paw.web.MoviesWicketSession;
 import ar.edu.itba.it.paw.web.comment.ReportedCommentsList;
 import ar.edu.itba.it.paw.web.movie.ListMoviesPage;
 import ar.edu.itba.it.paw.web.user.ListUsersPage;
+import ar.edu.itba.it.paw.web.user.RecoveryPage;
 import ar.edu.itba.it.paw.web.user.SignInPage;
 import ar.edu.itba.it.paw.web.user.SignUpPage;
+import ar.edu.itba.it.paw.web.user.UserDetailPage;
 
 @SuppressWarnings("serial")
 public class BasePage extends WebPage {
@@ -39,9 +41,9 @@ public class BasePage extends WebPage {
 				setResponsePage(getApplication().getHomePage());
 			}
 		});
-		add (new LoggedLink<Object>("signUpLink", false, false, false, BasePage.class, null));
-		add (new LoggedLink<Object>("myProfileLink", true, false , false, BasePage.class, null));
-		add (new LoggedLink<Object>("resetPasswordLink", true, false, false, BasePage.class, null));
+		add (new LoggedLink<Object>("signUpLink", false, false, false, SignUpPage.class, null));
+		add (new LoggedLink<Object>("myProfileLink", true, false , false, UserDetailPage.class, null));
+		add (new LoggedLink<Object>("resetPasswordLink", true, false, false, RecoveryPage.class, null));
 		add (new LoggedLink<Object>("usersListLink", true, false, false, ListUsersPage.class, null));
 		add (new LoggedLink<Object>("reportsListLink", true, true, false, ReportedCommentsList.class, null));
 		add(new ConditionalLabel("usersName", wicketSession.getEmail(), loggedIn));

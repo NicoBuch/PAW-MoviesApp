@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.user.EmailNotFound;
@@ -48,7 +49,7 @@ public class SignInPage extends BasePage{
 		form.add(new TextField<String>("email").setRequired(true));
 		form.add(new PasswordTextField("password"));
 		form.add(new Button("login", new ResourceModel("login")));
-		form.add(new BaseLink<Void>("recoveryLink", RecoveryPage.class));
+		form.add(new BaseLink<Void>("recoveryLink", RecoveryPage.class, new PageParameters()));
 		add(form);
 	}
 }
