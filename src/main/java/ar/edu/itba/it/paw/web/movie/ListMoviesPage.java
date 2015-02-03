@@ -89,8 +89,7 @@ public class ListMoviesPage extends BasePage{
 				PageParameters params = new PageParameters();
 				params.add("movieId", item.getModelObject().getId());
 				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
-				item.add(moviePanel);
-//				item.add(new BaseLink<Integer>("movieDetailLink", ViewMoviePage.class,params).add(new Label("title", new PropertyModel<String>(item.getModel(), "title"))));
+				item.add(new BaseLink<Integer>("movieDetailLink", ViewMoviePage.class,params).add(moviePanel));
 
 				item.add(new Label(("director"), new PropertyModel<String>(item.getModel(), "director")));
 				item.add(new Label(("releaseDate"), new PropertyModel<Date>(item.getModel(), "releaseDate")));

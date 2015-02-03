@@ -60,7 +60,7 @@
 							</thead>
 							<tr wicket:id="movie">
 						    	<td>
-                    				<a wicket:id="title"/>
+                    <a wicket:id="movieDetailLink"><p wicket:id="title"/></a>
 						    	</td>
 						    	<td wicket:id="releaseDate"></td>
 						    	<td wicket:id="director"></td>
@@ -76,7 +76,7 @@
 							    	</a>
 							    </td>
 							</tr>
-							
+
 							<!-- <c:forEach var="aMovie" items="${movies}">
 							    <tr>
 							    	<td><a href="detail?id=${aMovie.id}">${aMovie.title}</a></td>
@@ -98,7 +98,7 @@
 								    </c:if>
 							    </tr>
 						     </c:forEach> -->
-						</table>	
+						</table>
 					<!-- </c:when> -->
 					<!-- <c:otherwise> -->
 						<!-- <br><br> -->
