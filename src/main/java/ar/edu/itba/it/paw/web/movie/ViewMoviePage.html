@@ -77,11 +77,8 @@
 
 
 			<div class="col-md-10 col-md-offset-1">	
-					<h3><strong><wicket:message key="adminSettingsName">Admin Settings</wicket:message></strong></h3>
 					<div class="col-md-5">
-						<h4><strong><wicket:message key="prizesAndNomName">Prizes and Nominations</wicket:message></strong></h4>
 					  	<form wicket:id="adminPrizesForm">
-
 						  	<div class='col-md-12'>
 						  		<label><wicket:message key="PrizeAndNomPlaceholder">PrizeAndNom</wicket:message></label>
 						  		<input type="text" class="form-control" wicket:id="name" required>
@@ -99,7 +96,6 @@
 					</div>
 
 					<div class="col-md-5 pull-right">
-						<h4><strong><wicket:message key="moviePictureName">Picture</wicket:message></strong></h4>
 						<form wicket:id="setPicutreForm">
 					  		<input type="file" wicket:id="pic" required>
 					  		<div class='col-md-5 pull-right'>
@@ -115,7 +111,7 @@
 				<br/><br/>
 
 				
-				<!-- <div class="panel panel-primary">
+				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title"><wicket:message key="commentPanelHeading">Tell us your opinion!</wicket:message></h3>
 					</div>
@@ -127,12 +123,7 @@
 							<div class="col-xs-2">
 								<div class="form-group">
 									<label class="control-label"><wicket:message key="commentRatingName">Rating</wicket:message></label>
-									<select class="form-control" wicket:id='rating'>
-										<option value='1'>1</option>
-										<option value='2'>2</option>
-										<option value='3'>3</option>
-										<option value='4'>4</option>
-										<option value='5'>5</option>				
+									<select class="form-control" wicket:id='rating'>				
 									</select>
 								</div>
 							</div>
@@ -149,11 +140,11 @@
 							</div>
 						</form>
 					</div>
-				</div> -->
+				</div>
 				
 
 				
-				<!-- <div class="panel panel-default">
+				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title"><wicket:message key="commentsTitleName">Comments</wicket:message></h3>
 					</div>
@@ -171,7 +162,7 @@
 									<i>"<span wicket:id="body"></span>"</i>
 
 									<p class="pull-right">
-										<wicket:message key="">Average Rating</wicket:message>: 
+										<wicket:message key="averageRating">Average Rating</wicket:message>: 
 										<span wicket:id="avgCommentRatings"></span>
 									</p>
 								</p>
@@ -184,11 +175,7 @@
 
 									<form wicket:id="commentRateForm" class="form-inline">
 										<select class="form-control input-sm" wicket:id='rating'>
-											<option value='1'>1</option>
-											<option value='2'>2</option>
-											<option value='3'>3</option>
-											<option value='4'>4</option>
-											<option value='5'>5</option>	
+												
 										</select>
 										<input type="submit" class="btn btn-default btn-sm" value="Rate Comment">
 									</form>
@@ -209,7 +196,7 @@
 							</div>
 						</div>
 					</div>
-				</div> -->
+				</div>
 
 			</div>
 		</wicket:extend>

@@ -141,6 +141,9 @@ public class User extends PersistentEntity {
 	}
 
 	public void addComment(Comment comment) {
+		if(comments.contains(comment)){
+			return;
+		}
 		if(!comments.add(comment)){
 			return;
 		}

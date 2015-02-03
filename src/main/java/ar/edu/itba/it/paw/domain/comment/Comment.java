@@ -115,6 +115,9 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
+		if( user.getEmail().equals(((Comment)obj).user.getEmail())){
+			return true;
+		}
 		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())

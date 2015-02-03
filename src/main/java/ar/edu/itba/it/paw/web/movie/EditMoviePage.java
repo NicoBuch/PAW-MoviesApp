@@ -2,6 +2,7 @@ package ar.edu.itba.it.paw.web.movie;
 
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.markup.html.form.Button;
@@ -37,7 +38,6 @@ public class EditMoviePage extends AdminPage{
 	private transient int minutes;
 	private transient String description;
 	private transient EditMoviePanel panel;
-	private transient FileUpload picture;
 	
 	private Movie movie;
 	
@@ -48,11 +48,13 @@ public class EditMoviePage extends AdminPage{
 		add(new FeedbackPanel("feedback"));
 		Form<EditMoviePage> form = new Form<EditMoviePage>("editMovieForm", new CompoundPropertyModel<EditMoviePage>(
 				this));
-		form.add(new EditMoviePanel("editMovie"));
+		form.setMultiPart(true);
+		form.add(panel = new EditMoviePanel("editMovie"));
 		form.add(new Button("editMovieButton", new ResourceModel("editMovie")) {
 			@Override
 			public void onSubmit() {
-				byte[] moviePicture = picture.getBytes();
+				List<FileUpload> file = panel.picture.getFileUploads();
+				byte[] moviePicture = file.get(0).getBytes();
 				String releaseDateString = releaseYear + "-" + releaseMonth + "-" + releaseDay;
 				Date releaseDate = Date.valueOf(releaseDateString);
 				if(releaseDate.after(new Date(System.currentTimeMillis()))){
@@ -75,7 +77,6 @@ public class EditMoviePage extends AdminPage{
 				
 			}
 		});
-		form.setMultiPart(true);
 		add(form);
 	}
 	

@@ -4,30 +4,34 @@ package ar.edu.itba.it.paw.web.movie;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.list.PropertyListView;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.protocol.http.servlet.WicketSessionFilter;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.ByteArrayResource;
+import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValueConversionException;
+import org.apache.wicket.validation.validator.RangeValidator;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.NoIdException;
+import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.comment.CommentRepo;
 import ar.edu.itba.it.paw.domain.genre.Genre;
 import ar.edu.itba.it.paw.domain.genre.GenreRepo;
@@ -35,8 +39,13 @@ import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.movie.MovieRepo;
 import ar.edu.itba.it.paw.domain.prize.Prize;
 import ar.edu.itba.it.paw.domain.prize.PrizeRepo;
+import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.web.ConditionalForm;
+import ar.edu.itba.it.paw.web.ConditionalFormData;
+import ar.edu.itba.it.paw.web.ConditionalLink;
 import ar.edu.itba.it.paw.web.DeleteLink;
+import ar.edu.itba.it.paw.web.LoggedLink;
+import ar.edu.itba.it.paw.web.MoviesWicketSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
 
 @SuppressWarnings("serial")
@@ -48,10 +57,14 @@ public class ViewMoviePage  extends BasePage {
 	@SpringBean static PrizeRepo prizes;
 	private transient boolean prize;
 	private transient String name;
+	private transient Integer rating;
+	private transient String body;
 	EntityModel<Movie> movieModel;
 	PageParameters params;
 	FileUploadField pictureToUpload;
 	
+	private static int MIN_RATING = 1;
+	private static int MAX_RATING = 5;
 	public ViewMoviePage(PageParameters params)  throws StringValueConversionException, NoIdException{
 		this.params = params;
 		final EntityModel<Movie> movie = new EntityModel<Movie>(Movie.class,movies.get(params.get("movieId").toInteger()));
@@ -82,6 +95,7 @@ public class ViewMoviePage  extends BasePage {
 					@Override
 					public void onClick() {
 						movie.getObject().removePrize(getModelObject());
+						movie.detach();
 					}
 				});
 			}
@@ -107,8 +121,14 @@ public class ViewMoviePage  extends BasePage {
 			}
 			
 		});
-		
-		add(new Image("moviePicture", new ByteArrayResource("JPEG", movie.getObject().getPicture())));
+		add(new NonCachingImage("moviePicture", new DynamicImageResource(){
+
+			@Override
+			protected byte[] getImageData(Attributes attributes) {
+				return movie.getObject().getPicture();
+			}
+			
+		}));
 		add(new DeleteLink<Movie>("deletePictureLink", true, true, false, null) {
 			@Override
 			public void onClick() {
@@ -132,7 +152,7 @@ public class ViewMoviePage  extends BasePage {
 		add(adminPrizesForm);
 		
 		
-		Form<ViewMoviePage> setPicutreForm = new ConditionalForm<ViewMoviePage>("setPicutreForm", new CompoundPropertyModel<ViewMoviePage>(this),
+		Form<ViewMoviePage> setPictureForm = new ConditionalForm<ViewMoviePage>("setPicutreForm", new CompoundPropertyModel<ViewMoviePage>(this),
 																				true, true ,false){
 			@Override
 			protected void onSubmit() {
@@ -142,30 +162,117 @@ public class ViewMoviePage  extends BasePage {
 				onSubmit();
 			}
 		};
-		setPicutreForm.add(new Button("uploadPicture", new ResourceModel("uploadPicture")));
-		add(pictureToUpload = new FileUploadField("pic", new LoadableDetachableModel<List<FileUpload>>() {
+		setPictureForm.add(new Button("uploadPicture", new ResourceModel("uploadPicture")));
+		setPictureForm.add(pictureToUpload = new FileUploadField("pic", new LoadableDetachableModel<List<FileUpload>>() {
 
 			@Override
 			protected List<FileUpload> load() {
 				return null;
 			}
 		}));
-		add(setPicutreForm);
+		add(setPictureForm);
 		
 		
 		
-		WebMarkupContainer adminBox = new WebMarkupContainer ("adminSettings");
-		add(adminBox);		
 		
+		List<Integer> ratings = new ArrayList<Integer>();
+		for(int i = MIN_RATING ; i <= MAX_RATING ; i++){
+			ratings.add(i);
+		}
+		Form<ViewMoviePage> commentMovieForm = new ConditionalForm<ViewMoviePage>("commentMovieForm", new CompoundPropertyModel<ViewMoviePage>(this), true, false, false){
+			@Override
+			protected void onSubmit(){
+				Comment comment;
+				try {
+					comment = new Comment(body, rating, movie.getObject(),
+							users.get(MoviesWicketSession.get().getUserId()));
+							movie.getObject().addComment(comment);
+							System.out.println("asds");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		};
+		TextField<Integer> bodyField = new TextField<Integer>("body");
+		bodyField.setRequired(true);
+		commentMovieForm.add(bodyField);
+		DropDownChoice<Integer> dpc = new DropDownChoice<Integer>("rating", ratings);
+		dpc.add(new RangeValidator<Integer>(MIN_RATING, MAX_RATING));
+		dpc.setRequired(true);
+		commentMovieForm.add(new Button("addComment"));
+		commentMovieForm.add(dpc);
+		add(commentMovieForm);
+		 
+		add(new PropertyListView<Comment>("comment", new ArrayList<Comment>(movie.getObject().getComments())){
+			@Override
+			protected void populateItem(ListItem<Comment> item) {
+				item.add(new Label("commentAuthor", new PropertyModel<String>(new PropertyModel<User>(item.getModel(), "user"), "email")));
+				item.add(new Label("rating", new PropertyModel<Integer>(item.getModel(), "rating")));
+				item.add(new Label("body", new PropertyModel<String>(item.getModel(), "body")));
+				item.add(new Label("avgCommentRatings", new PropertyModel<Double>(item.getModel(), "avgCommentRatings")));
+				item.add(new LoggedLink<Comment>("reportCommentLink",true,false,false,ListMoviesPage.class,null,item.getModel()){
+					@Override
+					public boolean isVisible(){
+						if(super.isVisible()){
+							try {
+								User user;
+								user = users.get(MoviesWicketSession.get().getUserId());
+								return user.canReport(model.getObject());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						return false;
+					}
+				});
+				item.add(new DeleteLink<Comment>("deleteCommentLink", true, true, false, item.getModel()) {
+					@Override
+					public void onClick() {
+						comments.delete(this.model.getObject());
+					}
+				});
+				List<Integer> ratings = new ArrayList<Integer>();
+				for(int i = MIN_RATING ; i <= MAX_RATING ; i++){
+					ratings.add(i);
+				}
+				DropDownChoice<Integer> dpcComment = new DropDownChoice<Integer>("rating", ratings);
+				dpcComment.add(new RangeValidator<Integer>(MIN_RATING, MAX_RATING));
+				dpcComment.setRequired(true);
+				Form<Void> commentRateForm = new ConditionalFormData<Void,Comment>("commentRateForm",null,true,false,false,
+																				new EntityModel<Comment>(Comment.class, item.getModelObject().getId())){
+					Integer rating;
+					@Override
+					protected void onSubmit(){
+						data.getObject().rate(user, rating);
+					}
+				};	
+				User user;
+				try {
+					MoviesWicketSession session = MoviesWicketSession.get();
+					if(session.isSignedIn()){
+						user = users.get(session.getUserId());
+						commentRateForm.setVisible(commentRateForm.isVisible() && user.canRate(item.getModelObject()));
+					}
+					commentRateForm.add(dpcComment);
+					item.add(commentRateForm);
+				} catch (NoIdException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		
-		//Si no es admin
-		adminBox.setVisible(false);
-		
-		
-		Form<ViewMoviePage> commentRateForm = new Form<ViewMoviePage>("commentRateForm", new CompoundPropertyModel<ViewMoviePage>(this));		
-		
-		Form<ViewMoviePage> commentMovieForm = new Form<ViewMoviePage>("commentMovieForm", new CompoundPropertyModel<ViewMoviePage>(this));
-		
+	}
+	
+	@Override
+	public
+	void detachModels(){
+		super.detachModels();
+		if(movieModel!=null){
+			movieModel.detach();
+		}
 	}
 }
 	

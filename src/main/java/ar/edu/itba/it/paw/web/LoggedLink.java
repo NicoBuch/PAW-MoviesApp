@@ -1,13 +1,10 @@
 package ar.edu.itba.it.paw.web;
 
-import java.util.Map;
-
-
-
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 
 @SuppressWarnings("serial")
 public class LoggedLink<T> extends Link<T>{
