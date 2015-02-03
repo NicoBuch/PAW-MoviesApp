@@ -187,7 +187,7 @@ public class ViewMoviePage  extends BasePage {
 					comment = new Comment(body, rating, movie.getObject(),
 							users.get(MoviesWicketSession.get().getUserId()));
 							movie.getObject().addComment(comment);
-							System.out.println("asds");
+//							users.get(MoviesWicketSession.get().getUserId()).addComment(comment);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

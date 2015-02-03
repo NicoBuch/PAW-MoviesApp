@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 public abstract class AbstractHibernateRepo {
 	private final SessionFactory sessionFactory;
@@ -31,7 +31,7 @@ public abstract class AbstractHibernateRepo {
 		return list;
 	}
 
-	protected org.hibernate.classic.Session getSession() {
+	protected Session getSession() {
 		return sessionFactory.getCurrentSession();
 	}
 
