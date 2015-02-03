@@ -39,6 +39,8 @@ import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.movie.MovieRepo;
 import ar.edu.itba.it.paw.domain.prize.Prize;
 import ar.edu.itba.it.paw.domain.prize.PrizeRepo;
+import ar.edu.itba.it.paw.domain.report.Report;
+import ar.edu.itba.it.paw.domain.user.EmailNotFound;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.web.ConditionalForm;
 import ar.edu.itba.it.paw.web.ConditionalFormData;
@@ -185,7 +187,7 @@ public class ViewMoviePage  extends BasePage {
 				Comment comment;
 				try {
 					comment = new Comment(body, rating, movie.getObject(),
-							users.get(MoviesWicketSession.get().getUserId()));
+							MoviesWicketSession.get().getUserModel().getObject());
 							movie.getObject().addComment(comment);
 //							users.get(MoviesWicketSession.get().getUserId()).addComment(comment);
 				} catch (Exception e) {
@@ -206,7 +208,7 @@ public class ViewMoviePage  extends BasePage {
 		 
 		add(new PropertyListView<Comment>("comment", new ArrayList<Comment>(movie.getObject().getComments())){
 			@Override
-			protected void populateItem(ListItem<Comment> item) {
+			protected void populateItem(final ListItem<Comment> item) {
 				item.add(new Label("commentAuthor", new PropertyModel<String>(new PropertyModel<User>(item.getModel(), "user"), "email")));
 				item.add(new Label("rating", new PropertyModel<Integer>(item.getModel(), "rating")));
 				item.add(new Label("body", new PropertyModel<String>(item.getModel(), "body")));
@@ -217,8 +219,8 @@ public class ViewMoviePage  extends BasePage {
 						if(super.isVisible()){
 							try {
 								User user;
-								user = users.get(MoviesWicketSession.get().getUserId());
-								return user.canReport(model.getObject());
+								user = users.getByEmail(MoviesWicketSession.get().getEmail());
+								return user.canReport(item.getModelObject());
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -226,11 +228,21 @@ public class ViewMoviePage  extends BasePage {
 						}
 						return false;
 					}
+					@Override
+					public void onClick() {
+						try {
+							user = users.getByEmail(MoviesWicketSession.get().getEmail());
+						} catch (EmailNotFound e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						user.report(new Report(user, getModelObject()));
+					}
 				});
 				item.add(new DeleteLink<Comment>("deleteCommentLink", true, true, false, item.getModel()) {
 					@Override
 					public void onClick() {
-						comments.delete(this.model.getObject());
+						comments.delete(item.getModelObject());
 					}
 				});
 				List<Integer> ratings = new ArrayList<Integer>();
@@ -240,7 +252,7 @@ public class ViewMoviePage  extends BasePage {
 				DropDownChoice<Integer> dpcComment = new DropDownChoice<Integer>("rating", ratings);
 				dpcComment.add(new RangeValidator<Integer>(MIN_RATING, MAX_RATING));
 				dpcComment.setRequired(true);
-				Form<Void> commentRateForm = new ConditionalFormData<Void,Comment>("commentRateForm",null,true,false,false,
+				ConditionalFormData<Void,Comment> commentRateForm = new ConditionalFormData<Void,Comment>("commentRateForm",null,true,false,false,
 																				new EntityModel<Comment>(Comment.class, item.getModelObject().getId())){
 					Integer rating;
 					@Override
@@ -248,19 +260,20 @@ public class ViewMoviePage  extends BasePage {
 						data.getObject().rate(user, rating);
 					}
 				};	
-				User user;
-				try {
-					MoviesWicketSession session = MoviesWicketSession.get();
-					if(session.isSignedIn()){
-						user = users.get(session.getUserId());
-						commentRateForm.setVisible(commentRateForm.isVisible() && user.canRate(item.getModelObject()));
+				User user = null;
+				MoviesWicketSession session = MoviesWicketSession.get();
+				if(session.isSignedIn()){
+//					user = session.getUserModel().getObject();
+					try {
+						user = users.getByEmail(session.getEmail());
+					} catch (EmailNotFound e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-					commentRateForm.add(dpcComment);
-					item.add(commentRateForm);
-				} catch (NoIdException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					commentRateForm.setVisible(commentRateForm.isVisible() && user.canRate(item.getModelObject()));
 				}
+				commentRateForm.add(dpcComment);
+				item.add(commentRateForm);
 			}
 		});
 		
@@ -276,9 +289,3 @@ public class ViewMoviePage  extends BasePage {
 	}
 }
 	
-	
-	
-	
-	
-
-
