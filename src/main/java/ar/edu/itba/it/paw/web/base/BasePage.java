@@ -22,12 +22,13 @@ import ar.edu.itba.it.paw.web.user.UserDetailPage;
 
 @SuppressWarnings("serial")
 public class BasePage extends WebPage {
-	@SpringBean private UserRepo users;
+	@SpringBean
+	public UserRepo users;
 	@SpringBean private EntityResolver entityResolver;
-	User user;
+	MoviesWicketSession wicketSession = MoviesWicketSession.get();
+	public User user;
 	public BasePage() {
 		boolean loggedIn = false;
-		MoviesWicketSession wicketSession = MoviesWicketSession.get();
 		if(wicketSession.getEmail() != null){
 			loggedIn = true;
 		}

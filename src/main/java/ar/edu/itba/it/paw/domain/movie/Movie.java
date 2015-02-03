@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
+import org.postgresql.util.Base64;
 
 import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.comment.Comment;
@@ -33,7 +34,7 @@ public class Movie extends PersistentEntity {
 	@ManyToMany
 	private Set<Genre> genres;
 	
-	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<Prize> prices = new ArrayList<Prize>();
 	
 	private int minutes;
@@ -102,6 +103,14 @@ public class Movie extends PersistentEntity {
 	public String getDescription() {
 		return this.description;
 	}
+	public String getPictureURL() {
+		if(picture == null) {
+			return "";
+		}
+		String encodedImage = Base64.encodeBytes(picture);
+		String url = "data:image/jpeg;base64," + encodedImage;
+		return url;
+	}
 	public void setPicture(byte[] pic){
 		this.picture = pic;
 	}
@@ -131,11 +140,12 @@ public class Movie extends PersistentEntity {
 	}
 	
 	 public void addComment(Comment comment) {
-		 if(comments.contains(comment)){
-			 return;
-		 }
+//		 if(comments.contains(comment)){
+//			 return;
+//		 }
 		 comments.add(comment);
-		 comment.getUser().addComment(comment);
+		 comment.getUser().getComments().add(comment);
+//		 comment.getUser().addComment(comment);
 	 }
 
 

@@ -141,10 +141,14 @@ public class User extends PersistentEntity {
 	}
 
 	public void addComment(Comment comment) {
-		if(!comments.add(comment)){
-			return;
-		}
-		comment.getMovie().addComment(comment);
+//		if(comments.contains(comment)){
+//			return;
+//		}
+		comments.add(comment);
+		comment.getMovie().getComments().add(comment);
+//			return;
+//		}
+//		comment.getMovie().addComment(comment);
 	}
 
 	@Override

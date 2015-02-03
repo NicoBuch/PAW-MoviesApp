@@ -46,8 +46,7 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 	public Comment(String body, int rating, Movie movie, User user) {
 		super();
 		creationDate = new Date(System.currentTimeMillis());
-		setFields(body,rating,movie,user);
-		
+		setFields(body,rating,movie,user);	
 	}
 
 	private void setFields(String body, Date creationDate, int rating, Movie movie, User user){
@@ -115,6 +114,9 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
+		if(user.getEmail().equals(((Comment)obj).user.getEmail())){
+			return true;
+		}
 		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
