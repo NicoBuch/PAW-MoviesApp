@@ -69,7 +69,9 @@ public class ViewMoviePage  extends BasePage {
 		this.params = params;
 		final EntityModel<Movie> movie = new EntityModel<Movie>(Movie.class,movies.get(params.get("movieId").toInteger()));
 		movie.getObject().visit();
+		
 		add(new Label(("visits"), new PropertyModel<Integer>(movie, "visits")));
+		add(new Label(("stock"), new PropertyModel<Integer>(movie, "visits")));
 		add(new Label(("title"), new PropertyModel<String>(movie, "title")));
 		add(new Label(("director"), new PropertyModel<String>(movie, "director")));
 		add(new Label(("releaseDate"), new PropertyModel<String>(movie, "releaseDate")));

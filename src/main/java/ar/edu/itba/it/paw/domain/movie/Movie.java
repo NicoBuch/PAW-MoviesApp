@@ -14,6 +14,11 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
+import org.parse4j.Parse;
+import org.parse4j.ParseException;
+import org.parse4j.ParseObject;
+import org.parse4j.ParseQuery;
+import org.parse4j.callback.FindCallback;
 import org.postgresql.util.Base64;
 
 import ar.edu.itba.it.paw.domain.PersistentEntity;
@@ -282,6 +287,22 @@ public class Movie extends PersistentEntity {
 
 	public void visit() {
 		this.visits++;
+	}
+	
+	public void getStock() {
+		Parse.initialize("bH0IAo6UbBCuaXVVFZQl62vgaOs6l4vBRmDmyZMl", "EwQWDYrnMcTqQ7MJOxnl3l9aA12bBHOPKXp3AIFY");
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Movie");
+		query.limit(1);
+		query.findInBackground(new FindCallback<ParseObject>() {
+		    public void done(List<ParseObject> movie, ParseException e) {
+		        if (e == null) {
+		            movie.get(0).getInt("stock");
+		        } else {
+		            throw new RuntimeException();
+		        }
+		    }
+		});
+		
 	}
 
 
