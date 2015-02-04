@@ -12,6 +12,11 @@
 						<small wicket:id="title"></small>
 					</h2>
 				</div>
+				<div class="col-md-4">
+					<h4><wicket:message key="visits">Visits to this Movie: </wicket:message>
+						<p wicket:id="visits"/>
+					</h4>
+				</div>
 			</div>
 
 			<div class="col-md-12">
@@ -23,8 +28,8 @@
 						<br/>
 
 						<label><b><wicket:message key="movieGenresName">Genres</wicket:message></b></label>
-						<br/>						
-							<p  class="text-center" wicket:id="genreList"></p>						
+						<br/>
+							<p  class="text-center" wicket:id="genreList"></p>
 						<br/>
 					</p>
 					<p class="text-center">
@@ -39,28 +44,28 @@
 
 						<label><b><wicket:message key="moviePrizesName">Prizes</wicket:message></b></label>
 						<br/>
-						
+
 						<p class="text-center" wicket:id="prizeList">
-							<span wicket:id="name"></span> 
+							<span wicket:id="name"></span>
 							<a class="btn btn-danger btn-xs" wicket:id="deletePrizeLink"><wicket:message key="deleteLinkName">Delete</wicket:message></a>
 						</p>
 					</p>
-					<p class="text-center">						
+					<p class="text-center">
 						<br/>
 
 						<label><b><wicket:message key="movieNominationsName">Nominations</wicket:message></b></label><br/>
-						
+
 						<p class="text-center" wicket:id="nominationList">
 							<span wicket:id="name"></span>
 							<a class="btn btn-danger btn-xs" wicket:id="deleteNominationLink"><wicket:message key="deleteLinkName">Delete</wicket:message></a>
 				  		</p>
-						
+
 					</p>
 				</div>
 
 				<div class="col-md-6">
 					<img wicket:id="moviePicture" class="img-responsive" />
-					<a class="btn btn-danger btn-sm" wicket:id="deletePictureLink"><wicket:message key="deleteLinkName">Delete</wicket:message></a> 
+					<a class="btn btn-danger btn-sm" wicket:id="deletePictureLink"><wicket:message key="deleteLinkName">Delete</wicket:message></a>
 				</div>
 			</div>
 
@@ -76,7 +81,7 @@
 
 
 
-			<div class="col-md-10 col-md-offset-1">	
+			<div class="col-md-10 col-md-offset-1">
 					<div class="col-md-5">
 					  	<form wicket:id="adminPrizesForm">
 						  	<div class='col-md-12'>
@@ -110,12 +115,12 @@
 			<div class="col-md-10 col-md-offset-1">
 				<br/><br/>
 
-				
+
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title"><wicket:message key="commentPanelHeading">Tell us your opinion!</wicket:message></h3>
 					</div>
-					  
+
 				 	<div class="panel-body">
 
 						<form wicket:id="commentMovieForm">
@@ -123,7 +128,7 @@
 							<div class="col-xs-2">
 								<div class="form-group">
 									<label class="control-label"><wicket:message key="commentRatingName">Rating</wicket:message></label>
-									<select class="form-control" wicket:id='rating'>				
+									<select class="form-control" wicket:id='rating'>
 									</select>
 								</div>
 							</div>
@@ -141,9 +146,9 @@
 						</form>
 					</div>
 				</div>
-				
 
-				
+
+
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title"><wicket:message key="commentsTitleName">Comments</wicket:message></h3>
@@ -152,17 +157,17 @@
 						<div wicket:id="comment">
 							<div class="col-md-12">
 								<p>
-									<span class="glyphicon glyphicon-chevron-right"></span> 
+									<span class="glyphicon glyphicon-chevron-right"></span>
 									<label wicket:id="commentAuthor">said</label>:<br/>
 
-									<label><b><wicket:message key="commentRatingName">Rating</wicket:message>:</b></label> 								
-									<span wicket:id="rating"></span><wicket:message key="commentRatingUnit">stars</wicket:message>.								
+									<label><b><wicket:message key="commentRatingName">Rating</wicket:message>:</b></label>
+									<span wicket:id="rating"></span><wicket:message key="commentRatingUnit">stars</wicket:message>.
 									<br/>
 
 									<i>"<span wicket:id="body"></span>"</i>
 
 									<p class="pull-right">
-										<wicket:message key="averageRating">Average Rating</wicket:message>: 
+										<wicket:message key="averageRating">Average Rating</wicket:message>:
 										<span wicket:id="avgCommentRatings"></span>
 									</p>
 								</p>
@@ -170,12 +175,12 @@
 
 							<div class="col-md-12">
 
-								
+
 								<div class="col-md-8">
 
 									<form wicket:id="commentRateForm" class="form-inline">
 										<select class="form-control input-sm" wicket:id='rating'>
-												
+
 										</select>
 										<input type="submit" class="btn btn-default btn-sm" value="Rate Comment">
 									</form>
@@ -203,5 +208,5 @@
 	</body>
 </html>
 
-	
+
 

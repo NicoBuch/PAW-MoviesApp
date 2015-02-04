@@ -22,7 +22,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.protocol.http.servlet.WicketSessionFilter;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -44,7 +43,6 @@ import ar.edu.itba.it.paw.domain.user.EmailNotFound;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.web.ConditionalForm;
 import ar.edu.itba.it.paw.web.ConditionalFormData;
-import ar.edu.itba.it.paw.web.ConditionalLink;
 import ar.edu.itba.it.paw.web.DeleteLink;
 import ar.edu.itba.it.paw.web.LoggedLink;
 import ar.edu.itba.it.paw.web.MoviesWicketSession;
@@ -70,6 +68,8 @@ public class ViewMoviePage  extends BasePage {
 	public ViewMoviePage(PageParameters params)  throws StringValueConversionException, NoIdException{
 		this.params = params;
 		final EntityModel<Movie> movie = new EntityModel<Movie>(Movie.class,movies.get(params.get("movieId").toInteger()));
+		movie.getObject().visit();
+		add(new Label(("visits"), new PropertyModel<Integer>(movie, "visits")));
 		add(new Label(("title"), new PropertyModel<String>(movie, "title")));
 		add(new Label(("director"), new PropertyModel<String>(movie, "director")));
 		add(new Label(("releaseDate"), new PropertyModel<String>(movie, "releaseDate")));
@@ -97,7 +97,6 @@ public class ViewMoviePage  extends BasePage {
 					@Override
 					public void onClick() {
 						movie.getObject().removePrize(getModelObject());
-						movie.detach();
 					}
 				});
 			}
