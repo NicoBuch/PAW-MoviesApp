@@ -38,8 +38,6 @@ public class MoviesWicketApp extends WebApplication {
     super.init();
     getComponentInstantiationListeners().add(new SpringComponentInjector(this));
     getRequestCycleListeners().add(new HibernateRequestCycleListener(sessionFactory));
-    getApplicationSettings().setInternalErrorPage(ErrorPage.class);
-
 //    Bootstrap.install(this);
   }
 
