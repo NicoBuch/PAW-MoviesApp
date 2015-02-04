@@ -27,6 +27,7 @@ import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValueConversionException;
 import org.apache.wicket.validation.validator.RangeValidator;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.NoIdException;
@@ -74,7 +75,7 @@ public class ViewMoviePage  extends BasePage {
 		add(new Label(("stock"), new PropertyModel<Integer>(movie, "visits")));
 		add(new Label(("title"), new PropertyModel<String>(movie, "title")));
 		add(new Label(("director"), new PropertyModel<String>(movie, "director")));
-		add(new Label(("releaseDate"), new PropertyModel<String>(movie, "releaseDate")));
+		add(new Label(("releaseDate"), new PrettyTime().format(movie.getObject().getReleaseDate())));
 		add(new Label(("minutes"), new PropertyModel<String>(movie, "minutes")));
 		add(new Label(("description"), new PropertyModel<String>(movie, "description")));
 		

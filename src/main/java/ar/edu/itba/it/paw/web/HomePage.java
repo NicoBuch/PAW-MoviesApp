@@ -17,6 +17,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.NoIdException;
@@ -119,7 +120,7 @@ public class HomePage extends BasePage{
 				params.add("movieId", item.getModelObject().getId());
 				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
 				item.add(new BaseLink<Integer>("movieDetailLink", ViewMoviePage.class,params).add(moviePanel)
-				.add(new Label("uploadDate", String.format(getString("uploadDate"), item.getModelObject().getCreationDate())))
+				.add(new Label("uploadDate", String.format(getString("uploadDate"), new PrettyTime().format(item.getModelObject().getCreationDate()))))
 				.add(new Label("commentsCount", String.format(getString("commentsCount"), item.getModelObject().getCommentCount()))));
 
 			}

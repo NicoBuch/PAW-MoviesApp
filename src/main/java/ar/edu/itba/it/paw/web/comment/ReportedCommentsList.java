@@ -1,7 +1,6 @@
 package ar.edu.itba.it.paw.web.comment;
 
 import java.util.ArrayList;
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,7 +16,9 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.comment.Comment;
@@ -25,6 +26,7 @@ import ar.edu.itba.it.paw.domain.comment.CommentRepo;
 import ar.edu.itba.it.paw.web.BaseLink;
 import ar.edu.itba.it.paw.web.MoviesWicketSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
+import ar.edu.itba.it.paw.web.movie.ViewMoviePage;
 import ar.edu.itba.it.paw.web.user.SignInPage;
 
 @SuppressWarnings("serial")
@@ -57,10 +59,12 @@ public class ReportedCommentsList extends BasePage{
 			protected void populateItem(final Item<Comment> item) {
 				Map<String, Comment> params = new HashMap<String, Comment>();
 				params.put("reportModel", item.getModelObject());
-				BaseLink<Void> link = new BaseLink<Void>("movieDetailLink", ReportedCommentsList.class);
+				PageParameters movieParams = new PageParameters();
+				movieParams.add("movieId", item.getModelObject().getMovie().getId());
+				BaseLink<Integer> link = new BaseLink<Integer>("movieDetailLink", ViewMoviePage.class, movieParams);
 				link.add(new Label("body", new PropertyModel<String>(item.getModel(), "body")));
 				item.add(link);
-				item.add(new Label("creationDate", new PropertyModel<Date>(item.getModel(), "creationDate")));
+				item.add(new Label("creationDate", new PrettyTime().format(item.getModelObject().getCreationDate())));
 				Form<ReportedCommentsList> cleanForm = new Form<ReportedCommentsList>("cleanReport", new CompoundPropertyModel<ReportedCommentsList>(ReportedCommentsList.this)) {
 					@Override
 					protected void onSubmit() {
