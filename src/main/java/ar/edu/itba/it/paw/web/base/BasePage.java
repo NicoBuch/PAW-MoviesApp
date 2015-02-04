@@ -1,6 +1,10 @@
 package ar.edu.itba.it.paw.web.base;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.IRequestHandler;
+import org.apache.wicket.request.handler.PageProvider;
+import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -13,6 +17,8 @@ import ar.edu.itba.it.paw.web.HomePage;
 import ar.edu.itba.it.paw.web.LoggedLink;
 import ar.edu.itba.it.paw.web.MoviesWicketSession;
 import ar.edu.itba.it.paw.web.comment.ReportedCommentsList;
+import ar.edu.itba.it.paw.web.error.ErrorPage;
+import ar.edu.itba.it.paw.web.error.RuntimeExceptionHandler;
 import ar.edu.itba.it.paw.web.movie.ListMoviesPage;
 import ar.edu.itba.it.paw.web.user.ListUsersPage;
 import ar.edu.itba.it.paw.web.user.RecoveryPage;
@@ -49,5 +55,5 @@ public class BasePage extends WebPage {
 		add (new LoggedLink<Object>("usersListLink", true, false, false, ListUsersPage.class, null));
 		add (new LoggedLink<Object>("reportsListLink", true, true, false, ReportedCommentsList.class, null));
 		add(new ConditionalLabel("usersName", wicketSession.getEmail(), loggedIn));
-		}
+	}
 }

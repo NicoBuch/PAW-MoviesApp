@@ -3,11 +3,16 @@ package ar.edu.itba.it.paw.web.common;
 import org.apache.wicket.request.IRequestHandler;
 import org.apache.wicket.request.cycle.AbstractRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.handler.PageProvider;
+import org.apache.wicket.request.handler.RenderPageRequestHandler;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.classic.Session;
 import org.hibernate.context.ManagedSessionContext;
 import org.springframework.util.Assert;
+
+import ar.edu.itba.it.paw.web.email.EmailSender;
+import ar.edu.itba.it.paw.web.error.ErrorPage;
 
 public class HibernateRequestCycleListener extends AbstractRequestCycleListener {
 
@@ -40,7 +45,9 @@ public class HibernateRequestCycleListener extends AbstractRequestCycleListener 
   public IRequestHandler onException(RequestCycle cycle, Exception ex) {
     rollback();
     error.set(true);
-    return null;
+    EmailSender emailSender = new EmailSender();
+   	emailSender.sendEmail("Error" + ex.toString(), ex.getMessage());
+   	return new RenderPageRequestHandler(new PageProvider(ErrorPage.class));
   }
 
   private void commit() {
