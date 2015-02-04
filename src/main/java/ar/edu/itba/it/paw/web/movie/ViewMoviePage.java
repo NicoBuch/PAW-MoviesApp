@@ -67,7 +67,7 @@ public class ViewMoviePage  extends BasePage {
 	
 	private static int MIN_RATING = 1;
 	private static int MAX_RATING = 5;
-	public ViewMoviePage(PageParameters params)  throws StringValueConversionException, NoIdException{
+	public ViewMoviePage(PageParameters params)  throws Exception{
 		this.params = params;
 		final EntityModel<Movie> movie = new EntityModel<Movie>(Movie.class,movies.get(params.get("movieId").toInteger()));
 		add(new Label(("title"), new PropertyModel<String>(movie, "title")));
@@ -173,10 +173,7 @@ public class ViewMoviePage  extends BasePage {
 			}
 		}));
 		add(setPictureForm);
-		
-		
-		
-		
+			
 		List<Integer> ratings = new ArrayList<Integer>();
 		for(int i = MIN_RATING ; i <= MAX_RATING ; i++){
 			ratings.add(i);
@@ -264,19 +261,19 @@ public class ViewMoviePage  extends BasePage {
 				MoviesWicketSession session = MoviesWicketSession.get();
 				if(session.isSignedIn()){
 //					user = session.getUserModel().getObject();
-					try {
-						user = users.getByEmail(session.getEmail());
-					} catch (EmailNotFound e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+						try {
+							user = users.getByEmail(session.getEmail());
+						} catch (EmailNotFound e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					
 					commentRateForm.setVisible(commentRateForm.isVisible() && user.canRate(item.getModelObject()));
 				}
 				commentRateForm.add(dpcComment);
 				item.add(commentRateForm);
 			}
 		});
-		
 	}
 	
 	@Override
