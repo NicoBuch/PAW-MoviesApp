@@ -50,7 +50,13 @@ public class BasePage extends WebPage {
 			}
 		});
 		add (new LoggedLink<Object>("signUpLink", false, false, false, SignUpPage.class, null));
-		add (new LoggedLink<Object>("myProfileLink", true, false , false, UserDetailPage.class, null));
+		
+		PageParameters myProfileParams = new PageParameters();
+		if(wicketSession.isSignedIn()){
+			myProfileParams.add("userId", wicketSession.getUserModel().getObject().getId());
+		}
+		
+		add (new LoggedLink<Object>("myProfileLink", true, false , false, UserDetailPage.class, myProfileParams));
 		add (new LoggedLink<Object>("resetPasswordLink", true, false, false, RecoveryPage.class, new PageParameters()));
 		add (new LoggedLink<Object>("usersListLink", true, false, false, ListUsersPage.class, null));
 		add (new LoggedLink<Object>("reportsListLink", true, true, false, ReportedCommentsList.class, null));

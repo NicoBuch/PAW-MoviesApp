@@ -13,9 +13,10 @@ import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.NoIdException;
@@ -34,8 +35,10 @@ public class UserDetailPage extends BasePage{
 	private transient MoviesWicketSession session = MoviesWicketSession.get();
 	private IModel<User> user;
 	private IModel<List<User>> usersOfInterest;
+	private transient int id;
 
-	public UserDetailPage(final int id) {
+	public UserDetailPage(PageParameters params) {
+		this.id = params.get("userId").toInt();
 		user = new EntityModel<User>(User.class, id);
 		usersOfInterest = new LoadableDetachableModel<List<User>>() {
 			@Override
@@ -119,7 +122,7 @@ public class UserDetailPage extends BasePage{
 			@Override
 			protected void populateItem(Item<Comment> item) {
 				RankedMoviePanel moviePanel = new RankedMoviePanel("movieName", new EntityModel<Movie>(Movie.class, item.getModelObject().getMovie()));
-				item.add(new Label(("creationDate"), new PropertyModel<String>(item.getModel(), "creationDate")));
+				item.add(new Label(("creationDate"), new PrettyTime().format(item.getModelObject().getCreationDate())));
 				item.add(new BaseLink<Void>("movieInfoLink", UserDetailPage.class).add(moviePanel));
 			}
 

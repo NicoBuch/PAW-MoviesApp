@@ -1,7 +1,6 @@
 package ar.edu.itba.it.paw.web.movie;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,6 +17,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.genre.Genre;
@@ -89,11 +89,10 @@ public class ListMoviesPage extends BasePage{
 				PageParameters params = new PageParameters();
 				params.add("movieId", item.getModelObject().getId());
 				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
-				item.add(moviePanel);
-//				item.add(new BaseLink<Integer>("movieDetailLink", ViewMoviePage.class,params).add(new Label("title", new PropertyModel<String>(item.getModel(), "title"))));
+				item.add(new BaseLink<Integer>("movieDetailLink", ViewMoviePage.class,params).add(moviePanel));
 
 				item.add(new Label(("director"), new PropertyModel<String>(item.getModel(), "director")));
-				item.add(new Label(("releaseDate"), new PropertyModel<Date>(item.getModel(), "releaseDate")));
+				item.add(new Label(("releaseDate"), new PrettyTime().format(item.getModelObject().getReleaseDate())));
 				item.add(new LoggedLink<Integer>("editMovieLink", true, true, false , EditMoviePage.class, params));
 				item.add(new DeleteLink<Movie>("deleteMovieLink", true, true, false, item.getModel()) {
 					@Override

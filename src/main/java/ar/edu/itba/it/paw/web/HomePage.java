@@ -15,7 +15,9 @@ import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.NoIdException;
@@ -26,6 +28,7 @@ import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.domain.user.UserRepo;
 import ar.edu.itba.it.paw.web.base.BasePage;
 import ar.edu.itba.it.paw.web.movie.RankedMoviePanel;
+import ar.edu.itba.it.paw.web.movie.ViewMoviePage;
 
 @SuppressWarnings("serial")
 public class HomePage extends BasePage{
@@ -91,8 +94,10 @@ public class HomePage extends BasePage{
 		add(new PropertyListView<Movie>("releases", releases){
 			@Override
 			protected void populateItem(ListItem<Movie> item) {
+				PageParameters params = new PageParameters();
+				params.add("movieId", item.getModelObject().getId());
 				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
-				item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(moviePanel).add(new Label("shortDescription", new PropertyModel<String>(item.getModel(), "shortDescription"))));
+				item.add(new BaseLink<Integer>("movieDetailLink", ViewMoviePage.class,params).add(moviePanel).add(new Label("shortDescription", new PropertyModel<String>(item.getModel(), "shortDescription"))));
 			}
 		}.setVisible(!releases.getObject().isEmpty()));
 		add(new WebMarkupContainer("noReleases").setVisible(releases.getObject().isEmpty()));
@@ -100,8 +105,10 @@ public class HomePage extends BasePage{
 		add(new PropertyListView<Movie>("rankedMovies", ranked){
 			@Override
 			protected void populateItem(ListItem<Movie> item) {
+				PageParameters params = new PageParameters();
+				params.add("movieId", item.getModelObject().getId());
 				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
-				item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(moviePanel));
+				item.add(new BaseLink<Integer>("movieDetailLink", ViewMoviePage.class,params).add(moviePanel));
 			}
 		}.setVisible(!ranked.getObject().isEmpty()));
 		add(new WebMarkupContainer("noRankedMovies").setVisible(ranked.getObject().isEmpty()));
@@ -109,9 +116,11 @@ public class HomePage extends BasePage{
 		add(new PropertyListView<Movie>("recentMovies", recents){
 			@Override
 			protected void populateItem(ListItem<Movie> item) {
+				PageParameters params = new PageParameters();
+				params.add("movieId", item.getModelObject().getId());
 				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
-				item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(moviePanel)
-				.add(new Label("uploadDate", String.format(getString("uploadDate"), item.getModelObject().getCreationDate())))
+				item.add(new BaseLink<Integer>("movieDetailLink", ViewMoviePage.class,params).add(moviePanel)
+				.add(new Label("uploadDate", String.format(getString("uploadDate"), new PrettyTime().format(item.getModelObject().getCreationDate()))))
 				.add(new Label("commentsCount", String.format(getString("commentsCount"), item.getModelObject().getCommentCount()))));
 
 			}
@@ -121,8 +130,10 @@ public class HomePage extends BasePage{
 		add(new PropertyListView<Movie>("visitedMovies", visited){
 			@Override
 			protected void populateItem(ListItem<Movie> item) {
+				PageParameters params = new PageParameters();
+				params.add("movieId", item.getModelObject().getId());
 				RankedMoviePanel moviePanel = new RankedMoviePanel("title", item.getModel());
-				item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(moviePanel));
+				item.add(new BaseLink<Integer>("movieDetailLink", ViewMoviePage.class,params).add(moviePanel));
 			}
 		}.setVisible(!visited.getObject().isEmpty()));
 		add(new WebMarkupContainer("noVisitedMovies").setVisible(visited.getObject().isEmpty()));
@@ -135,9 +146,11 @@ public class HomePage extends BasePage{
 
 					@Override
 					protected void populateItem(Item<Comment> item) {
+						PageParameters params = new PageParameters();
+						params.add("movieId", item.getModelObject().getId());
 						RankedMoviePanel moviePanel = new RankedMoviePanel("title", new EntityModel<Movie>(Movie.class, item.getModelObject().getMovie()));
 						item.add(new Label("body", new PropertyModel<String>(item.getModel(), "body")));
-						item.add(new BaseLink<Void>("movieDetailLink", HomePage.class).add(moviePanel));
+						item.add(new BaseLink<Integer>("movieDetailLink", ViewMoviePage.class,params).add(moviePanel));
 						item.setVisible(item.getModelObject().getCreationDate().after(aWeekBefore));
 					}
 

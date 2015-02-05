@@ -12,6 +12,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
@@ -52,8 +53,9 @@ public class ListUsersPage extends BasePage{
 					
 					@Override
 					public void onClick() {
-						
-						setResponsePage(new UserDetailPage(this.getModelObject().getId())); 
+						PageParameters myProfileParams = new PageParameters();
+						myProfileParams.add("userId", this.getModelObject().getId());
+						setResponsePage(new UserDetailPage(myProfileParams)); 
 					}
 				}.add(new Label(("email"), new PropertyModel<String>(item.getModel(), "email"))));
 						

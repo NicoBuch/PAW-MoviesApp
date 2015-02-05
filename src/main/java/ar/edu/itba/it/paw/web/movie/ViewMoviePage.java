@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.web.movie;
 
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +23,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.wicket.protocol.http.servlet.WicketSessionFilter;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValueConversionException;
 import org.apache.wicket.validation.validator.RangeValidator;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.NoIdException;
@@ -37,6 +38,7 @@ import ar.edu.itba.it.paw.domain.genre.Genre;
 import ar.edu.itba.it.paw.domain.genre.GenreRepo;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.movie.MovieRepo;
+import ar.edu.itba.it.paw.domain.movie.NoStockAvailableException;
 import ar.edu.itba.it.paw.domain.prize.Prize;
 import ar.edu.itba.it.paw.domain.prize.PrizeRepo;
 import ar.edu.itba.it.paw.domain.report.Report;
@@ -44,7 +46,6 @@ import ar.edu.itba.it.paw.domain.user.EmailNotFound;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.web.ConditionalForm;
 import ar.edu.itba.it.paw.web.ConditionalFormData;
-import ar.edu.itba.it.paw.web.ConditionalLink;
 import ar.edu.itba.it.paw.web.DeleteLink;
 import ar.edu.itba.it.paw.web.LoggedLink;
 import ar.edu.itba.it.paw.web.MoviesWicketSession;
@@ -70,9 +71,24 @@ public class ViewMoviePage  extends BasePage {
 	public ViewMoviePage(PageParameters params)  throws Exception{
 		this.params = params;
 		final EntityModel<Movie> movie = new EntityModel<Movie>(Movie.class,movies.get(params.get("movieId").toInteger()));
+		movie.getObject().visit();
+		
+		add(new Label(("visits"), new PropertyModel<Integer>(movie, "visits")));
+		add(new Label(("stock"), new PropertyModel<String>(movie, "stock"){
+			@Override
+			public String getObject() {
+				try {
+					return String.valueOf(movies.getStock(movie.getObject()));
+				} catch (FileNotFoundException e) {
+					throw new RuntimeException();
+				} catch (NoStockAvailableException e) {
+					return e.getMessage();
+				}
+			}
+		}));
 		add(new Label(("title"), new PropertyModel<String>(movie, "title")));
 		add(new Label(("director"), new PropertyModel<String>(movie, "director")));
-		add(new Label(("releaseDate"), new PropertyModel<String>(movie, "releaseDate")));
+		add(new Label(("releaseDate"), new PrettyTime().format(movie.getObject().getReleaseDate())));
 		add(new Label(("minutes"), new PropertyModel<String>(movie, "minutes")));
 		add(new Label(("description"), new PropertyModel<String>(movie, "description")));
 		
@@ -97,7 +113,6 @@ public class ViewMoviePage  extends BasePage {
 					@Override
 					public void onClick() {
 						movie.getObject().removePrize(getModelObject());
-						movie.detach();
 					}
 				});
 			}
