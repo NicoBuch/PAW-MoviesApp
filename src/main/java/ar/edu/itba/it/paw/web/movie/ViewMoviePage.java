@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.web.movie;
 
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,7 @@ import ar.edu.itba.it.paw.domain.genre.Genre;
 import ar.edu.itba.it.paw.domain.genre.GenreRepo;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.movie.MovieRepo;
+import ar.edu.itba.it.paw.domain.movie.NoStockAvailableException;
 import ar.edu.itba.it.paw.domain.prize.Prize;
 import ar.edu.itba.it.paw.domain.prize.PrizeRepo;
 import ar.edu.itba.it.paw.domain.report.Report;
@@ -72,7 +74,18 @@ public class ViewMoviePage  extends BasePage {
 		movie.getObject().visit();
 		
 		add(new Label(("visits"), new PropertyModel<Integer>(movie, "visits")));
-		add(new Label(("stock"), new PropertyModel<Integer>(movie, "visits")));
+		add(new Label(("stock"), new PropertyModel<String>(movie, "stock"){
+			@Override
+			public String getObject() {
+				try {
+					return String.valueOf(movies.getStock(movie.getObject()));
+				} catch (FileNotFoundException e) {
+					throw new RuntimeException();
+				} catch (NoStockAvailableException e) {
+					return e.getMessage();
+				}
+			}
+		}));
 		add(new Label(("title"), new PropertyModel<String>(movie, "title")));
 		add(new Label(("director"), new PropertyModel<String>(movie, "director")));
 		add(new Label(("releaseDate"), new PrettyTime().format(movie.getObject().getReleaseDate())));

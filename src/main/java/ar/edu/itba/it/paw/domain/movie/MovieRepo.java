@@ -1,5 +1,6 @@
 package ar.edu.itba.it.paw.domain.movie;
 
+import java.io.FileNotFoundException;
 import java.sql.Date;
 import java.util.List;
 
@@ -28,5 +29,7 @@ public interface MovieRepo {
 	public void delete(Movie movie);
 
 	public List<Movie> getByVisits(int limit);
+
+	int getStock(Movie movie) throws NoStockAvailableException, FileNotFoundException;
 
 }
