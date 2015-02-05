@@ -199,7 +199,7 @@ public class User extends PersistentEntity {
 				return false;
 			}
 		}
-		return true;
+		return !this.equals(comment.getUser());
 	}
 
 	public boolean canReport(Comment comment) {

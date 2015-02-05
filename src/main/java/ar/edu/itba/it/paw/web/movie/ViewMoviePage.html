@@ -163,8 +163,8 @@
 									<span class="glyphicon glyphicon-chevron-right"></span>
 									<label wicket:id="commentAuthor">said</label>:<br/>
 
-									<label><b><wicket:message key="commentRatingName">Rating</wicket:message>:</b></label>
-									<span wicket:id="rating"></span><wicket:message key="commentRatingUnit">stars</wicket:message>.
+									<label><b><wicket:message key="commentRatingName">Rating</wicket:message>:</b></label> 								
+									<span wicket:id="ratingLabel"></span><wicket:message key="commentRatingUnit">stars</wicket:message>.						
 									<br/>
 
 									<i>"<span wicket:id="body"></span>"</i>
@@ -181,7 +181,7 @@
 
 								<div class="col-md-8">
 
-									<form wicket:id="commentRateForm" class="form-inline">
+									<form wicket:id="rating" class="form-inline">
 										<select class="form-control input-sm" wicket:id='rating'>
 
 										</select>

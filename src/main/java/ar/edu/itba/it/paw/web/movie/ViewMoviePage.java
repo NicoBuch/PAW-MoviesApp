@@ -3,8 +3,10 @@ package ar.edu.itba.it.paw.web.movie;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -17,6 +19,8 @@ import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PropertyListView;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -62,7 +66,8 @@ public class ViewMoviePage  extends BasePage {
 	private transient String name;
 	private transient Integer rating;
 	private transient String body;
-	EntityModel<Movie> movieModel;
+	
+	EntityModel<Movie> movie;
 	PageParameters params;
 	FileUploadField pictureToUpload;
 	
@@ -70,6 +75,7 @@ public class ViewMoviePage  extends BasePage {
 	private static int MAX_RATING = 5;
 	public ViewMoviePage(PageParameters params)  throws Exception{
 		this.params = params;
+<<<<<<< HEAD
 		final EntityModel<Movie> movie = new EntityModel<Movie>(Movie.class,movies.get(params.get("movieId").toInteger()));
 		movie.getObject().visit();
 		
@@ -86,6 +92,9 @@ public class ViewMoviePage  extends BasePage {
 				}
 			}
 		}));
+=======
+		movie = new EntityModel<Movie>(Movie.class,movies.get(params.get("movieId").toInteger()));
+>>>>>>> Se arreglo el rate de comment, ahora se actualiza todo en el momento... excepto eliminar un premio
 		add(new Label(("title"), new PropertyModel<String>(movie, "title")));
 		add(new Label(("director"), new PropertyModel<String>(movie, "director")));
 		add(new Label(("releaseDate"), new PrettyTime().format(movie.getObject().getReleaseDate())));
@@ -146,7 +155,7 @@ public class ViewMoviePage  extends BasePage {
 			}
 			
 		}));
-		add(new DeleteLink<Movie>("deletePictureLink", true, true, false, null) {
+		add(new DeleteLink<Movie>("deletePictureLink", true, true, false, movie) {
 			@Override
 			public void onClick() {
 				movie.getObject().deletePicture();			
@@ -159,6 +168,7 @@ public class ViewMoviePage  extends BasePage {
 				if(name != null){
 					Prize pri = new Prize(movie.getObject(), name, prize);
 					movie.getObject().addPrize(pri);
+					movie.detach();
 				}
 				setResponsePage(ViewMoviePage.class,ViewMoviePage.this.params);
 			}
@@ -207,6 +217,23 @@ public class ViewMoviePage  extends BasePage {
 					e.printStackTrace();
 				}
 			}
+			@Override
+			public boolean isVisible(){
+				if(super.isVisible()){
+					return false;
+				}
+				MoviesWicketSession session = MoviesWicketSession.get();
+				if(session.isSignedIn()){
+					try {
+						user = users.getByEmail(MoviesWicketSession.get().getEmail());
+						return user.canComment(movie.getObject());
+					} catch (EmailNotFound e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				return false;
+			}
 		};
 		TextField<Integer> bodyField = new TextField<Integer>("body");
 		bodyField.setRequired(true);
@@ -217,12 +244,13 @@ public class ViewMoviePage  extends BasePage {
 		commentMovieForm.add(new Button("addComment"));
 		commentMovieForm.add(dpc);
 		add(commentMovieForm);
-		 
-		add(new PropertyListView<Comment>("comment", new ArrayList<Comment>(movie.getObject().getComments())){
+		add(new RefreshingView<Comment>("comment", movie) {
+		
+//		add(new PropertyListView<Comment>("comment", new ArrayList<Comment>(movie.getObject().getComments())){
 			@Override
-			protected void populateItem(final ListItem<Comment> item) {
+			protected void populateItem(Item<Comment> item) {
 				item.add(new Label("commentAuthor", new PropertyModel<String>(new PropertyModel<User>(item.getModel(), "user"), "email")));
-				item.add(new Label("rating", new PropertyModel<Integer>(item.getModel(), "rating")));
+				item.add(new Label("ratingLabel", new PropertyModel<Integer>(item.getModel(), "rating")));
 				item.add(new Label("body", new PropertyModel<String>(item.getModel(), "body")));
 				item.add(new Label("avgCommentRatings", new PropertyModel<Double>(item.getModel(), "avgCommentRatings")));
 				item.add(new LoggedLink<Comment>("reportCommentLink",true,false,false,ListMoviesPage.class,null,item.getModel()){
@@ -232,7 +260,7 @@ public class ViewMoviePage  extends BasePage {
 							try {
 								User user;
 								user = users.getByEmail(MoviesWicketSession.get().getEmail());
-								return user.canReport(item.getModelObject());
+								return user.canReport(getModelObject());
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -254,7 +282,7 @@ public class ViewMoviePage  extends BasePage {
 				item.add(new DeleteLink<Comment>("deleteCommentLink", true, true, false, item.getModel()) {
 					@Override
 					public void onClick() {
-						comments.delete(item.getModelObject());
+						comments.delete(getModelObject());
 					}
 				});
 				List<Integer> ratings = new ArrayList<Integer>();
@@ -264,29 +292,54 @@ public class ViewMoviePage  extends BasePage {
 				DropDownChoice<Integer> dpcComment = new DropDownChoice<Integer>("rating", ratings);
 				dpcComment.add(new RangeValidator<Integer>(MIN_RATING, MAX_RATING));
 				dpcComment.setRequired(true);
-				ConditionalFormData<Void,Comment> commentRateForm = new ConditionalFormData<Void,Comment>("commentRateForm",null,true,false,false,
-																				new EntityModel<Comment>(Comment.class, item.getModelObject().getId())){
-					Integer rating;
-					@Override
-					protected void onSubmit(){
-						data.getObject().rate(user, rating);
-					}
-				};	
 				User user = null;
 				MoviesWicketSession session = MoviesWicketSession.get();
-				if(session.isSignedIn()){
-//					user = session.getUserModel().getObject();
+				ConditionalFormData<ViewMoviePage,Comment> commentRateForm = new ConditionalFormData<ViewMoviePage,Comment>("rating"
+																					,new CompoundPropertyModel<ViewMoviePage>(ViewMoviePage.this)
+																					,true,false,false,
+																					item.getModel()){
+					User user;
+					@Override
+					protected void onSubmit(){
 						try {
-							user = users.getByEmail(session.getEmail());
+							
+							user = users.getByEmail(MoviesWicketSession.get().getEmail());
+							data.getObject().rate(user,rating);
+							data.detach();
+							} catch (EmailNotFound e) {
+								e.printStackTrace();
+							}
+					}
+					@Override
+					public boolean isVisible(){
+						try {
+							if(super.isVisible() == false){
+								return false;
+							}
+							MoviesWicketSession session = MoviesWicketSession.get();
+							if(session.isSignedIn()){
+								user = users.getByEmail(MoviesWicketSession.get().getEmail());
+								return user.canRate(data.getObject());
+							}
 						} catch (EmailNotFound e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					
-					commentRateForm.setVisible(commentRateForm.isVisible() && user.canRate(item.getModelObject()));
-				}
+						return false;
+					}
+				};	
+				
 				commentRateForm.add(dpcComment);
 				item.add(commentRateForm);
+			}
+
+			@Override
+			protected Iterator<IModel<Comment>> getItemModels() {
+				List<IModel<Comment>> result = new ArrayList<IModel<Comment>>();
+				for(Comment c: movie.getObject().getComments()) {
+					result.add(new EntityModel<Comment>(Comment.class, c));
+				}
+				return result.iterator();
 			}
 		});
 	}
@@ -295,8 +348,8 @@ public class ViewMoviePage  extends BasePage {
 	public
 	void detachModels(){
 		super.detachModels();
-		if(movieModel!=null){
-			movieModel.detach();
+		if(movie!=null){
+			movie.detach();
 		}
 	}
 }

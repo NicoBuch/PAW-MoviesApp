@@ -23,7 +23,7 @@ public class CommentRating extends PersistentEntity{
 	}
 	
 	public CommentRating(User user, Comment comment, int rating){
-		if(rating < 0 || rating > 5 || comment.getUser().equals(user) || !user.canRate(comment)){
+		if(rating < 0 || rating > 5 ||  !user.canRate(comment)){
 			throw new IllegalArgumentException();
 		}
 		this.user = user;
