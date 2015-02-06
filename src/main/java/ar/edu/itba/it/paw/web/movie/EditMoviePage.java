@@ -57,8 +57,34 @@ public class EditMoviePage extends AdminPage{
 				byte[] moviePicture = file.get(0).getBytes();
 				String releaseDateString = releaseYear + "-" + releaseMonth + "-" + releaseDay;
 				Date releaseDate = Date.valueOf(releaseDateString);
+				if(releaseDate == null){
+					panel.releaseDayField.error((IValidationError) new ValidationError().addMessageKey("invalidDate"));
+				}
 				if(releaseDate.after(new Date(System.currentTimeMillis()))){
 					panel.releaseDayField.error((IValidationError) new ValidationError().addMessageKey("invalidDate"));
+				}
+				if (title.length() > 255){
+					panel.releaseDayField.error((IValidationError) new ValidationError().addMessageKey("invalidDate"));
+				}
+				if( title.isEmpty()){
+					panel.releaseDayField.error((IValidationError) new ValidationError().addMessageKey("invalidDate"));
+				}
+				
+				if(director.length() > 255){
+					panel.releaseDayField.error((IValidationError) new ValidationError().addMessageKey("invalidDate"));
+				}
+					
+				if(director.isEmpty()) {
+					panel.releaseDayField.error((IValidationError) new ValidationError().addMessageKey("invalidDate"));
+				}
+				
+					
+				if(genres == null)
+					
+				if(genres.isEmpty())
+					
+				if(description.isEmpty()){
+					
 				}
 				movie.setDescription(description);
 				movie.setDirector(director);
