@@ -48,7 +48,6 @@ public class AddMoviePage extends AdminPage{
 			public void onSubmit(){
 //				final FileUpload picture = panel.fileUpload.getFileUpload();
 				List<FileUpload> file = panel.picture.getFileUploads();
-				byte[] moviePicture = file.get(0).getBytes();
 				String releaseDateString = releaseYear + "-" + releaseMonth + "-" + releaseDay;
 				Date releaseDate = Date.valueOf(releaseDateString);
 				if(releaseDate.after(new Date(System.currentTimeMillis()))){
@@ -56,7 +55,10 @@ public class AddMoviePage extends AdminPage{
 				}
 				Set<Genre> genr = new HashSet<Genre>(genres);
 				Movie movie = new Movie(title, releaseDate, director, genr, minutes, description);
-				movie.setPicture(moviePicture);
+				if(file != null){
+					byte[] moviePicture = file.get(0).getBytes();
+					movie.setPicture(moviePicture);
+				}
 				movies.save(movie);
 				setResponsePage(ListMoviesPage.class);
 			}
