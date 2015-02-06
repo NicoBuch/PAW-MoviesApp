@@ -75,7 +75,6 @@ public class ViewMoviePage  extends BasePage {
 	private static int MAX_RATING = 5;
 	public ViewMoviePage(PageParameters params)  throws Exception{
 		this.params = params;
-<<<<<<< HEAD
 		final EntityModel<Movie> movie = new EntityModel<Movie>(Movie.class,movies.get(params.get("movieId").toInteger()));
 		movie.getObject().visit();
 		
@@ -92,9 +91,6 @@ public class ViewMoviePage  extends BasePage {
 				}
 			}
 		}));
-=======
-		movie = new EntityModel<Movie>(Movie.class,movies.get(params.get("movieId").toInteger()));
->>>>>>> Se arreglo el rate de comment, ahora se actualiza todo en el momento... excepto eliminar un premio
 		add(new Label(("title"), new PropertyModel<String>(movie, "title")));
 		add(new Label(("director"), new PropertyModel<String>(movie, "director")));
 		add(new Label(("releaseDate"), new PrettyTime().format(movie.getObject().getReleaseDate())));
@@ -219,7 +215,7 @@ public class ViewMoviePage  extends BasePage {
 			}
 			@Override
 			public boolean isVisible(){
-				if(super.isVisible()){
+				if(!super.isVisible()){
 					return false;
 				}
 				MoviesWicketSession session = MoviesWicketSession.get();
