@@ -47,7 +47,7 @@ public class HibernateRequestCycleListener extends AbstractRequestCycleListener 
     error.set(true);
     EmailSender emailSender = new EmailSender();
    	emailSender.sendEmail("Error" + ex.toString(), ex.getMessage());
-    return new RenderPageRequestHandler(new PageProvider(ErrorPage.class));
+   	return new RenderPageRequestHandler(new PageProvider(ErrorPage.class));
   }
 
   private void commit() {
