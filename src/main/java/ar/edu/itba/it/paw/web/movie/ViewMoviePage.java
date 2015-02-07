@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -16,9 +15,6 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.NonCachingImage;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.list.PropertyListView;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -30,12 +26,10 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.string.StringValueConversionException;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
-import ar.edu.itba.it.paw.domain.NoIdException;
 import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.comment.CommentRepo;
 import ar.edu.itba.it.paw.domain.genre.Genre;
@@ -102,46 +96,47 @@ public class ViewMoviePage  extends BasePage {
 			genreList.add(new Label(genreList.newChildId(),g.getName()));
 		}
 		add(genreList);
-		
-		IModel<List<Prize>> prizeModel = new LoadableDetachableModel<List<Prize>>(){
+		add(new RefreshingView<Prize>("prizeList") {
 			@Override
-			protected List<Prize> load() {
-				return new ArrayList<Prize>(movie.getObject().getPrices()) ;
+			protected Iterator<IModel<Prize>> getItemModels() {
+				List<IModel<Prize>> result = new ArrayList<IModel<Prize>>();
+				for(Prize a: movie.getObject().getPrices()) {
+					result.add(new EntityModel<Prize>(Prize.class, a));
+				}
+				return result.iterator();
 			}
-		};
-		add(new ListView<Prize>("prizeList", prizeModel)
-		{	
+	
 			@Override
-			protected void populateItem(ListItem<Prize> item) {
-			   item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
-			   item.add(new DeleteLink<Prize>("deletePrizeLink",true, true, false, item.getModel()) {
-					@Override
-					public void onClick() {
-						movie.getObject().removePrize(getModelObject());
-					}
-				});
+			protected void populateItem(final Item<Prize> item) {
+				 item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
+				   item.add(new DeleteLink<Prize>("deletePrizeLink", true, true, false, item.getModel()) {
+						@Override
+						public void onClick() {
+							movie.getObject().removePrize(getModelObject());	
+						}
+					});
 			}
-			
-		});
-		IModel<List<Prize>> nominationsModel = new LoadableDetachableModel<List<Prize>>(){
+	});
+		add(new RefreshingView<Prize>("nominationList") {
 			@Override
-			protected List<Prize> load() {
-				return new ArrayList<Prize>(movie.getObject().getNominations()) ;
+			protected Iterator<IModel<Prize>> getItemModels() {
+				List<IModel<Prize>> result = new ArrayList<IModel<Prize>>();
+				for(Prize a: movie.getObject().getNominations()) {
+					result.add(new EntityModel<Prize>(Prize.class, a));
+				}
+				return result.iterator();
 			}
-		};
-		add(new ListView<Prize>("nominationList", nominationsModel) {
-			
+	
 			@Override
-			protected void populateItem(ListItem<Prize> item) {
-			   item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
-			   item.add(new DeleteLink<Prize>("deleteNominationLink", true, true, false, item.getModel()) {
-					@Override
-					public void onClick() {
-						movie.getObject().removePrize(getModelObject());
-					}
-				});
+			protected void populateItem(final Item<Prize> item) {
+				 item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
+				   item.add(new DeleteLink<Prize>("deleteNominationLink", true, true, false, item.getModel()) {
+						@Override
+						public void onClick() {
+							movie.getObject().removePrize(getModelObject());
+						}
+					});
 			}
-			
 		});
 		add(new NonCachingImage("moviePicture", new DynamicImageResource(){
 
@@ -240,9 +235,7 @@ public class ViewMoviePage  extends BasePage {
 		commentMovieForm.add(new Button("addComment"));
 		commentMovieForm.add(dpc);
 		add(commentMovieForm);
-		add(new RefreshingView<Comment>("comment", movie) {
-		
-//		add(new PropertyListView<Comment>("comment", new ArrayList<Comment>(movie.getObject().getComments())){
+		add(new RefreshingView<Comment>("comment", movie) {		
 			@Override
 			protected void populateItem(Item<Comment> item) {
 				item.add(new Label("commentAuthor", new PropertyModel<String>(new PropertyModel<User>(item.getModel(), "user"), "email")));
@@ -288,8 +281,6 @@ public class ViewMoviePage  extends BasePage {
 				DropDownChoice<Integer> dpcComment = new DropDownChoice<Integer>("rating", ratings);
 				dpcComment.add(new RangeValidator<Integer>(MIN_RATING, MAX_RATING));
 				dpcComment.setRequired(true);
-				User user = null;
-				MoviesWicketSession session = MoviesWicketSession.get();
 				ConditionalFormData<ViewMoviePage,Comment> commentRateForm = new ConditionalFormData<ViewMoviePage,Comment>("rating"
 																					,new CompoundPropertyModel<ViewMoviePage>(ViewMoviePage.this)
 																					,true,false,false,
