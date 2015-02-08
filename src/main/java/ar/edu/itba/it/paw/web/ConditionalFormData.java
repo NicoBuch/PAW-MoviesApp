@@ -1,6 +1,5 @@
 package ar.edu.itba.it.paw.web;
 
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 
 @SuppressWarnings("serial")

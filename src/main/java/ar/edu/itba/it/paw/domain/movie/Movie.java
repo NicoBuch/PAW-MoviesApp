@@ -25,6 +25,7 @@ import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.genre.Genre;
 import ar.edu.itba.it.paw.domain.prize.Prize;
+import ar.edu.itba.it.paw.domain.reportHistory.ReportHistory;
 
 @Entity
 public class Movie extends PersistentEntity {
@@ -41,6 +42,9 @@ public class Movie extends PersistentEntity {
 	
 	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<Prize> prices = new ArrayList<Prize>();
+	
+	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL)
+	private List<ReportHistory> reportHistories = new ArrayList<ReportHistory>();
 	
 	private int minutes;
 	private String description;
@@ -303,6 +307,13 @@ public class Movie extends PersistentEntity {
 		    }
 		});
 		
+	}
+	
+	public void addReportHistory(ReportHistory reportHistory) {
+		reportHistories.add(reportHistory);	
+	}
+	public List<ReportHistory> getReportHistories(){
+		return reportHistories;
 	}
 
 

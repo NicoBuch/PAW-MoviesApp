@@ -28,8 +28,8 @@ public class ReportTest {
 				"lastName", new Date(System.currentTimeMillis()), "hola?",
 				"hola", false);
 		Comment comment = new Comment("body", 4, randomMovie, user);
-		user.report(new Report(user, comment));
-		new Report(user, comment);
+		user.report(new Report(user, comment, "No me gusto el comentario"));
+		new Report(user, comment, "No me gusto el comentario");
 	}
 
 	@Test
@@ -38,6 +38,6 @@ public class ReportTest {
 				"lastName", new Date(System.currentTimeMillis()), "hola?",
 				"hola", false);
 		Comment comment = new Comment("body", 4, randomMovie, user);
-		user.report(new Report(user, comment));
+		user.report(new Report(user, comment, "No me gusto el comentario"));
 	}
 }

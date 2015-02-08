@@ -16,7 +16,6 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
@@ -25,7 +24,6 @@ import org.apache.wicket.util.value.ValueMap;
 import org.apache.wicket.validation.IValidationError;
 import org.apache.wicket.validation.ValidationError;
 
-import ar.edu.itba.it.paw.domain.user.EmailNotFound;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.domain.user.UserRepo;
 import ar.edu.itba.it.paw.web.BaseLink;
@@ -155,9 +153,10 @@ public class SignUpPage extends BasePage{
 					captchaImageResource.invalidate();
 					if (!hasError()) {
 						try {
-							users.save(new User(email, password, firstName, lastName, birthDate, secretQuestion, secretAnswer, false));
+							User user = new User(email, password, firstName, lastName, birthDate, secretQuestion, secretAnswer, false);
+							users.save(user);
 							resetValues();
-							setResponsePage(new HomePage());
+							setResponsePage(new SignInPage());
 						} catch ( Exception e) {
 							error("Invalid Registration");
 						}
