@@ -68,6 +68,7 @@ public class ReportedCommentsList extends BasePage{
 				Form<ReportedCommentsList> cleanForm = new Form<ReportedCommentsList>("cleanReport", new CompoundPropertyModel<ReportedCommentsList>(ReportedCommentsList.this)) {
 					@Override
 					protected void onSubmit() {
+						item.getModelObject().cleanReports();
 						comments.cleanReports(item.getModelObject());
 					}
 				};
@@ -76,6 +77,7 @@ public class ReportedCommentsList extends BasePage{
 				Form<ReportedCommentsList> deleteForm = new Form<ReportedCommentsList>("deleteComment", new CompoundPropertyModel<ReportedCommentsList>(ReportedCommentsList.this)) {
 					@Override
 					protected void onSubmit() {
+						item.getModelObject().deleteReports();
 						comments.delete(item.getModelObject());
 					}
 				};

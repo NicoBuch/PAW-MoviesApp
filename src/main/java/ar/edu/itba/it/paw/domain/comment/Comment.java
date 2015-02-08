@@ -13,6 +13,7 @@ import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.commentRating.CommentRating;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.report.Report;
+import ar.edu.itba.it.paw.domain.reportHistory.ReportHistory;
 import ar.edu.itba.it.paw.domain.user.User;
 
 @Entity
@@ -21,8 +22,6 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 	private String body;
 	private Date creationDate;
 	private int rating; 
-	
-	
 	
 	@OneToMany(mappedBy="comment", cascade=CascadeType.ALL)
 	private List<CommentRating> commentRatings = new ArrayList<CommentRating>();
@@ -33,7 +32,7 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 	@ManyToOne
 	private User user;
 	
-	@OneToMany(mappedBy="comment" ,  cascade=CascadeType.ALL )
+	@OneToMany(mappedBy="comment", cascade=CascadeType.ALL)
 	private List<Report> reports;
 	
 	@SuppressWarnings("unused")
@@ -137,11 +136,20 @@ public class Comment extends PersistentEntity implements Comparable<Comment>{
 	}
 
 	public void cleanReports() {
-		reports.clear();		
+		for(Report report : reports){
+			report.getUser().addReportHistory(new ReportHistory(report.getUser(), movie, report.getExplanation(), "ReportCleaned", body));
+		}
 	}
 
 	public void removeReport(Report r) {
 		this.reports.remove(r);
+		
+	}
+
+	public void deleteReports() {
+		for(Report report : reports){
+			report.getUser().addReportHistory(new ReportHistory(report.getUser(), movie, report.getExplanation(), "CommentDestroied", body));
+		}
 		
 	}
 

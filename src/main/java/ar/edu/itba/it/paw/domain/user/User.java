@@ -23,6 +23,7 @@ import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.commentRating.CommentRating;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.report.Report;
+import ar.edu.itba.it.paw.domain.reportHistory.ReportHistory;
 
 @Entity
 @Table(name = "Users")
@@ -55,6 +56,9 @@ public class User extends PersistentEntity {
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Report> reports = new ArrayList<Report>();
+	
+	@OneToMany(mappedBy = "reporter", cascade = CascadeType.ALL)
+	private List<ReportHistory> reportHistories = new ArrayList<ReportHistory>();
 
 	@SuppressWarnings("unused")
 	private User() {
@@ -204,7 +208,7 @@ public class User extends PersistentEntity {
 
 	public boolean canReport(Comment comment) {
 		for (Report report : reports) {
-			if (report.getComment().equals(comment)) {
+			if (report.getComment()!= null && report.getComment().equals(comment)) {
 				return false;
 			}
 		}
@@ -244,5 +248,12 @@ public class User extends PersistentEntity {
 
 	public void setBlocked(boolean blocked) {
 		this.blocked = blocked;
+	}
+
+	public void addReportHistory(ReportHistory reportHistory) {
+		reportHistories.add(reportHistory);	
+	}
+	public List<ReportHistory> getReportHistories(){
+		return reportHistories;
 	}
 }

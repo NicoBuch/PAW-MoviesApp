@@ -1,16 +1,8 @@
 package ar.edu.itba.it.paw.web;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import ar.edu.itba.it.paw.web.movie.ViewMoviePage;
 
 @SuppressWarnings("serial")
 public class BaseLink<T> extends Link<T>{

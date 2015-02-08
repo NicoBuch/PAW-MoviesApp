@@ -1,7 +1,6 @@
 package ar.edu.itba.it.paw.web.movie;
 
 import java.sql.Date;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 

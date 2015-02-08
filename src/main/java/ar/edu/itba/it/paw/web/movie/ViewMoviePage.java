@@ -39,7 +39,6 @@ import ar.edu.itba.it.paw.domain.movie.MovieRepo;
 import ar.edu.itba.it.paw.domain.movie.NoStockAvailableException;
 import ar.edu.itba.it.paw.domain.prize.Prize;
 import ar.edu.itba.it.paw.domain.prize.PrizeRepo;
-import ar.edu.itba.it.paw.domain.report.Report;
 import ar.edu.itba.it.paw.domain.user.EmailNotFound;
 import ar.edu.itba.it.paw.domain.user.User;
 import ar.edu.itba.it.paw.web.ConditionalForm;
@@ -48,6 +47,7 @@ import ar.edu.itba.it.paw.web.DeleteLink;
 import ar.edu.itba.it.paw.web.LoggedLink;
 import ar.edu.itba.it.paw.web.MoviesWicketSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
+import ar.edu.itba.it.paw.web.comment.ReportCommentPage;
 
 @SuppressWarnings("serial")
 public class ViewMoviePage  extends BasePage {
@@ -237,7 +237,7 @@ public class ViewMoviePage  extends BasePage {
 		add(commentMovieForm);
 		add(new RefreshingView<Comment>("comment", movie) {		
 			@Override
-			protected void populateItem(Item<Comment> item) {
+			protected void populateItem(final Item<Comment> item) {
 				item.add(new Label("commentAuthor", new PropertyModel<String>(new PropertyModel<User>(item.getModel(), "user"), "email")));
 				item.add(new Label("ratingLabel", new PropertyModel<Integer>(item.getModel(), "rating")));
 				item.add(new Label("body", new PropertyModel<String>(item.getModel(), "body")));
@@ -259,13 +259,9 @@ public class ViewMoviePage  extends BasePage {
 					}
 					@Override
 					public void onClick() {
-						try {
-							user = users.getByEmail(MoviesWicketSession.get().getEmail());
-						} catch (EmailNotFound e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						user.report(new Report(user, getModelObject()));
+						PageParameters commentParams = new PageParameters();
+						commentParams.add("commentId", item.getModelObject().getId());
+						setResponsePage(ReportCommentPage.class, commentParams);
 					}
 				});
 				item.add(new DeleteLink<Comment>("deleteCommentLink", true, true, false, item.getModel()) {
