@@ -34,13 +34,13 @@
 				hibernate.hbm2ddl.auto=${hibernate.hbm2ddl.auto}
 				hibernate.show_sql=${hibernate.show_sql}
 				hibernate.current_session_context_class=managed
-        hibernate.max_fetch_depth=2
-     		hibernate.jdbc.batch_size=30
+        		hibernate.max_fetch_depth=2
+     			hibernate.jdbc.batch_size=30
 			</value>
 		</property>
 
 		<property name="packagesToScan">
-			<list> <value>ar.edu.itba.it.paw.domain</value> </list>
+			<list> <value>ar.edu.itba.it.paw.</value> </list>
 		</property>
 
 	</bean>
