@@ -32,4 +32,9 @@ public class HibernateGenreRepo extends AbstractHibernateRepo implements GenreRe
 		}
 	}
 
+	@Override
+	public Genre getByName(String genre) {
+		return (Genre) find("from Genre g where lower(g.name) like ?","%" + genre.toLowerCase() + "%").get(0);
+	}
+
 }

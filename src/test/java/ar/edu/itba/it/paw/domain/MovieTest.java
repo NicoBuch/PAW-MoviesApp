@@ -10,8 +10,15 @@ import org.junit.Test;
 import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.genre.Genre;
 import ar.edu.itba.it.paw.domain.movie.Movie;
+import ar.edu.itba.it.paw.domain.user.User;
 
 public class MovieTest {
+	User randomUser = new User(
+			"email@email.com",
+			"password",
+			"frstName",
+			"lastName", new Date(System.currentTimeMillis()), "hola?",
+			"hola", false);
 
 	@Test(expected = IllegalArgumentException.class)
 	public void emptyTitleTest() {
@@ -101,7 +108,7 @@ public class MovieTest {
 		genres.add(new Genre("andy"));
 		Movie movie = new Movie("title", new Date(System.currentTimeMillis()),
 				"director", genres, 15, "caca");
-		Comment comment = new Comment();
+		Comment comment = new Comment("body", 4, movie,randomUser);
 		Assert.assertEquals(movie.getComments().size(), 0);
 		movie.addComment(comment);
 		Assert.assertEquals(movie.getComments().size(), 1);

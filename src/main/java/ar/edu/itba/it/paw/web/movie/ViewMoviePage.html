@@ -1,0 +1,215 @@
+
+
+
+
+<html>
+	<body>
+		<wicket:extend>
+			<div class="page-header">
+				<div class="col-md-8">
+					<h2><wicket:message key="pageName">Movie Detail</wicket:message>
+						<br/>
+						<small wicket:id="title"></small>
+					</h2>
+				</div>
+				<div class="col-md-4">
+					<h4><wicket:message key="visits">Visits to this Movie: </wicket:message>
+						<p wicket:id="visits"/>
+					</h4>
+					<h4><wicket:message key="stock">Available Stock: </wicket:message>
+						<p wicket:id="stock"/>
+					</h4>
+				</div>
+			</div>
+
+			<div class="col-md-12">
+				<div class="col-md-6">
+					<p class="text-center">
+
+						<label><b><wicket:message key="movieDirectorName">Director</wicket:message></b></label>
+						<br/><span wicket:id="director"></span><br/>
+						<br/>
+
+						<label><b><wicket:message key="movieGenresName">Genres</wicket:message></b></label>
+						<br/>
+							<p  class="text-center" wicket:id="genreList"></p>
+						<br/>
+					</p>
+					<p class="text-center">
+
+						<label><b><wicket:message key="movieReleaseDateName">Release Date</wicket:message></b></label>
+						<br/><span wicket:id="releaseDate"></span><br/>
+						<br/>
+
+						<label><b><wicket:message key="movieReleaseDateName">Duration</wicket:message></b></label>
+						<br/><span wicket:id="minutes"></span> <wicket:message key="timeUnitName">minutes</wicket:message>.<br/>
+						<br/>
+
+						<label><b><wicket:message key="moviePrizesName">Prizes</wicket:message></b></label>
+						<br/>
+
+						<p class="text-center" wicket:id="prizeList">
+							<span wicket:id="name"></span>
+							<a class="btn btn-danger btn-xs" wicket:id="deletePrizeLink"><wicket:message key="deleteLinkName">Delete</wicket:message></a>
+						</p>
+					</p>
+					<p class="text-center">
+						<br/>
+
+						<label><b><wicket:message key="movieNominationsName">Nominations</wicket:message></b></label><br/>
+
+						<p class="text-center" wicket:id="nominationList">
+							<span wicket:id="name"></span>
+							<a class="btn btn-danger btn-xs" wicket:id="deleteNominationLink"><wicket:message key="deleteLinkName">Delete</wicket:message></a>
+				  		</p>
+
+					</p>
+				</div>
+
+				<div class="col-md-6">
+					<img wicket:id="moviePicture" class="img-responsive" />
+					<a class="btn btn-danger btn-sm" wicket:id="deletePictureLink"><wicket:message key="deleteLinkName">Delete</wicket:message></a>
+				</div>
+			</div>
+
+
+			<div class="col-md-6 col-md-offset-3">
+				<div class="well">
+					<p class="text-center">
+						<label><b><wicket:message key="movieDescriptionName">Description</wicket:message></b></label><br/>
+						<i><span wicket:id="description"></span></i>
+					</p>
+				</div>
+			</div>
+
+
+
+			<div class="col-md-10 col-md-offset-1">
+					<div class="col-md-5">
+					  	<form wicket:id="adminPrizesForm">
+						  	<div class='col-md-12'>
+						  		<label><wicket:message key="PrizeAndNomPlaceholder">PrizeAndNom</wicket:message></label>
+						  		<input type="text" class="form-control" wicket:id="name" required>
+						   	</div>
+						   	<div class='col-md-6'>
+						  		<label><wicket:message key="awardedCheckName">Awarded</wicket:message></label>
+						  		<input type="checkbox" class="pull-left" wicket:id="prize">
+						  	</div>
+						  	<div class='col-md-5 pull-right'>
+						  		<button type="submit" class="pull-right btn btn-default btn-block" wicket:id="addMovieAward">
+						  			<wicket:message key="addPrizeLinkName">Add</wicket:message>
+						  		</button>
+						  	</div>
+						</form>
+					</div>
+
+					<div class="col-md-5 pull-right">
+						<form wicket:id="setPicutreForm">
+					  		<input type="file" wicket:id="pic" required>
+					  		<div class='col-md-5 pull-right'>
+								<button type="submit" class="btn btn-default btn-block" wicket:id="uploadPicture">
+									<wicket:message key="uploadPictureLinkName">Upload</wicket:message>
+								</button>
+							</div>
+						</form>
+					</div>
+			</div>
+
+			<div class="col-md-10 col-md-offset-1">
+				<br/><br/>
+
+
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title"><wicket:message key="commentPanelHeading">Tell us your opinion!</wicket:message></h3>
+					</div>
+
+				 	<div class="panel-body">
+
+						<form wicket:id="commentMovieForm">
+							<input  type="hidden" name="movieId" value="${movie.id}"/>
+							<div class="col-xs-2">
+								<div class="form-group">
+									<label class="control-label"><wicket:message key="commentRatingName">Rating</wicket:message></label>
+									<select class="form-control" wicket:id='rating'>
+									</select>
+								</div>
+							</div>
+							<div class="col-xs-12">
+								<div class="form-group">
+									<label class="control-label"><wicket:message key="commentTitleName">Comment</wicket:message></label>
+									<input class="form-control" wicket:id='body'/>
+								</div>
+							</div>
+							<div class="col-md-3 col-md-offset-2 pull-right">
+								<button class="btn btn-primary btn-block" type='submit' wicket:id="addComment">
+									<wicket:message key="commentTitleName">Comment</wicket:message>
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"><wicket:message key="commentsTitleName">Comments</wicket:message></h3>
+					</div>
+					<div class="panel-body">
+						<div wicket:id="comment">
+							<div class="col-md-12">
+								<p>
+									<span class="glyphicon glyphicon-chevron-right"></span>
+									<label wicket:id="commentAuthor">said</label>:<br/>
+
+									<label><b><wicket:message key="commentRatingName">Rating</wicket:message>:</b></label> 								
+									<span wicket:id="ratingLabel"></span><wicket:message key="commentRatingUnit">stars</wicket:message>.						
+									<br/>
+
+									<i>"<span wicket:id="body"></span>"</i>
+
+									<p class="pull-right">
+										<wicket:message key="averageRating">Average Rating</wicket:message>:
+										<span wicket:id="avgCommentRatings"></span>
+									</p>
+								</p>
+							</div>
+
+							<div class="col-md-12">
+
+
+								<div class="col-md-8">
+
+									<form wicket:id="rating" class="form-inline">
+										<select class="form-control input-sm" wicket:id='rating'>
+
+										</select>
+										<input type="submit" class="btn btn-default btn-sm" value="Rate Comment">
+									</form>
+								</div>
+								<div class="col-md-3 pull-right">
+									<div class="col-md-6">
+										<a class="btn btn-warning btn-xs btn-block" wicket:id="reportCommentLink">
+											<wicket:message key="reportLinkName">Report</wicket:message>
+										</a>
+									</div>
+									<div class="col-md-6 pull-right">
+										<a class="btn btn-danger btn-xs btn-block" wicket:id="deleteCommentLink">
+											<wicket:message key="deleteLinkName">Delete</wicket:message>
+										</a>
+									</div>
+								</div>
+								<br/><br/>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</wicket:extend>
+	</body>
+</html>
+
+
+

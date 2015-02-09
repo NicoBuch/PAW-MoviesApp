@@ -1,0 +1,113 @@
+
+<html>
+
+  <body>
+      <wicket:panel>
+        <!-- <c:if test='${!empty errors}'>
+          <c:forEach var="error" items="${errors}">
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <strong>Movie Error!</strong> ${error.message}
+            </div>
+          </c:forEach>
+        </c:if> -->
+
+
+
+
+        <!-- <form:hidden path="id"/> -->
+
+        <!-- <div class="col-md-8 col-md-offset-2" id="feedbackPanel" /> -->
+
+          <fieldset>
+
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label class="control-label"><wicket:message key="movieTitleName"/></label>
+                <!-- <span class="help-block"><form:errors class="text-danger" path="title"/></span> -->
+                <input class="form-control" type="text" wicket:id="title" autofocus='autofocus' required='required'/>
+              </div>
+            </div>
+
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label class="control-label"><wicket:message key="movieDirectorName"/></label>
+                <!-- <span class="help-block"><form:errors class="text-danger" path="director"/></span> -->
+                <input class="form-control" type="text" wicket:id="director" required='required'/>
+
+              </div>
+            </div>
+
+            <div class="col-xs-12">
+              <div class=" col-md-offset-0">
+                <div class="col-xs-4">
+                  <select class="form-control" wicket:id="releaseDay">
+                    <!-- <option value="0" disabled="disabled" selected="selected">Day</option> -->
+    <!--                 <c:forEach var="i" begin="1" end="31">
+                       <option value="${i}">${i}</option>
+                       </c:forEach> -->
+                  </select>
+                </div>
+
+                <div class="col-xs-4">
+                  <select class="form-control" wicket:id="releaseMonth">
+   <!--                  <option value="0" disabled="disabled" selected="selected">Month</option>
+                    <c:forEach var="i" begin="1" end="12">
+                       <option value="${i}">${i}</option>
+                       </c:forEach> -->
+                  </select>
+                </div>
+
+                <div class="col-xs-4">
+                  <select class="form-control" wicket:id="releaseYear">
+<!--                     <option value="0" disabled="disabled" selected="selected">Year</option>
+                    <c:forEach var="i" begin="1930" end="2014">
+                       <option value="${i}">${i}</option>
+                       </c:forEach> -->
+                  </select>
+                </div>
+              </div>
+            <br><br>
+            </div>
+
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label class="control-label"><wicket:message key="movieDurationName"/></label>
+                <!-- <span class="help-block"><form:errors class="text-danger" path="minutes"/></span> -->
+                <div class="col-md-offset-2">
+                  <div class="col-xs-10">
+                    <input class="form-control" type="number" wicket:id="minutes" required='required'/>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label class="control-label"><wicket:message key="movieDescName"/></label>
+                <!-- <span class="help-block"><form:errors class="text-danger" path="description"/></span> -->
+                <input class="form-control" wicket:id="description" rows="6" cols="60" required='required'/>
+              </div>
+            </div>
+
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label class="control-label"><wicket:message key="movieGenresName"/></label>
+                <!-- <span class="help-block"><form:errors class="text-danger" path="genres"/></span> -->
+                <!-- <form:checkboxes element="div" path="genres" items="${genresList}" itemValue="id" itemLabel="name" /> -->
+                <select wicket:id="genres"></select>
+              </div>
+            </div>
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label class="control-label"><wicket:message key="picture"/></label>
+                <!-- <span class="help-block"><form:errors class="text-danger" path="genres"/></span> -->
+                <!-- <form:checkboxes element="div" path="genres" items="${genresList}" itemValue="id" itemLabel="name" /> -->
+                <input wicket:id="picture" size="40" type="file" multipe/>
+              </div>
+            </div>
+          </fieldset>
+      </wicket:panel>
+  </body>
+</html>
+

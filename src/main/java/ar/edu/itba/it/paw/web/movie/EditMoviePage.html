@@ -1,0 +1,30 @@
+<html>
+  <body>
+    <wicket:extend>
+
+        <div class="page-header">
+          <h2> <wicket:message key="pageName"/>
+            <br>
+            <small><wicket:message key="pageDesc"/></small>
+          </h2>
+        </div>
+
+        <div class="col-md-10 col-md-offset-1" >
+
+          <div wicket:id="feedback" class="formErrors"/>
+          <form wicket:id='editMovieForm' novalidate='novalidate'>
+          
+            <div wicket:id="editMovie" />
+
+            <div class="col-md-8 col-md-offset-2">
+              <input class="btn btn-primary btn-block" type="submit" wicket:id="editMovieButton"></input>
+              <a class="btn btn-default btn-block" wicket:id="movieCancelButton"><wicket:message key="movieCancelLinkName"/></a>
+            </div>
+
+          </form>
+          
+        </div>
+    </wicket:extend>
+  </body>
+</html>
+

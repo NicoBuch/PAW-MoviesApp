@@ -23,6 +23,7 @@ import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.commentRating.CommentRating;
 import ar.edu.itba.it.paw.domain.movie.Movie;
 import ar.edu.itba.it.paw.domain.report.Report;
+import ar.edu.itba.it.paw.domain.reportHistory.ReportHistory;
 
 @Entity
 @Table(name = "Users")
@@ -40,6 +41,7 @@ public class User extends PersistentEntity {
 	private String secretAnswer;
 	private boolean vip;
 	private boolean admin;
+	private boolean blocked;
 
 	@ManyToMany
 	@JoinTable(name = "users_of_interest", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "user_of_interest_id") })
@@ -54,8 +56,12 @@ public class User extends PersistentEntity {
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Report> reports = new ArrayList<Report>();
+	
+	@OneToMany(mappedBy = "reporter", cascade = CascadeType.ALL)
+	private List<ReportHistory> reportHistories = new ArrayList<ReportHistory>();
 
-	public User() {
+	@SuppressWarnings("unused")
+	private User() {
 	}
 
 	public User(String email, String password, String firstName,
@@ -138,17 +144,15 @@ public class User extends PersistentEntity {
 		return usersOfInterest;
 	}
 
-	public void setUsersOfInterest(List<User> usersOfInterest) {
-		this.usersOfInterest = usersOfInterest;
-	}
-
-	public void setComments(SortedSet<Comment> comments) {
-		this.comments = comments;
-	}
-
 	public void addComment(Comment comment) {
-		comment.setUser(this);
-		this.comments.add(comment);
+//		if(comments.contains(comment)){
+//			return;
+//		}
+		comments.add(comment);
+		comment.getMovie().getComments().add(comment);
+//			return;
+//		}
+//		comment.getMovie().addComment(comment);
 	}
 
 	@Override
@@ -176,7 +180,7 @@ public class User extends PersistentEntity {
 	}
 
 	public boolean canComment(Movie movie) {
-		if ((movie.alreadyReleased() || isVip()) && !(alreadyCommented(movie))) {
+		if (!blocked && (movie.alreadyReleased() || isVip()) && !(alreadyCommented(movie))) {
 			return true;
 		} else {
 			return false;
@@ -199,12 +203,12 @@ public class User extends PersistentEntity {
 				return false;
 			}
 		}
-		return true;
+		return !this.equals(comment.getUser());
 	}
 
 	public boolean canReport(Comment comment) {
 		for (Report report : reports) {
-			if (report.getComment().equals(comment)) {
+			if (report.getComment()!= null && report.getComment().equals(comment)) {
 				return false;
 			}
 		}
@@ -212,8 +216,10 @@ public class User extends PersistentEntity {
 	}
 
 	public void rate(CommentRating commentRating) {
-		commentRatings.add(commentRating);
-		commentRating.setUser(this);
+		if(!commentRatings.contains(commentRating)){
+			commentRatings.add(commentRating);
+		}
+		commentRating.getComment().rate(commentRating);
 	}
 
 	public void addUserOfInterest(User user_of_interest) {
@@ -227,7 +233,27 @@ public class User extends PersistentEntity {
 
 	public void report(Report report) {
 		reports.add(report);
-		report.setUser(this);
+	}
 
+	public boolean checkPassword(String password2) {
+		return password.equals(password2);
+	}
+
+	public String getFullName() {
+		return firstName + " " + lastName;
+	}
+	public boolean isBlocked() {
+		return blocked;
+	}
+
+	public void setBlocked(boolean blocked) {
+		this.blocked = blocked;
+	}
+
+	public void addReportHistory(ReportHistory reportHistory) {
+		reportHistories.add(reportHistory);	
+	}
+	public List<ReportHistory> getReportHistories(){
+		return reportHistories;
 	}
 }

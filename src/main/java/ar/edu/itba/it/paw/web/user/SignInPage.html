@@ -1,0 +1,53 @@
+<html>
+  <body>
+    <wicket:extend>
+      <div class="page-header">
+        <h2><wicket:message key="pageName"/>
+          <br>
+          <small><wicket:message key="pageDesc"/></small>
+        </h2>
+      </div>
+
+
+  <div class="col-md-10 col-md-offset-1">
+
+    <!-- <c:if test="${!empty errorMessage}"> -->
+    <div wicket:id="feedback" class="alert alert-warning alert-dismissible" role="alert"/>
+<!--           <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <strong>Login Error!</strong> ${errorMessage}
+      </div> -->
+    <!-- </c:if> -->
+
+<!--     <c:if test="${!empty prevSuccess}">
+      <div class="alert alert-success alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          <strong>Success!</strong> ${prevSuccess}
+      </div>
+    </c:if> -->
+
+
+    <form wicket:id="loginForm" novalidate>
+      <div class="col-md-8 col-md-offset-2" id="feedbackPanel" />
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label class="control-label"><wicket:message key="username">Username</wicket:message></label>
+            <input class="form-control" wicket:id='email' autofocus type='text' placeholder='user@example.com' >
+          </div>
+        </div>
+
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label class="control-label"><wicket:message key="password">Password</wicket:message></label>
+            <input class="form-control" wicket:id='password' type='password' placeholder='Insert password' required>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-md-offset-6 ">
+          <button wicket:id="login" class="btn btn-primary btn-block" type="submit"><wicket:message key="login">Log in</wicket:message></button>
+          <wicket:message key="passwordRecovery">Can't remember your password?</wicket:message> <a wicket:id="recoveryLink" class="float-right"><strong><wicket:message key="recover">Recover it!</wicket:message></strong></a>
+        </div>
+    </form>
+  </div>
+    </wicket:extend>
+  </body>
+</html>

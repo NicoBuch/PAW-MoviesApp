@@ -17,7 +17,8 @@ public class Genre extends PersistentEntity{
 
 	private String name;
 
-	public Genre(){
+	@SuppressWarnings("unused")
+	private Genre(){
 	}
 
 	public Genre(String name){
@@ -25,6 +26,9 @@ public class Genre extends PersistentEntity{
 			throw new IllegalArgumentException();
 		}
 		this.name = name.toLowerCase();
+	}
+	public String toString(){
+		return getName();
 	}
 
 	public String getName(){
@@ -36,11 +40,17 @@ public class Genre extends PersistentEntity{
 	}
 
 	public void removeMovie(Movie movie) {
-		this.movies.remove(movie);
+		if(!movies.remove(movie)){
+			return;
+		}
+		movie.removeGenre(this);
 	}
 
 	public void addMovie(Movie movie) {
-		this.movies.add(movie);
+		if(!movies.add(movie)){
+			return;
+		}
+		movie.addGenre(this);
 	}
 
 	@Override

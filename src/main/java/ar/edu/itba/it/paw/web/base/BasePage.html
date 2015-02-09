@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <title>ITBA-MoviesApp</title>
+    <!--
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css"/>
+    -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+  </head>
+  <!-- CONTENT BEGINS -->
+  <body class="col-md-12">
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" wicket:id="homeLink"><wicket:message key="appName">Movies App</wicket:message></a>
+        </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+              <li><a wicket:id="moviesListLink"><wicket:message key="moviesList">List Movies</wicket:message></a></li>
+              <!-- <c:if test='${not empty user && user.email!=""}'> -->
+              <li><a wicket:id="usersListLink"><wicket:message key="usersList">List Users</wicket:message></a></li>
+            <!-- </c:if> -->
+            <!-- <c:if test='${not empty user && user.email!="" && user.admin == true}'> -->
+              <li><a wicket:id="reportsListLink"><wicket:message key="reportsList">Reports</wicket:message></a></li>
+            <!-- </c:if> -->
+          </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <!-- <c:choose> -->
+              <!-- <c:when test='${empty user || user.email==""}'> -->
+                <!-- User is not logged in -->
+                <li><a wicket:id="signInLink"><wicket:message key="signIn">Login</wicket:message></a></li>
+                  <li><a wicket:id="signUpLink"><wicket:message key="signUp">Register</wicket:message></a></li>
+                <!-- </c:when> -->
+                <!-- <c:otherwise> -->
+                  <!-- User is logged in -->
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" wicket:id="usersName">User's Name<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li><a wicket:id="myProfileLink"><wicket:message key="myProfileLink">My Profile</wicket:message></a></li>
+                      <li><a wicket:id="resetPasswordLink"><wicket:message key="resetPassword">Reset password</wicket:message></a></li>
+                      <li class="divider"></li>
+                      <li><a wicket:id="signOutLink"><wicket:message key="logout">Logout</wicket:message></a></li>
+                    </ul>
+                  </li>
+         <!--      </c:otherwise>
+            </c:choose> -->
+            </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container col-md-8 col-md-offset-2">
+
+    <wicket:child />
+
+    </div>
+
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <!--
+      <script type="javascript" href="scripts/bootstrap.js"/>
+      <script type="javascript" href="scripts/jquery.js"/>
+    -->
+  </body>
+</html>

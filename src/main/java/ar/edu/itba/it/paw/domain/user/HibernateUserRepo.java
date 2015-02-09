@@ -16,11 +16,11 @@ public class HibernateUserRepo extends AbstractHibernateRepo implements UserRepo
 	public HibernateUserRepo(SessionFactory sessionFactory) {
 		super(sessionFactory);
 	}
-	
+
 	public List<User> getAll() {
 		return find("from User");
 	}
-	
+
 	public User get(int id) throws NoIdException {
 		try{
 			return get(User.class, id);
@@ -52,7 +52,7 @@ public class HibernateUserRepo extends AbstractHibernateRepo implements UserRepo
 		}
 
 	}
-	
+
 	@Override
 	public void save(User user){
 		super.save(user);

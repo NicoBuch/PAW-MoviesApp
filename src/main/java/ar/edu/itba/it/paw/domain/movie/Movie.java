@@ -14,11 +14,18 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
+import org.parse4j.Parse;
+import org.parse4j.ParseException;
+import org.parse4j.ParseObject;
+import org.parse4j.ParseQuery;
+import org.parse4j.callback.FindCallback;
+import org.postgresql.util.Base64;
 
 import ar.edu.itba.it.paw.domain.PersistentEntity;
 import ar.edu.itba.it.paw.domain.comment.Comment;
 import ar.edu.itba.it.paw.domain.genre.Genre;
 import ar.edu.itba.it.paw.domain.prize.Prize;
+import ar.edu.itba.it.paw.domain.reportHistory.ReportHistory;
 
 @Entity
 public class Movie extends PersistentEntity {
@@ -33,19 +40,24 @@ public class Movie extends PersistentEntity {
 	@ManyToMany
 	private Set<Genre> genres;
 	
-	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL, orphanRemoval = true)
 	private List<Prize> prices = new ArrayList<Prize>();
+	
+	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL)
+	private List<ReportHistory> reportHistories = new ArrayList<ReportHistory>();
 	
 	private int minutes;
 	private String description;
 	private Date creationDate;
 	private byte[] picture;
+	private int visits;
 
 	@OneToMany(mappedBy="movie", cascade=CascadeType.ALL)
 	@Sort(type = SortType.NATURAL)
 	private SortedSet<Comment> comments = new TreeSet<Comment>();
 
-	public Movie(){
+	@SuppressWarnings("unused")
+	private Movie(){
 	}
 
 	public Movie(String movieName, Date releaseDate,
@@ -100,6 +112,14 @@ public class Movie extends PersistentEntity {
 	public String getDescription() {
 		return this.description;
 	}
+	public String getPictureURL() {
+		if(picture == null) {
+			return "";
+		}
+		String encodedImage = Base64.encodeBytes(picture);
+		String url = "data:image/jpeg;base64," + encodedImage;
+		return url;
+	}
 	public void setPicture(byte[] pic){
 		this.picture = pic;
 	}
@@ -128,12 +148,13 @@ public class Movie extends PersistentEntity {
 		return comments;
 	}
 	
-	 public void setComments(SortedSet<Comment> comments) {
-		 this.comments = comments;
-	}
 	 public void addComment(Comment comment) {
-	  comment.setMovie(this);
-	  this.comments.add(comment);
+//		 if(comments.contains(comment)){
+//			 return;
+//		 }
+		 comments.add(comment);
+		 comment.getUser().getComments().add(comment);
+//		 comment.getUser().addComment(comment);
 	 }
 
 
@@ -209,11 +230,17 @@ public class Movie extends PersistentEntity {
 
 	
 	public void addGenre(Genre g) {
-		this.genres.add(g);		
+		if(!genres.add(g)){
+			return;
+		}
+		g.addMovie(this);
 	}
 
 	public void removeGenre(Genre g) {
-		this.genres.remove(g);
+		if(!genres.remove(g)){
+			return;
+		}
+		g.removeMovie(this);
 	}
 
 	public List<Prize> getPrices(){
@@ -237,8 +264,9 @@ public class Movie extends PersistentEntity {
 	}
 
 	public void addPrize(Prize prize) {
-		prices.add(prize);
-		prize.setMovie(this);		
+		if(!prices.contains(prize)){
+			prices.add(prize);
+		}	
 	}
 
 	public void removePrize(Prize prize) {
@@ -247,6 +275,45 @@ public class Movie extends PersistentEntity {
 
 	public void deletePicture() {
 		picture = null;		
+	}
+	
+	public double getAvgRating(){
+		double rating = 0;
+		for(Comment c : comments){
+			rating+=c.getRating();
+		}
+		return rating/comments.size();
+	}
+
+	public int getVisits() {
+		return visits;
+	}
+
+	public void visit() {
+		this.visits++;
+	}
+	
+	public void getStock() {
+		Parse.initialize("bH0IAo6UbBCuaXVVFZQl62vgaOs6l4vBRmDmyZMl", "EwQWDYrnMcTqQ7MJOxnl3l9aA12bBHOPKXp3AIFY");
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Movie");
+		query.limit(1);
+		query.findInBackground(new FindCallback<ParseObject>() {
+		    public void done(List<ParseObject> movie, ParseException e) {
+		        if (e == null) {
+		            movie.get(0).getInt("stock");
+		        } else {
+		            throw new RuntimeException();
+		        }
+		    }
+		});
+		
+	}
+	
+	public void addReportHistory(ReportHistory reportHistory) {
+		reportHistories.add(reportHistory);	
+	}
+	public List<ReportHistory> getReportHistories(){
+		return reportHistories;
 	}
 
 

@@ -1,0 +1,31 @@
+<html>
+  <body>
+    <wicket:extend>
+      <div class="page-header">
+        <h2><wicket:message key="pageName">User List</wicket:message>
+          <br>
+          <small><wicket:message key="pageDesc">A complete list of all users</wicket:message></small>
+        </h2>
+      </div>
+      <br/>
+
+      <!-- Users Table -->
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th><wicket:message key="emailTableHeader">Email</wicket:message></th>
+            <th><wicket:message key="firstNameTableHeader">First Name</wicket:message></th>
+            <th><wicket:message key="lastNameTableHeader">Last Name</wicket:message></th>
+          </tr>
+        </thead>
+        <!-- <c:forEach var="aUser" items="${users}"> -->
+        <tr wicket:id="user">
+          <td><a wicket:id="emailLink"><wicket:container wicket:id="email"/></a></td>
+          <td wicket:id="firstName"/>
+          <td wicket:id="lastName"/>
+        </tr>
+<!--            </c:forEach> -->
+      </table>
+    </wicket:extend>
+  </body>
+</html>
